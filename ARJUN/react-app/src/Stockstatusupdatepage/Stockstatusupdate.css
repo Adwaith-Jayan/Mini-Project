@@ -1,0 +1,185 @@
+/* General Page Layout */
+.stock-container {
+    display: flex;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 200px;
+    background: #2b4c5a;
+    color: white;
+    padding: 20px;
+    transition: width 0.3s ease-in-out;
+    overflow: hidden;
+}
+
+.sidebar.closed {
+    width: 60px;
+}
+
+.menu-icon {
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.sidebar .menu-icon {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px 0;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.sidebar ul li:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding: 20px;
+    background: #f4f4f4;
+}
+
+/* Header */
+.headerstockdetails{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    position: relative;
+    position: relative; /* Added to ensure dropdown is positioned correctly */
+}
+
+
+.header-icons {
+    display: flex;
+    align-items: center;
+    gap: 15px; 
+}
+
+/* User Menu */
+.user-menu {
+    position: relative;
+    
+}
+
+.user-icon {
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.user-dropdown {
+    position: absolute;
+    background: white;
+    padding: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    right: 0;
+    top: 30px;
+    width: 120px;
+    text-align: center;
+    display: none; /* Initially hidden */
+    z-index: 1000;
+
+}
+
+.user-dropdown {
+    display: block; /* Show on hover */
+}
+.user-dropdown p:hover {
+    background: rgba(99, 167, 166, 0.404);
+    cursor: pointer;
+}
+
+
+/* Notification Icon */
+.notification-icon {
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.notification-icon, .user-icon, .search-bar {
+    z-index: 999; /* Ensure icons have proper stacking order */
+}
+
+/* Search Bar */
+.search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-bar input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.search-bar .search-icon {
+    color: gray;
+    cursor: pointer;
+}
+
+.filter-btn {
+    background: #ddd;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Stock Table */
+.stock-table {
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    border-collapse: collapse;
+}
+
+.stock-table th, .stock-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.stock-table th {
+    background: #eaeaea;
+}
+
+/* Status Dropdown */
+.status-dropdown {
+    padding: 6px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+.status-dropdown:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.working {
+    background: #a5d6a7;
+    color: #1b5e20;
+}
+
+.not-working {
+    background: #ffccbc;
+    color: #d32f2f;
+}
