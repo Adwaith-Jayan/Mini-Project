@@ -16,7 +16,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Stockwarranty/>} />
+        <Route path="/" element={<Stockverifications/>} />
         <Route path="/login" element={<Login />} />
       </Routes>
     </Router>

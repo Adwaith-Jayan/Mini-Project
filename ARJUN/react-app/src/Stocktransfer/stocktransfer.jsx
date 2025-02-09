@@ -46,7 +46,7 @@ const Stocktransfer = () => {
       {/* Main Content */}
       <div className="stmain-content">
         <header className="headerstocktransfer">
-          <h2>Stock Tranfer</h2>
+          <h2>Stock Transfer</h2>
           <div className="stsearch-bar">
             <FaSearch className="stsearch-icon" />
             <input type="text" placeholder="Search Item ID" />
