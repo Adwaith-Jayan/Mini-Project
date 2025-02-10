@@ -1,6 +1,7 @@
 
 import styled from 'styled-components';
-
+import { Link } from "react-router-dom";
+import { Link2 } from 'lucide-react';
 export const HeaderContainer = styled.header`
   background-color: #002366;
   color: white;
@@ -17,8 +18,10 @@ export const Loginnav= styled.button`
   padding: 10px 20px; 
   font-size: 16px; 
   cursor: pointer; 
+  text-decoration: none;  
+  color: inherit;    
   &:hover {
-    background-color: rgb(200, 197, 10); 
+    background-color: rgb(200, 197, 10);
   }
 `;
 
@@ -30,12 +33,12 @@ export const Logo = styled.h1`
 export const Nav = styled.nav`
   margin-top: 10px;
 `;
-
 export const NavLink = styled.a`
   margin: 0 10px;
   color: white;
-  text-decoration: none;
+  text-decoration: none !important;
   font-size: 1.2em;
+  color: inherit; 
 
   &:hover {
     text-decoration: underline;

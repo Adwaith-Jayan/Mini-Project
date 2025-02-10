@@ -5,7 +5,7 @@ import AccountMenu from "../assets/Usermenu";
 import BasicButtons from "../assets/Buttons";
 import Button  from "@mui/material/Button";
 import SendIcon from '@mui/icons-material/Send';
-
+import HomeIcon from '@mui/icons-material/Home';
 
 
 const Stockverifications = () => {
@@ -36,8 +36,10 @@ const Stockverifications = () => {
         <FaBars className="vfmenu-icon" onClick={toggleSidebar} />
         {sidebarOpen && (
           <ul>
-            <li>Dashboard</li>
-          </ul>
+            <li></li>
+                  <li></li>
+                  <li><HomeIcon fontSize="medium"/>   Dashboard</li>
+                </ul>
         )}
       </aside>
 

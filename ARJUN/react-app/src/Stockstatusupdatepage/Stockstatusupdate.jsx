@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import "./Stockstatusupdate.css";
 import { FaSearch, FaUser, FaBars, FaBell, FaFilter } from "react-icons/fa";
 import AccountMenu from "../assets/Usermenu";
+import HomeIcon from '@mui/icons-material/Home';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import UpdateIcon from '@mui/icons-material/Update';
+import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
+import SendIcon from '@mui/icons-material/Send';
 import { Link } from "react-router-dom";
+
 
 const Stockstatusupdate = () => {
   const [stocks, setStocks] = useState([
@@ -34,12 +40,14 @@ const Stockstatusupdate = () => {
         <FaBars className="menu-icon" onClick={toggleSidebar} />
         {sidebarOpen && (
           <ul>
-            <li>Dashboard</li>
-            <li><Link to="/stockdetails">Stock Details</Link></li>
-            <li>Stock Status Update</li>
-            <li>Stock Warranty</li>
-            <li>Stock Transfer</li>
-          </ul>
+            <li></li>
+                  <li></li>
+                  <li><HomeIcon fontSize="medium"/>   Dashboard</li>
+                  <li><InventoryIcon fontSize="medium"/><Link to="/stockdetails">   Stock Details</Link></li>
+                  <li><UpdateIcon fontSize="medium"/> <Link to="/stockstatus"> Stock Status Update</Link> </li>
+                  <li><HealthAndSafetyIcon fontSize="medium"/> <Link to="/stockwarranty"> Stock Warranty</Link></li>
+                  <li><SendIcon fontSize="medium"/><Link to="/stocktransfer">   Stock Transfer</Link></li>
+                </ul>
         )}
       </aside>
 

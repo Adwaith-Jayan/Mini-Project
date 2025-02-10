@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import "./login.css";
 import loginimage from "../assets/loginimg.png";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigate=useNavigate();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("Email:", email);
     console.log("Password:", password);
+    navigate("/stockdetails");
   };
 
   return (
@@ -20,7 +24,7 @@ function Login() {
             <h1>Login</h1>
             <p>Login your account</p>
           </div>
-          <form onSubmit={handleSubmit} className="login-form">
+          <form onSubmit={handleSubmit}   className="login-form">
             <div className="login-input">
               <label htmlFor="email">Email*</label>
               <input

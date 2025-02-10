@@ -3,6 +3,7 @@ import "./Homedes.css";
 import { ArrowRight } from "lucide-react";
 import stockimage from "../assets/stockimg.png";
 import { Link } from "react-router-dom";
+import { Button } from "@mui/material";
 function StockManagement() {
   return (
     <>
@@ -17,9 +18,9 @@ function StockManagement() {
       <p>Effortlessly manage and maintain inventory with a <br />streamlined, user-friendly system designed for <br />accuracy and efficiency</p>
       
       <div className="buttons">
-        <button className="get-started">GET STARTED<ArrowRight size={25} style={{ marginLeft: "0.5rem" }} /></button>
+        <button disabled className="get-started">GET STARTED<ArrowRight size={25} style={{ marginLeft: "0.5rem" }} /></button>
         <Link to="/login">
-          <button className="loginbtn">Login</button>
+          <Button variant="contained" className="loginbtn">Login</Button>
         </Link>
       </div>
       </div>

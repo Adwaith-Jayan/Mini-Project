@@ -4,6 +4,11 @@ import { FaSearch, FaUser, FaBars, FaBell, FaFilter } from "react-icons/fa";
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 import AccountMenu from "../assets/Usermenu";
+import HomeIcon from '@mui/icons-material/Home';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import UpdateIcon from '@mui/icons-material/Update';
+import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
+import { Link } from "react-router-dom";
 
 
 const Stocktransfer = () => {
@@ -34,19 +39,21 @@ const Stocktransfer = () => {
         <FaBars className="stmenu-icon" onClick={toggleSidebar} />
         {sidebarOpen && (
           <ul>
-            <li>Dashboard</li>
-            <li>Stock Details</li>
-            <li>Stock Status Update</li>
-            <li>Stock Warranty</li>
-            <li>Stock Transfer</li>
-          </ul>
+            <li></li>
+                  <li></li>
+                  <li><HomeIcon fontSize="medium"/>   Dashboard</li>
+                  <li><InventoryIcon fontSize="medium"/><Link to="/stockdetails">   Stock Details</Link></li>
+                  <li><UpdateIcon fontSize="medium"/> <Link to="/stockstatus"> Stock Status Update</Link> </li>
+                  <li><HealthAndSafetyIcon fontSize="medium"/> <Link to="/stockwarranty"> Stock Warranty</Link></li>
+                  <li><SendIcon fontSize="medium"/><Link to="/stocktransfer">   Stock Transfer</Link></li>
+                </ul>
         )}
       </aside>
 
       {/* Main Content */}
       <div className="stmain-content">
         <header className="headerstocktransfer">
-          <h2>Stock Transfer</h2>
+          <h2>Stock Tranfer</h2>
           <div className="stsearch-bar">
             <FaSearch className="stsearch-icon" />
             <input type="text" placeholder="Search Item ID" />

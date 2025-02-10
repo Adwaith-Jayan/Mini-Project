@@ -1,4 +1,4 @@
-
+// src/App.jsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Homepage from "./Homepage/Home"; 
@@ -11,16 +11,22 @@ import Stockdetails from "./Stockdetailspage/Stockdetails";
 import Stockclears from "./Stockclearence/Stockclearence";
 import Register from "./Registerpage/Register";
 import Deleteacc from "./deleteaccount/Deleteaccount";
-
+import UserProfile from "./profilesetting/Profilesetting";
+import { Delete } from "lucide-react";
 
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Stockstatusupdate/>} />
-        <Route path="/stockdetails" element={<Stockdetails/>}></Route>
+        <Route path="/" element={<Homepage/>} />
         <Route path="/login" element={<Login />} />
+        <Route path="/stockdetails" element={<Stockdetails />} />
+        <Route path="/stockstatus" element={<Stockstatusupdate/>}></Route>
+        <Route path="/stockwarranty" element={<Stockwarranty/>} />
+        <Route path="/stocktransfer" element={<Stocktransfer/>} />
+        <Route path="/userprofile" element={<UserProfile/>} />
+    
       </Routes>
     </Router>
   );

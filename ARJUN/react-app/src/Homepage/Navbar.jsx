@@ -1,6 +1,6 @@
 import React from "react";
 import { HeaderContainer, Logo, Nav, NavLink,Loginnav } from './StyledHeader';
-
+import { Link } from "react-router-dom";
 function Navbar() {
     return (
       <HeaderContainer>
@@ -8,7 +8,7 @@ function Navbar() {
         <Nav>
           <NavLink href="#home">Home</NavLink>
           <NavLink href="#about">About</NavLink>
-          <Loginnav className="Loginnav">Login</Loginnav>
+          <Loginnav as={Link} to="/login">Login</Loginnav>
         </Nav>
       </HeaderContainer>
     );
