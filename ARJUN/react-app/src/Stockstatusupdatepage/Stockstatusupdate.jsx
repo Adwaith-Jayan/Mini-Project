@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Stockstatusupdate.css";
 import { FaSearch, FaUser, FaBars, FaBell, FaFilter } from "react-icons/fa";
 import AccountMenu from "../assets/Usermenu";
-
+import { Link } from "react-router-dom";
 
 const Stockstatusupdate = () => {
   const [stocks, setStocks] = useState([
@@ -35,7 +35,7 @@ const Stockstatusupdate = () => {
         {sidebarOpen && (
           <ul>
             <li>Dashboard</li>
-            <li>Stock Details</li>
+            <li><Link to="/stockdetails">Stock Details</Link></li>
             <li>Stock Status Update</li>
             <li>Stock Warranty</li>
             <li>Stock Transfer</li>
