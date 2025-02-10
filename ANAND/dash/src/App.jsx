@@ -2,6 +2,9 @@ import React from 'react';
 import './App.css';
 import { FaUserCircle, FaSignOutAlt, FaChartBar, FaCheckCircle, FaListAlt } from 'react-icons/fa';
 import { FaBeer } from 'react-icons/fa';
+import AccountMenu from './assets/usermenu';
+import Button from '@mui/material/Button';
+
 
 const notifications = [
     { message: 'New report from from Verifier' },
@@ -28,7 +31,7 @@ const Header = () => (
       </div>
       <div className="header-right">
           <input type="search" placeholder="Search..." />
-          <FaUserCircle className="user-icon" /> {/* User icon next to search */}
+          <AccountMenu/>
       </div>
   </header>
 );
@@ -61,7 +64,7 @@ const Dashboard = () => (
             <Notifications notifications={notifications} />
         </div>
         <div className="actions">
-            <ActionButton label="Assign Faculty for verification" />
+            <Button className='action-button' variant="contained">Assign Faculty for verification</Button>
             <ActionButton label="Request For Stock Details" />
             <ActionButton label="Reports" />
         </div>
