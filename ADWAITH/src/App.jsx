@@ -3,7 +3,7 @@ import AssignFaculty from "./AssignFaculty/AssignFaculty"
 function App() {
   return (
     <div>
-      <AssignFaculty/>
+      <MaintenanceList/>
     </div>
   )
 }
