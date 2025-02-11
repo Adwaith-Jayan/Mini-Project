@@ -4,7 +4,12 @@ import { FaUserCircle, FaSignOutAlt, FaChartBar, FaCheckCircle, FaListAlt, FaBar
 import AccountMenu from '../assets/usermenu';
 import Button from '@mui/material/Button';
 import { Link } from "react-router-dom";
-import { Home as HomeIcon, Inventory, Update, HealthAndSafety, Send } from '@mui/icons-material';
+import HomeIcon from "@mui/icons-material/Home";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import UpdateIcon from "@mui/icons-material/Update";
+import HealthAndSafetyIcon from "@mui/icons-material/HealthAndSafety";
+import SendIcon from "@mui/icons-material/Send";
+
 
 const notifications = [
     { message: 'New report from Verifier' },
@@ -47,10 +52,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             {sidebarOpen && (
                 <ul>
                     <li><Link to="/Hoddash"><HomeIcon fontSize="medium" /> Dashboard</Link></li>
-                    <li><Link to="/stockdetails"><Inventory fontSize="medium" /> Stock Details</Link></li>
-                    <li><Link to="/stockstatus"><Update fontSize="medium" /> Stock Status Update</Link></li>
-                    <li><Link to="/stockwarranty"><HealthAndSafety fontSize="medium" /> Stock Warranty</Link></li>
-                    <li><Link to="/stocktransfer"><Send fontSize="medium" /> Stock Transfer</Link></li>
                 </ul>
             )}
         </aside>
@@ -64,7 +65,10 @@ const Dashboard = () => (
             <Notifications notifications={notifications} />
         </div>
         <div className="actions">
+            <Link to="/register">
             <Button className='action-button' variant="contained">Create Account</Button>
+            </Link>
+            
             <Button className='action-button' variant="contained">Remove Account</Button>
             <Button className='action-button' variant="contained">Send Email</Button>
             <Button className='action-button' variant="contained">Create New Stock System</Button>
