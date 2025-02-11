@@ -28,6 +28,7 @@ function App() {
         <Route path="/stockwarranty" element={<Stockwarranty/>} />
         <Route path="/stocktransfer" element={<Stocktransfer/>} />
         <Route path="/userprofile" element={<UserProfile/>} />
+        <Route path="/register" element={<Register/>} />
     
       </Routes>
     </Router>
