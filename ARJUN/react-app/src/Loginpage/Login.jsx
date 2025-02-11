@@ -13,7 +13,7 @@ function Login() {
     event.preventDefault();
     console.log("Email:", email);
     console.log("Password:", password);
-    navigate("/stockdetails");
+    navigate("/Hoddash");
   };
 
   return (

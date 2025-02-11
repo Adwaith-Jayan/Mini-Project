@@ -6,7 +6,7 @@ import otherImage from "../assets/Desktopimg.png";
 function Header() {
   return (
     <>
-        <div className="header">
+        <div className="homeheader">
             <h1 className="Left-text">Track,<br />Transfer,<br />Verify <br />– All in One Place</h1>
             <img className="desktopimage" src={otherImage} alt="Header Illustration" />
         </div>

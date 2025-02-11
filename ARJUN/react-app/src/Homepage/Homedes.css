@@ -7,7 +7,7 @@ body {
 
 
 
-body .header {
+body .homeheader {
   background-color: #002366 !important;
   color: white;
   display: flex; /* Use flexbox layout */

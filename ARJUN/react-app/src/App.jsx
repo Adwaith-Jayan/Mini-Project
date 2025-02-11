@@ -13,6 +13,7 @@ import Register from "./Registerpage/Register";
 import Deleteacc from "./deleteaccount/Deleteaccount";
 import UserProfile from "./profilesetting/Profilesetting";
 import { Delete } from "lucide-react";
+import HodDash from "../../../ANAND/dash/src/HOD/HodDash";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Homepage/>} />
         <Route path="/login" element={<Login />} />
+        <Route path="/Hoddash" element={<HodDash/>}></Route>
         <Route path="/stockdetails" element={<Stockdetails />} />
         <Route path="/stockstatus" element={<Stockstatusupdate/>}></Route>
         <Route path="/stockwarranty" element={<Stockwarranty/>} />
