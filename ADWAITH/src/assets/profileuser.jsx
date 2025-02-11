@@ -9,7 +9,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
 import { Link } from 'react-router-dom';
 
-export default function AccountMenu() {
+export default function ProfileMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -71,11 +71,7 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleClose} component={Link} to="/userprofile">
-          <Avatar/> Profile
-          
-        </MenuItem>
-        <MenuItem onClick={handleClose} component={Link} to="/">
+        <MenuItem onClick={handleClose}component={Link} to="/">
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
