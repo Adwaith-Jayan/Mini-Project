@@ -23,6 +23,10 @@ function Login() {
       if (role === "hodcse") {
         navigate("/stockdetails");
       }
+      else if(role=="stock-in-charge")
+      {
+        navigate("/Sicdash")
+      }
     } catch (error) {
       alert(error.response ? error.response.data.message : "Something went wrong");
     }

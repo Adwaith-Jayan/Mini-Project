@@ -3,9 +3,7 @@ dotenv.config();
 
 import express from "express";
 import cors from "cors";
-import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import nodemailer from "nodemailer";
 import mongoose from "mongoose";
 
 const app = express();

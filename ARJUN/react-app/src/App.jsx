@@ -14,6 +14,7 @@ import Deleteacc from "./deleteaccount/Deleteaccount";
 import UserProfile from "./profilesetting/Profilesetting";
 import { Delete } from "lucide-react";
 import HodDash from "../../../ANAND/dash/src/HOD/HodDash";
+import SicDash from "../../../ANAND/dash/src/SIC/SicDash"
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path="/stocktransfer" element={<Stocktransfer/>} />
         <Route path="/userprofile" element={<UserProfile/>} />
         <Route path="/register" element={<Register/>} />
+        <Route path="/Sicdash" element={<SicDash/>}/>
     
       </Routes>
     </Router>
