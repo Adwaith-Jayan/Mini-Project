@@ -227,11 +227,7 @@ html, body {
   }
   
   @media (max-width: 768px) {
-    .sidebar {
-        width: 100%;
-        margin-bottom: 20px;
-    }
-  
+    
     .notifications {
         width: 100%;
     }
@@ -256,10 +252,14 @@ html, body {
 .clsidebar.closed {
     width: 60px;
 }
+.clsidebar.open {
+  width: 250px; /* Wider when open */
+}
 .clmenu-icon {
     font-size: 20px;
     cursor: pointer;
     transition: transform 0.3s ease;
+    align-items: center;
 }
   
 .clsidebar ul {
@@ -270,6 +270,7 @@ html, body {
 .clsidebar ul li {
     padding: 10px;
     cursor: pointer;
+    align-items: center;
 }
   
 .clsidebar ul li:hover {
@@ -280,4 +281,5 @@ ul li a {
     text-decoration: none; 
     color: inherit; 
     font-size: 16px; 
+    align-items: center;
   }

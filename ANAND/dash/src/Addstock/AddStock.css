@@ -1,0 +1,103 @@
+/* General Page Layout */
+.addstock-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Header */
+.addstock-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #1976d2;
+    color: white;
+}
+
+.addstock-header-left,
+.addstock-header-right {
+    display: flex;
+    gap: 15px;
+}
+
+/* Sidebar */
+.addstock-sidebar {
+    width: 200px;
+    background: #333;
+    color: white;
+    transition: width 0.3s ease-in-out;
+    min-height: 100vh;
+}
+
+.addstock-sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.addstock-sidebar ul li {
+    padding: 10px;
+}
+
+.addstock-sidebar ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.addstock-sidebar.closed {
+    width: 50px;
+}
+
+/* Sidebar Toggle Icon */
+.addstock-menu-icon {
+    font-size: 20px;
+    cursor: pointer;
+    padding: 10px;
+}
+
+/* Main Content */
+.addstock-main-area {
+    display: flex;
+    flex: 1;
+}
+
+.addstock-content-area {
+    flex: 1;
+    padding: 20px;
+    background: #f5f5f5;
+    min-height: 100vh;
+}
+
+/* Form Styling */
+.addstock-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.addstock-form label {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.addstock-form input,
+.addstock-form select {
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.addstock-form button {
+    margin-top: 15px;
+    padding: 10px;
+    background: #1976d2;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
