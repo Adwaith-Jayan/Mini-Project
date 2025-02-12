@@ -23,6 +23,9 @@ function Login() {
       if (role === "hodcse") {
         navigate("/Hoddash");
       }
+      else if (role==="pricipal"){
+        navigate("/principaldash");
+      }
     } catch (error) {
       alert(error.response ? error.response.data.message : "Something went wrong");
     }

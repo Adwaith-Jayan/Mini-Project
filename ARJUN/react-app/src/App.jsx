@@ -16,6 +16,7 @@ import { Delete } from "lucide-react";
 import HodDash from "../../../ANAND/dash/src/HOD/HodDash";
 import AssignFaculty from "../../../ADWAITH/src/AssignFaculty/AssignFaculty";
 import AddStock from "../../../ANAND/dash/src/Addstock/AddStock";
+import PrincipalDash from "../../../ANAND/dash/src/Principal/PrincipalDash";
 
 function App() {
   return (
@@ -33,7 +34,7 @@ function App() {
         <Route path="/stockclears" element={<Stockclears/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/assign" element={<AssignFaculty/>}/>
-    
+        <Route path="/principaldash" element={<PrincipalDash/>}/>
       </Routes>
     </Router>
   );
