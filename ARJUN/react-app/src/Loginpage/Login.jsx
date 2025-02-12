@@ -2,18 +2,30 @@ import React, { useState } from "react";
 import "./login.css";
 import loginimage from "../assets/loginimg.png";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const navigate=useNavigate();
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
-    navigate("/Hoddash");
+    try {
+      const response = await axios.post("http://localhost:5000/login", { email, password });
+      alert(response.data.message);
+      
+      const token = response.data.token;
+      localStorage.setItem("token", token);
+      
+      const role = response.data.designation;
+      console.log(role);
+      if (role === "hodcse") {
+        navigate("/stockdetails");
+      }
+    } catch (error) {
+      alert(error.response ? error.response.data.message : "Something went wrong");
+    }
   };
 
   return (
@@ -22,9 +34,9 @@ function Login() {
         <div className="login-form-container">
           <div className="login-header">
             <h1>Login</h1>
-            <p>Login your account</p>
+            <p>Login to your account</p>
           </div>
-          <form onSubmit={handleSubmit}   className="login-form">
+          <form onSubmit={handleSubmit} className="login-form">
             <div className="login-input">
               <label htmlFor="email">Email*</label>
               <input
@@ -55,15 +67,10 @@ function Login() {
             <div className="login-button">
               <button type="submit">Login</button>
             </div>
-            
           </form>
         </div>
         <div className="login-image-container">
-          <img
-            src= {loginimage}
-            alt="Illustration"
-            className="login-image"
-          />
+          <img src={loginimage} alt="Illustration" className="login-image" />
         </div>
       </div>
     </div>
