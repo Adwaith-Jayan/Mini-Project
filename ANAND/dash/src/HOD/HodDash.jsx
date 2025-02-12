@@ -65,16 +65,13 @@ const Dashboard = () => (
             <Notifications notifications={notifications} />
         </div>
         <div className="actions">
-<<<<<<< HEAD
+
             <Link to ="/register"><Button className='action-button' variant="contained">Create Account</Button></Link>
             <Link to ="/deleteacc"><Button className='action-button' variant="contained">Remove Account</Button></Link>
-=======
             <Link to="/register">
             <Button className='action-button' variant="contained">Create Account</Button>
             </Link>
-            
             <Button className='action-button' variant="contained">Remove Account</Button>
->>>>>>> 83bc859d5ff52beecf3e4e02b02daef43da68ac6
             <Button className='action-button' variant="contained">Send Email</Button>
             <Button className='action-button' variant="contained">Create New Stock System</Button>
         </div>

@@ -29,15 +29,10 @@ function App() {
         <Route path="/stockwarranty" element={<Stockwarranty/>} />
         <Route path="/stocktransfer" element={<Stocktransfer/>} />
         <Route path="/userprofile" element={<UserProfile/>} />
-<<<<<<< HEAD
         <Route path="/deleteacc" element={<Deleteacc/>}/>
         <Route path="/stockclears" element={<Stockclears/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/assign" element={<AssignFaculty/>}/>
-
-=======
-        <Route path="/register" element={<Register/>} />
->>>>>>> 83bc859d5ff52beecf3e4e02b02daef43da68ac6
     
       </Routes>
     </Router>

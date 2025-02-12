@@ -22,7 +22,8 @@ export default function AccountMenu() {
   };
   const handleLogout = () => {
     localStorage.removeItem("token"); // Remove the token from storage
-    navigate("/"); // Redirect to login page
+    navigate("/",{ replace: true }); // Redirect to login page
+    window.history.pushState(null, "", "/");
     window.location.reload(); // Ensure the page reloads completely
   };
   return (

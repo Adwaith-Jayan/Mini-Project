@@ -24,7 +24,6 @@ const Stockstatusupdate = () => {
   const [filterOpen, setFilterOpen] = useState(false);
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
-  const toggleUserMenu = () => setUserMenuOpen(!userMenuOpen);
   const toggleFilterMenu = () => setFilterOpen(!filterOpen);
 
   const handleStatusChange = (index, newStatus) => {
@@ -36,8 +35,8 @@ const Stockstatusupdate = () => {
   return (
     <div className="stock-container">
       {/* Sidebar */}
-      <aside className={`sidebar ${sidebarOpen ? "open" : "closed"}`}>
-        <FaBars className="menu-icon" onClick={toggleSidebar} />
+      <aside className={`sktsidebar ${sidebarOpen ? "open" : "closed"}`}>
+        <FaBars className="sktmenu-icon" onClick={toggleSidebar} />
         {sidebarOpen && (
           <ul>
             <li></li>

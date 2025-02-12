@@ -6,7 +6,7 @@
 }
 
 /* Sidebar */
-.sidebar {
+.sktsidebar {
     width: 200px;
     background: #2b4c5a;
     color: white;
@@ -15,27 +15,27 @@
     overflow: hidden;
 }
 
-.sidebar.closed {
+.sktsidebar.closed {
     width: 60px;
 }
 
-.menu-icon {
+.sktmenu-icon {
     font-size: 20px;
     cursor: pointer;
     transition: transform 0.3s ease;
 }
 
-.sidebar .menu-icon {
+.sktsidebar .sktmenu-icon {
     font-size: 20px;
     margin-bottom: 10px;
 }
 
-.sidebar ul {
+.sktsidebar ul {
     list-style: none;
     padding: 0;
 }
 
-.sidebar ul li {
+.sktsidebar ul li {
     padding: 10px 0;
     cursor: pointer;
     transition: background 0.3s ease;
@@ -45,7 +45,8 @@ ul li a {
     color: inherit; 
     font-size: 16px; 
   }
-.sidebar ul li:hover {
+
+.sktsidebar ul li:hover {
     background: rgba(255, 255, 255, 0.2);
 }
 
