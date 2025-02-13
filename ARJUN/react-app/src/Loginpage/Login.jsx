@@ -21,7 +21,7 @@ function Login() {
       const role = response.data.designation;
       console.log(role);
       if (role === "hodcse") {
-        navigate("/stockdetails");
+        navigate("/Hoddash");
       }
       else if(role=="stock-in-charge")
       {

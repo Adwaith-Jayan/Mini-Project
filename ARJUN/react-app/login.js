@@ -34,7 +34,7 @@ connectDB();
 
 // Define user schema
 const userSchema = new mongoose.Schema({
-    name:String,
+    name: String,
     email_id: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     designation: { type: String, required: true },
@@ -59,7 +59,7 @@ app.post("/login", async (req, res) => {
     if (password !== user.password) {
         return res.status(400).json({ message: "Invalid password" });
     }
-    const token = jwt.sign({ email, designation: user.designation }, SECRET_KEY, { expiresIn: "1h" });
+    const token = jwt.sign({ email,name: user.name,designation: user.designation }, SECRET_KEY, { expiresIn: "1h" });
 
     res.json({ 
         message: "Login successful", 
