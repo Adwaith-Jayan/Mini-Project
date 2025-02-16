@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./Stocktransfer.css";
 import { FaSearch, FaUser, FaBars, FaBell, FaFilter } from "react-icons/fa";
 import Button from '@mui/material/Button';
@@ -9,7 +9,8 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import UpdateIcon from '@mui/icons-material/Update';
 import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
 import { Link } from "react-router-dom";
-
+import {jwtDecode} from "jwt-decode";
+import Sidebars from "../assets/sidebar";
 
 const Stocktransfer = () => {
   const [stocks, setStocks] = useState([
@@ -22,6 +23,7 @@ const Stocktransfer = () => {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
+  const [role,setRole]=useState(null);
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
   const toggleFilterMenu = () => setFilterOpen(!filterOpen);
@@ -32,23 +34,22 @@ const Stocktransfer = () => {
     setStocks(updatedstocktransfer);
   };
 
+   useEffect(() => {
+      const token = localStorage.getItem("token"); // Retrieve token from localStorage
+      if (token) {
+        try {
+          const decoded = jwtDecode(token); // Decode token to get user info
+          setRole(decoded.designation);
+        } catch (error) {
+          console.error("Invalid Token:", error);
+        }
+      }
+    }, []);
+
   return (
     <div className="stocktransfercontainer">
       {/* Sidebar */}
-      <aside className={`stsidebar ${sidebarOpen ? "open" : "closed"}`}>
-        <FaBars className="stmenu-icon" onClick={toggleSidebar} />
-        {sidebarOpen && (
-          <ul>
-            <li></li>
-                  <li></li>
-                  <li><HomeIcon fontSize="medium"/>   Dashboard</li>
-                  <li><InventoryIcon fontSize="medium"/><Link to="/stockdetails">   Stock Details</Link></li>
-                  <li><UpdateIcon fontSize="medium"/> <Link to="/stockstatus"> Stock Status Update</Link> </li>
-                  <li><HealthAndSafetyIcon fontSize="medium"/> <Link to="/stockwarranty"> Stock Warranty</Link></li>
-                  <li><SendIcon fontSize="medium"/><Link to="/stocktransfer">   Stock Transfer</Link></li>
-                </ul>
-        )}
-      </aside>
+      <Sidebars sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />
 
       {/* Main Content */}
       <div className="stmain-content">

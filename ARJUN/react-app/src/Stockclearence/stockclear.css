@@ -7,43 +7,7 @@
 }
   
 /* Sidebar */
-.clsidebar {
-    width: 200px;
-    background: #2b4c5a;
-    color: white;
-    padding: 20px;
-    transition: width 0.3s ease-in-out;
-    overflow: hidden;
-}
-.clsidebar.closed {
-    width: 60px;
-}
-.clmenu-icon {
-    font-size: 20px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-  
-.clsidebar ul {
-    list-style: none;
-    padding: 0;
-}
-  
-.clsidebar ul li {
-    padding: 10px;
-    cursor: pointer;
-}
-  
-.clsidebar ul li:hover {
-    background: #3b5b6b;
-}
 
-ul li a {
-    text-decoration: none; 
-    color: inherit; 
-    font-size: 16px; 
-  }
-  
 /* Main Content */
 .clmain-content {
     flex: 1;

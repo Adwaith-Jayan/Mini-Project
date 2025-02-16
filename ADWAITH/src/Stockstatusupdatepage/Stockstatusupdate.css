@@ -1,22 +1,63 @@
 /* General Page Layout */
-.stocktransfercontainer {
+.stock-container {
     display: flex;
     height: 100vh;
     font-family: Arial, sans-serif;
 }
 
 /* Sidebar */
+.sidebar {
+    width: 200px;
+    background: #2b4c5a;
+    color: white;
+    padding: 20px;
+    transition: width 0.3s ease-in-out;
+    overflow: hidden;
+}
 
+.sidebar.closed {
+    width: 60px;
+}
+
+.menu-icon {
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.sidebar .menu-icon {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px 0;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+ul li a {
+    text-decoration: none; 
+    color: inherit; 
+    font-size: 16px; 
+  }
+.sidebar ul li:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
 
 /* Main Content */
-.stmain-content {
+.main-content {
     flex: 1;
     padding: 20px;
     background: #f4f4f4;
 }
 
 /* Header */
-.headerstocktransfer{
+.headerstockdetails{
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -30,21 +71,24 @@
 }
 
 
-.stheader-icons {
+.header-icons {
     display: flex;
     align-items: center;
     gap: 15px; 
 }
 
 /* User Menu */
-.stuser-menu {
+.user-menu {
     position: relative;
     
 }
 
+.user-icon {
+    font-size: 20px;
+    cursor: pointer;
+}
 
-
-.stuser-dropdown {
+.user-dropdown {
     position: absolute;
     background: white;
     padding: 10px;
@@ -59,44 +103,44 @@
 
 }
 
-.stuser-dropdown {
+.user-dropdown {
     display: block; /* Show on hover */
 }
-.stuser-dropdown p:hover {
+.user-dropdown p:hover {
     background: rgba(99, 167, 166, 0.404);
     cursor: pointer;
 }
 
 
 /* Notification Icon */
-.stnotification-icon {
+.notification-icon {
     font-size: 20px;
     cursor: pointer;
 }
 
-.stnotification-icon, .stuser-icon, .stsearch-bar {
+.notification-icon, .user-icon, .search-bar {
     z-index: 999; /* Ensure icons have proper stacking order */
 }
 
 /* Search Bar */
-.stsearch-bar {
+.search-bar {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.stsearch-bar input {
+.search-bar input {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
-.stsearch-bar .stsearch-icon {
+.search-bar .search-icon {
     color: gray;
     cursor: pointer;
 }
 
-.stfilter-btn {
+.filter-btn {
     background: #ddd;
     border: none;
     padding: 8px 12px;
@@ -105,7 +149,7 @@
 }
 
 /* Stock Table */
-.ststock-table {
+.stock-table {
     width: 100%;
     background: white;
     border-radius: 8px;
@@ -113,35 +157,33 @@
     border-collapse: collapse;
 }
 
-.ststock-table th, .ststock-table td {
+.stock-table th, .stock-table td {
     padding: 12px;
     border-bottom: 1px solid #ddd;
     text-align: left;
 }
 
-.ststock-table th {
+.stock-table th {
     background: #eaeaea;
 }
 
 /* Status Dropdown */
-.premise-dropdown {
+.status-dropdown {
     padding: 6px;
     border-radius: 5px;
     border: 1px solid #ccc;
     font-size: 14px;
 }
-.premise-dropdown:hover {
+.status-dropdown:hover {
     background: rgba(255, 255, 255, 0.2);
 }
 
-.sttransferbtn Button{
-    border-radius: 19px;
-    box-shadow: none;
-    background-color: #6a0dad;
-    color: white;
+.working {
+    background: #a5d6a7;
+    color: #1b5e20;
 }
-.stfiltermenu{
-    border-radius: 5px;
-    height: 20px;
-    width: 80px;
+
+.not-working {
+    background: #ffccbc;
+    color: #d32f2f;
 }

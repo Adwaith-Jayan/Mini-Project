@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import '../Principal/PrincipalDash.css';
 import { FaUserCircle, FaSignOutAlt, FaChartBar, FaCheckCircle, FaListAlt, FaBars } from 'react-icons/fa';
-import AccountMenu from '../assets/usermenu';
+import AccountMenu from '../../../../ARJUN/react-app/src/assets/Usermenu';
 import Button from '@mui/material/Button';
-import { Link } from "react-router-dom";
-import { Home as HomeIcon, Inventory, Update, HealthAndSafety, Send } from '@mui/icons-material';
+import {jwtDecode} from "jwt-decode";
+import Sidebars from '../../../../ARJUN/react-app/src/assets/sidebar';
 
 const notifications = [
     { message: 'New report from Verifier' },
@@ -13,23 +13,44 @@ const notifications = [
 
 const SicDash = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [username,setusername]= useState("");
+    const [currentdate,setdate]=useState("");
+    
+    useEffect(()=>{
+            const today = new Date().toLocaleDateString("en-GB", {
+                weekday: "short",
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              });
+            setdate(today);
+            const token = localStorage.getItem("token");
+            if(token){
+                try{
+                    const decoded = jwtDecode(token);
+                    setusername(decoded.name);
+                }catch(error){
+                    console.error("Error decoding token : ",error);
+                }
+            }
+        },[]);
 
     return (
         <div className="app-container">
-            <Header />
+            <Header username={username} currentdate={currentdate}/>
             <div className="main-area">
-                <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+                <Sidebars sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
                 <Dashboard />
             </div>
         </div>
     );
 };
 
-const Header = () => (
+const Header = ({username,currentdate}) => (
     <header className="header">
         <div className="header-left">
-            <span>Welcome, User</span>
-            <span>Thu 16 January 2025</span>
+            <span>Welcome, {username}</span>
+            <span>{currentdate}</span>
         </div>
         <div className="header-right">
            <span>Premise Name</span>
@@ -38,24 +59,7 @@ const Header = () => (
     </header>
 );
 
-const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
-    const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
-    return (
-        <aside className={`clsidebar ${sidebarOpen ? "open" : "closed"}`}>
-            <FaBars className="clmenu-icon" onClick={toggleSidebar} />
-            {sidebarOpen && (
-                <ul>
-                    <li><Link to="/Hoddash"><HomeIcon fontSize="medium" /> Dashboard</Link></li>
-                    <li><Link to="/stockdetails"><Inventory fontSize="medium" /> Stock Details</Link></li>
-                    <li><Link to="/stockstatus"><Update fontSize="medium" /> Stock Status Update</Link></li>
-                    <li><Link to="/stockwarranty"><HealthAndSafety fontSize="medium" /> Stock Warranty</Link></li>
-                    <li><Link to="/stocktransfer"><Send fontSize="medium" /> Stock Transfer</Link></li>
-                </ul>
-            )}
-        </aside>
-    );
-};
 
 const Dashboard = () => (
     <main className="dashboard">
