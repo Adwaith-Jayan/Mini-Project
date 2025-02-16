@@ -7,41 +7,7 @@
 }
   
 /* Sidebar */
-.swsidebar {
-    width: 200px;
-    background: #2b4c5a;
-    color: white;
-    padding: 20px;
-    transition: width 0.3s ease-in-out;
-    overflow: hidden;
-}
-.swsidebar.closed {
-    width: 60px;
-}
-.swmenu-icon {
-    font-size: 20px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-  
-.swsidebar ul {
-    list-style: none;
-    padding: 0;
-}
-  
-.swsidebar ul li {
-    padding: 10px;
-    cursor: pointer;
-}
-ul li a {
-    text-decoration: none; 
-    color: inherit; 
-    font-size: 16px; 
-  }
-  
-.swsidebar ul li:hover {
-    background: #3b5b6b;
-}
+
   
 /* Main Content */
 .swmain-content {

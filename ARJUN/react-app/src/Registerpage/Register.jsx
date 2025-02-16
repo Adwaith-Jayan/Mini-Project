@@ -1,8 +1,7 @@
 import React, { useState } from "react";
+import axios from "axios";
 import "./Register.css";
-import registerimage from "../assets/loginimg.png"
-
-
+import registerimage from "../assets/loginimg.png";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -13,13 +12,31 @@ const Register = () => {
     inventory: "",
   });
 
+  const [message, setMessage] = useState(""); // For success/error messages
+  const [loading, setLoading] = useState(false); // Show a loading state
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/register", formData);
+
+      if (response.status === 201) {
+        setMessage("✅ Registration successful! You can now log in.");
+        setFormData({ firstName: "", email: "", password: "", role: "", inventory: "" });
+      }
+    } catch (error) {
+      setMessage("❌ Registration failed. Try again.");
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -32,6 +49,9 @@ const Register = () => {
           <h1>Register</h1>
           <p><strong>Manage all your inventory efficiently</strong></p>
           <p>Get started by creating your account and setting up your work profile to access all features seamlessly.</p>
+
+          {message && <p className="message">{message}</p>}
+
           <form onSubmit={handleSubmit}>
             <div className="input-group">
               <input 
@@ -89,7 +109,9 @@ const Register = () => {
               />
             </div>
 
-            <button type="submit" className="btn-submit">Create Account</button>
+            <button type="submit" className="btn-submit" disabled={loading}>
+              {loading ? "Creating Account..." : "Create Account"}
+            </button>
           </form>
         </div>
       </div>

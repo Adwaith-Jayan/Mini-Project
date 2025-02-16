@@ -1,0 +1,45 @@
+.assidebar {
+    width: 200px;
+    background: #2b4c5a;
+    color: white;
+    padding: 20px;
+    transition: width 0.3s ease-in-out;
+    overflow: hidden;
+    display: flex;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+.assidebar.closed {
+    width: 60px;
+}
+
+.asmenu-icon {
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.assidebar .asmenu-icon {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.assidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.assidebar ul li {
+    padding: 10px 0;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+ul li a {
+    text-decoration: none; 
+    color: inherit; 
+    font-size: 16px; 
+  }
+.assidebar ul li:hover {
+    background: rgba(255, 255, 255, 0.2);
+}

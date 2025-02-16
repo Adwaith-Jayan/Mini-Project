@@ -6,49 +6,7 @@
 }
 
 /* Sidebar */
-.stsidebar {
-    width: 200px;
-    background: #2b4c5a;
-    color: white;
-    padding: 20px;
-    transition: width 0.3s ease-in-out;
-    overflow: hidden;
-}
 
-.stsidebar.closed {
-    width: 60px;
-}
-
-.stmenu-icon {
-    font-size: 20px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.stsidebar .menu-icon {
-    font-size: 20px;
-    margin-bottom: 10px;
-}
-
-.stsidebar ul {
-    list-style: none;
-    padding: 0;
-}
-
-.stsidebar ul li {
-    padding: 10px 0;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-ul li a {
-    text-decoration: none; 
-    color: inherit; 
-    font-size: 16px; 
-  }
-
-.stsidebar ul li:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
 
 /* Main Content */
 .stmain-content {
