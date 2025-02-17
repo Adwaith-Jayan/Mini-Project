@@ -7,7 +7,7 @@ const roomSchema = new mongoose.Schema({
   in_charge: String  
 }); 
 
-// Create the Room model using the schema
+
 const Room = mongoose.models.Room ||  mongoose.model("Room", roomSchema, "room");
 
 export default Room;
