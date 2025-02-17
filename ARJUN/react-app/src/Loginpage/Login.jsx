@@ -32,7 +32,7 @@ function Login() {
       }
       else if(role==="stock-in-charge")
       {
-        navigate("/Sicdash")
+        navigate("/Sicdash");
       }
       else if(role==="Custodian")
       {
