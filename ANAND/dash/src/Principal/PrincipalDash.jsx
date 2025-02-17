@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './PrincipalDash.css'
 import { FaUserCircle, FaSignOutAlt, FaChartBar, FaCheckCircle, FaListAlt, FaBars } from 'react-icons/fa';
-import AccountMenu from '../assets/usermenu';
+import AccountMenu from '../../../../ARJUN/react-app/src/assets/Usermenu';
 import Button from '@mui/material/Button';
 import { Link } from "react-router-dom";
 import { Home as HomeIcon, Inventory, Update, HealthAndSafety, Send } from '@mui/icons-material';
@@ -15,6 +15,7 @@ const notifications = [
 
 const PrincipalDash = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const namess = response.data.names;
 
     return (
         <div className="app-container">
@@ -30,7 +31,7 @@ const PrincipalDash = () => {
 const Header = () => (
     <header className="header">
         <div className="header-left">
-            <span>Welcome, User</span>
+            <span>Welcome,{namess}</span>
             <span>Thu 16 January 2025</span>
         </div>
         <div className="header-right">

@@ -12,12 +12,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const SECRET_KEY = "your_jwt_secret"; // Fetch from env file
+const SECRET_KEY = "your_jwt_secret"; 
 
-// MongoDB connection URI from environment variable
 const mongoURI = process.env.MONGO_URI || 'mongodb+srv://adwaithjayan:abcd1234@cluster0.u0feo.mongodb.net/DepartmentStockManagement?retryWrites=true&w=majority'; 
 
-// Async function to connect to MongoDB
+
 const connectDB = async () => {
     try {
         await mongoose.connect(mongoURI, {
@@ -31,12 +30,12 @@ const connectDB = async () => {
     }
 };
 
-// Call the function to connect to MongoDB
+
 connectDB();
 
 // Define user schema
 const userSchema = new mongoose.Schema({
-    name:String,
+    name: String,
     email_id: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     designation: { type: String, required: true },
@@ -61,11 +60,12 @@ app.post("/login", async (req, res) => {
     if (password !== user.password) {
         return res.status(400).json({ message: "Invalid password" });
     }
-    const token = jwt.sign({ email, designation: user.designation }, SECRET_KEY, { expiresIn: "1h" });
+    const token = jwt.sign({ email, designation: user.designation,names: user.name }, SECRET_KEY, { expiresIn: "1h" });
 
     res.json({ 
         message: "Login successful", 
-        token: token, 
+        token: token,
+        names: user.name,
         designation: user.designation  // Ensure this is sent
     });
 });

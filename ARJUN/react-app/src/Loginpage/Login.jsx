@@ -26,6 +26,9 @@ function Login() {
       else if (role==="pricipal"){
         navigate("/principaldash");
       }
+      else if (role==="stock-in-charge"){
+        navigate("/stockdetails");
+      }
     } catch (error) {
       alert(error.response ? error.response.data.message : "Something went wrong");
     }
