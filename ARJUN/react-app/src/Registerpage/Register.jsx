@@ -91,10 +91,10 @@ const Register = () => {
                 required
               >
                 <option value="">Enter Inventory eg. Lab.</option>
-                <option value="Dbmslab">DBMS Lab</option>
-                <option value="OSlab">OS Lab</option>
-                <option value="networklab">Network Lab</option>
-                <option value="Furniture">Furniture</option>
+                <option value="DBMS LAB">DBMS Lab</option>
+                <option value="OS LAB">OS Lab</option>
+                <option value="NETWORK LAB">Network Lab</option>
+                <option value="FURNITURE">Furniture</option>
               </select>
             </div>
 

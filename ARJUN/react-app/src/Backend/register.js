@@ -1,4 +1,4 @@
-
+import mongoose from "mongoose";
 import express from "express";
 import User from "./usermodel.js";
 
@@ -23,6 +23,25 @@ router.post("/", async (req, res) => {
     // Hash the password before saving
     const Password = password;
 
+
+    const roomSchema = new mongoose.Schema({
+        name: String,
+        room_no: Number,
+        custodian: String,
+        in_charge: String
+    });
+    const accessSchema = new mongoose.Schema({
+      email_id: String,
+      room_no: Number
+    });
+
+    const Room = mongoose.model("Room", roomSchema, 'room');
+    const Access = mongoose.model("Access", accessSchema, 'access');
+    const Roomdetails = await Room.findOne({ name: inventory }); 
+    const Roomno = Roomdetails.room_no;
+    console.log(Roomdetails);
+    console.log(Roomno); 
+
     // Create a new user
     const newUser = new User({
       name: firstName,
@@ -31,8 +50,26 @@ router.post("/", async (req, res) => {
       designation: role
     });
 
+    const newAccess = new Access({
+      email_id: email,
+      room_no: Roomno
+  });
+
     // Save user to MongoDB
     await newUser.save();
+    await newAccess.save();
+
+    Roomdetails.name=firstName;
+    if(role.toLowerCase() ==="stock-in-charge")
+    {
+      Roomdetails.in_charge=firstName;
+    }
+    if(role.toLowerCase() ==="custodian")
+    {
+      Roomdetails.custodian=firstName;
+    }
+
+    await Roomdetails.save();
 
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {

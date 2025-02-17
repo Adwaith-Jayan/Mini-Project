@@ -6,18 +6,27 @@ import Button from '@mui/material/Button';
 import {jwtDecode} from "jwt-decode";
 import Sidebars from '../../../../ARJUN/react-app/src/assets/sidebar';
 import { Link } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 
 const notifications = [
     { message: 'New report from Verifier' },
     { message: 'New message from HOD' },
 ];
 
+const handleLogout = (navigate) => {
+    localStorage.removeItem("token"); // Remove the token from storage
+    navigate("/", {replace: true}); // Redirect to login page
+    window.location.reload(); // Ensure the page reloads completely
+    window.history.pushState(null,null,"/");
+  };
+
 const SicDash = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [username,setusername]= useState("");
     const [currentdate,setdate]=useState("");
     const [role,setRole]=useState(null);
+    const navigate= useNavigate();
+    
     
     useEffect(()=>{
               const token = localStorage.getItem("token"); // Retrieve token from localStorage
@@ -51,7 +60,7 @@ const SicDash = () => {
             <Header username={username} currentdate={currentdate}/>
             <div className="main-area">
                 <Sidebars sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role}/>
-                <Dashboard />
+                <Dashboard navigate={navigate} />
             </div>
         </div>
     );
@@ -72,7 +81,7 @@ const Header = ({username,currentdate}) => (
 
 
 
-const Dashboard = () => (
+const Dashboard = ({navigate}) => (
     <main className="dashboard">
         <div className="dashboard-header">
             <h1>Dashboard</h1>
@@ -86,7 +95,7 @@ const Dashboard = () => (
                 <Button className='action-button' variant="contained">Stock Handover</Button>
 
         </div>
-        <LogoutButton />
+        <LogoutButton navigate={navigate} />
     </main>
 );
 
@@ -104,11 +113,14 @@ const Notifications = ({ notifications }) => (
     </div>
 );
 
-const LogoutButton = () => (
+const LogoutButton = ({navigate}) => {
+    
+    return (
     <button className="logout-button">
-        <FaSignOutAlt className="logout-icon" />
+        <FaSignOutAlt className="logout-icon" onClick={()=>{handleLogout(navigate)}}/>
         Logout
     </button>
-);
+    );
+};
 
 export default SicDash;
