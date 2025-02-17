@@ -2,42 +2,32 @@ import React, { useState } from "react";
 import "./login.css";
 import loginimage from "../assets/loginimg.png";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); // For displaying errors
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setErrorMessage(""); // Reset error message before login attempt
-
     try {
-      const response = await fetch("http://localhost:5000/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email, password: password }), // ✅ Fixed key names
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Server error");
-      }
-
-      if (data.success) {
-        navigate("/SicDash");
-      } else {
-        setErrorMessage("Invalid email or password");
+      const response = await axios.post("http://localhost:5000/login", { email, password });
+      alert(response.data.message);
+      
+      const token = response.data.token;
+      localStorage.setItem("token", token);
+      
+      const role = response.data.designation;
+      console.log(role);
+      
+      if (role === "hodcse") {
+        navigate("/Hoddash");
+      } else if (role === "stock-in-charge") {
+        navigate("/Sicdash");
       }
     } catch (error) {
-      console.error("❌ Login error:", error.message);
-      if (error.message.includes("401")) {
-        setErrorMessage("Invalid email or password");
-      } else {
-        setErrorMessage("Failed to connect to the server. Please try again.");
-      }
+      alert(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -49,7 +39,6 @@ function Login() {
             <h1>Login</h1>
             <p>Login to your account</p>
           </div>
-          {errorMessage && <p className="error-message">{errorMessage}</p>}
           <form onSubmit={handleSubmit} className="login-form">
             <div className="login-input">
               <label htmlFor="email">Email*</label>
@@ -72,6 +61,11 @@ function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+            </div>
+            <div className="login-checkbox">
+              <input type="checkbox" id="remember-me" />
+              <label htmlFor="remember-me">Remember me</label>
+              <a className="login-forgot" href="#">Forgot password?</a>
             </div>
             <div className="login-button">
               <button type="submit">Login</button>

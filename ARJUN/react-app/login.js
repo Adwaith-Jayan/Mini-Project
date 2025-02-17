@@ -3,9 +3,7 @@ dotenv.config();
 
 import express from "express";
 import cors from "cors";
-import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import nodemailer from "nodemailer";
 import mongoose from "mongoose";
 
 const app = express();
@@ -60,7 +58,7 @@ app.post("/login", async (req, res) => {
     if (password !== user.password) {
         return res.status(400).json({ message: "Invalid password" });
     }
-    const token = jwt.sign({ email, designation: user.designation,names: user.name }, SECRET_KEY, { expiresIn: "1h" });
+    const token = jwt.sign({ email,name: user.name,designation: user.designation }, SECRET_KEY, { expiresIn: "1h" });
 
     res.json({ 
         message: "Login successful", 

@@ -14,9 +14,8 @@ import Deleteacc from "./deleteaccount/Deleteaccount";
 import UserProfile from "./profilesetting/Profilesetting";
 import { Delete } from "lucide-react";
 import HodDash from "../../../ANAND/dash/src/HOD/HodDash";
-import AssignFaculty from "../../../ADWAITH/src/AssignFaculty/AssignFaculty";
-import AddStock from "../../../ANAND/dash/src/Addstock/AddStock";
-import PrincipalDash from "../../../ANAND/dash/src/Principal/PrincipalDash";
+import SicDash from "../../../ANAND/dash/src/SIC/SicDash";
+import CustodianDash from "../../../ANAND/dash/src/Custodian/CustodianDash";
 
 function App() {
   return (
@@ -33,8 +32,9 @@ function App() {
         <Route path="/deleteacc" element={<Deleteacc/>}/>
         <Route path="/stockclears" element={<Stockclears/>}/>
         <Route path="/register" element={<Register/>}/>
-        <Route path="/assign" element={<AssignFaculty/>}/>
-        <Route path="/principaldash" element={<PrincipalDash/>}/>
+        <Route path="/Sicdash" element={<SicDash/>}/>
+        <Route path="/custdash" element={<CustodianDash/>}/>
+
       </Routes>
     </Router>
   );

@@ -4,9 +4,10 @@ import { FaUserCircle, FaSignOutAlt, FaChartBar, FaCheckCircle, FaListAlt, FaBar
 import AccountMenu from '../../../../ARJUN/react-app/src/assets/Usermenu';
 import Button from '@mui/material/Button';
 import { Link } from "react-router-dom";
-import { Home as HomeIcon, Inventory, Update, HealthAndSafety, Send } from '@mui/icons-material';
+import HomeIcon from '@mui/icons-material/Home';
 import ArticleIcon from '@mui/icons-material/Article';
 import VerifiedIcon from '@mui/icons-material/Verified';
+import { jwtDecode } from "jwt-decode";
 
 const notifications = [
     { message: 'New report from Verifier' },
@@ -16,10 +17,31 @@ const notifications = [
 const PrincipalDash = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const namess = response.data.names;
+    const [userName,setusername]= useState("");
+    const [currentdate,setdate]=useState("");
+    
+        useEffect(()=>{
+            const today = new Date().toLocaleDateString("en-GB", {
+                weekday: "short",
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              });
+            setdate(today);
+            const token = localStorage.getItem("token");
+            if(token){
+                try{
+                    const decoded = jwtDecode(token);
+                    setusername(decoded.name);
+                }catch(error){
+                    console.error("Error decoding token : ",error);
+                }
+            }
+        },[]);
 
     return (
         <div className="app-container">
-            <Header />
+            <Header userName={userName} currentdate={currentdate}/>
             <div className="main-area">
                 <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
                 <Dashboard />
@@ -28,11 +50,13 @@ const PrincipalDash = () => {
     );
 };
 
-const Header = () => (
+const Header = ({userName,currentdate}) => (
     <header className="header">
         <div className="header-left">
             <span>Welcome,{namess}</span>
             <span>Thu 16 January 2025</span>
+            <span>Welcome, {userName}</span>
+            <span>{currentdate}</span>
         </div>
         <div className="header-right">
             <input type="search" placeholder="Search..." />
@@ -50,7 +74,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             {sidebarOpen && (
                 <ul>
                     <li><Link to="/Hoddash"><HomeIcon fontSize="medium" /> Dashboard</Link></li>
-                    <li><Link to="/stockdetails"><VerifiedIcon fontSize="medium" /> Verification</Link></li>
+                    <li><Link to="/stockverify"><VerifiedIcon fontSize="medium" /> Verification</Link></li>
                     <li><Link to="/stockstatus"><ArticleIcon fontSize="medium" /> Reports </Link></li>
                 </ul>
             )}

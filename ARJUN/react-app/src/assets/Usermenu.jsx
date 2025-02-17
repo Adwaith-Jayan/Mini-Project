@@ -22,9 +22,9 @@ export default function AccountMenu() {
   };
   const handleLogout = () => {
     localStorage.removeItem("token"); // Remove the token from storage
-    navigate("/",{ replace: true }); // Redirect to login page
-    window.history.pushState(null, "", "/");
+    navigate("/", {replace: true}); // Redirect to login page
     window.location.reload(); // Ensure the page reloads completely
+    Window.history.pushState(null,"","/");
   };
   return (
     <React.Fragment>

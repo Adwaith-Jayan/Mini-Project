@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState } from "react";
 import "./Stockstatusupdate.css";
 import { FaSearch, FaUser, FaBars, FaBell, FaFilter } from "react-icons/fa";
 import AccountMenu from "../assets/Usermenu";
@@ -7,9 +7,7 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import UpdateIcon from '@mui/icons-material/Update';
 import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
 import SendIcon from '@mui/icons-material/Send';
-import { Link, useNavigate } from "react-router-dom";
-import {jwtDecode} from "jwt-decode";
-import Sidebars from "../assets/sidebar";
+import { Link } from "react-router-dom";
 
 
 const Stockstatusupdate = () => {
@@ -22,10 +20,11 @@ const Stockstatusupdate = () => {
   ]);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
-  const [role, setRole] = useState(null);
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+  const toggleUserMenu = () => setUserMenuOpen(!userMenuOpen);
   const toggleFilterMenu = () => setFilterOpen(!filterOpen);
 
   const handleStatusChange = (index, newStatus) => {
@@ -33,23 +32,12 @@ const Stockstatusupdate = () => {
     updatedStocks[index].status = newStatus;
     setStocks(updatedStocks);
   };
-  useEffect(() => {
-    const token = localStorage.getItem("token"); // Retrieve token from localStorage
-    if (token) {
-      try {
-        const decoded = jwtDecode(token); // Decode token to get user info
-        setRole(decoded.designation);
-      } catch (error) {
-        console.error("Invalid Token:", error);
-      }
-    }
-  }, []);
 
   return (
     <div className="stock-container">
       {/* Sidebar */}
-      <aside className={`sktsidebar ${sidebarOpen ? "open" : "closed"}`}>
-        <FaBars className="sktmenu-icon" onClick={toggleSidebar} />
+      <aside className={`sidebar ${sidebarOpen ? "open" : "closed"}`}>
+        <FaBars className="menu-icon" onClick={toggleSidebar} />
         {sidebarOpen && (
           <ul>
             <li></li>
@@ -62,7 +50,6 @@ const Stockstatusupdate = () => {
                 </ul>
         )}
       </aside>
-      <Sidebars sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />
 
       {/* Main Content */}
       <div className="main-content">
@@ -111,7 +98,7 @@ const Stockstatusupdate = () => {
             <tr>
               <th>Item ID</th>
               <th>Date of Invoice</th>
-              <th>Date of Indent</th>
+              <th>Indent No</th>
               <th>Item Name</th>
               <th>Description</th>
               <th>Price</th>

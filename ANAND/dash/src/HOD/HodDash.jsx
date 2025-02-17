@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../Principal/PrincipalDash.css';
 import { FaUserCircle, FaSignOutAlt, FaChartBar, FaCheckCircle, FaListAlt, FaBars } from 'react-icons/fa';
 import Button from '@mui/material/Button';
@@ -9,6 +9,8 @@ import UpdateIcon from "@mui/icons-material/Update";
 import HealthAndSafetyIcon from "@mui/icons-material/HealthAndSafety";
 import SendIcon from "@mui/icons-material/Send";
 import AccountMenu from '../../../../ARJUN/react-app/src/assets/Usermenu';
+import AccountMenu from '../../../../ARJUN/react-app/src/assets/Usermenu';
+import { jwtDecode } from "jwt-decode";
 
 const notifications = [
     { message: 'New report from Verifier' },
@@ -17,9 +19,23 @@ const notifications = [
 
 const HodDash = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [userName, setUserName] = useState("");
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            try {
+                const decoded = jwtDecode(token);
+                setUserName(decoded.name); 
+            } catch (error) {
+                console.error("Error decoding token:", error);
+            }
+        }
+    }, []);
+
+
     return (
         <div className="app-container">
-            <Header />
+             <Header userName={userName}/>
             <div className="main-area">
                 <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
                 <Dashboard />
@@ -28,10 +44,10 @@ const HodDash = () => {
     );
 };
 
-const Header = () => (
+const Header = ({userName}) => (
     <header className="header">
         <div className="header-left">
-            <span>Welcome, User</span>
+            <span>Welcome, {userName}</span>
             <span>Thu 16 January 2025</span>
         </div>
         <div className="header-right">
@@ -63,7 +79,6 @@ const Dashboard = () => (
             <Notifications notifications={notifications} />
         </div>
         <div className="actions">
-
             <Link to ="/register"><Button className='action-button' variant="contained">Create Account</Button></Link>
             <Link to ="/deleteacc"><Button className='action-button' variant="contained">Remove Account</Button></Link>
             <Button className='action-button' variant="contained">Send Email</Button>
