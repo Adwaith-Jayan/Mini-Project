@@ -1,6 +1,6 @@
 
 import express from "express";
-import User from "./usermodel.js"; // Assuming your Mongoose model is in models/User.js
+import User from "./usermodel.js";
 
 const router = express.Router();
 
