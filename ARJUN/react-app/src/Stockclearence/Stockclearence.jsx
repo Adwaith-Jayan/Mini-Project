@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./stockclear.css";
 import { FaSearch, FaUser, FaBars, FaBell, FaFilter } from "react-icons/fa";
 import AccountMenu from "../assets/Usermenu";
@@ -10,6 +10,9 @@ import UpdateIcon from '@mui/icons-material/Update';
 import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
 import SendIcon from '@mui/icons-material/Send';
 import { Link } from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
+import Sidebars from "../assets/sidebar";
+
 
 const Stockclears = () => {
   const [stocks, setStocks] = useState([
@@ -23,8 +26,8 @@ const Stockclears = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [checkedStocks, setCheckedStocks] = useState({});
-
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+  const [role, setRole] = useState(null);
+  
   const toggleFilterMenu = () => setFilterOpen(!filterOpen);
   const handleCheckboxChange = (id) => {
     setCheckedStocks((prev) => ({
@@ -32,24 +35,21 @@ const Stockclears = () => {
       [id]: !prev[id],
     }));
   };
-
+  useEffect(() => {
+      const token = localStorage.getItem("token"); // Retrieve token from localStorage
+      if (token) {
+        try {
+          const decoded = jwtDecode(token); // Decode token to get user info
+          setRole(decoded.designation);
+        } catch (error) {
+          console.error("Invalid Token:", error);
+        }
+      }
+    }, []);
   return (
     <div className="clearstocks-container">
       {/* Sidebar */}
-      <aside className={`clsidebar ${sidebarOpen ? "open" : "closed"}`}>
-        <FaBars className="clmenu-icon" onClick={toggleSidebar} />
-        {sidebarOpen && (
-          <ul>
-           <li></li>
-                  <li></li>
-                  <li><HomeIcon fontSize="medium"/>   Dashboard</li>
-                  <li><InventoryIcon fontSize="medium"/><Link to="/stockdetails">   Stock Details</Link></li>
-                  <li><UpdateIcon fontSize="medium"/> <Link to="/stockstatus"> Stock Status Update</Link> </li>
-                  <li><HealthAndSafetyIcon fontSize="medium"/> <Link to="/stockwarranty"> Stock Warranty</Link></li>
-                  <li><SendIcon fontSize="medium"/><Link to="/stocktransfer">   Stock Transfer</Link></li>
-          </ul>
-        )}
-      </aside>
+      <Sidebars sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />
 
       {/* Main Content */}
       <div className="clmain-content">

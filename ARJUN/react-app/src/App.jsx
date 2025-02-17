@@ -15,6 +15,7 @@ import UserProfile from "./profilesetting/Profilesetting";
 import { Delete } from "lucide-react";
 import HodDash from "../../../ANAND/dash/src/HOD/HodDash";
 import SicDash from "../../../ANAND/dash/src/SIC/SicDash";
+import CustodianDash from "../../../ANAND/dash/src/Custodian/CustodianDash";
 
 function App() {
   return (
@@ -32,6 +33,8 @@ function App() {
         <Route path="/stockclears" element={<Stockclears/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/Sicdash" element={<SicDash/>}/>
+        <Route path="/custdash" element={<CustodianDash/>}/>
+
       </Routes>
     </Router>
   );

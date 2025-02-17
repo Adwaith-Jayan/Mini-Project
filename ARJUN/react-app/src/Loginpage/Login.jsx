@@ -12,7 +12,7 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/login", { email, password });
+      const response = await axios.post("http://localhost:5000/api/loginauth", { email, password });
       alert(response.data.message);
       
       const token = response.data.token;
@@ -23,9 +23,13 @@ function Login() {
       if (role === "hodcse") {
         navigate("/Hoddash");
       }
-      else if(role=="stock-in-charge")
+      else if(role==="stock-in-charge")
       {
-        navigate("/Sicdash")
+        navigate("/Sicdash");
+      }
+      else if(role==="Custodian")
+      {
+        navigate("/custdash");
       }
     } catch (error) {
       alert(error.response ? error.response.data.message : "Something went wrong");

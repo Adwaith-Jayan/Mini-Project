@@ -1,5 +1,5 @@
 /* General Layout */
-.swstocks-container {
+.sdstocks-container {
     display: flex;
     height: 100vh;
     font-family: Arial, sans-serif;
@@ -7,17 +7,52 @@
 }
   
 /* Sidebar */
+.sdsidebar {
+    width: 200px;
+    background: #2b4c5a;
+    color: white;
+    padding: 20px;
+    transition: width 0.3s ease-in-out;
+    overflow: hidden;
+}
+.sdsidebar.closed {
+    width: 60px;
+}
+.sdmenu-icon {
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+  
+.sdsidebar ul {
+    list-style: none;
+    padding: 0;
+}
+  
+.sdsidebar ul li {
+    padding: 10px;
+    cursor: pointer;
+}
 
+ul li a {
+    text-decoration: none; 
+    color: inherit; 
+    font-size: 16px; 
+  }
+  
+.sdsidebar ul li:hover {
+    background: #3b5b6b;
+}
   
 /* Main Content */
-.swmain-content {
+.sdmain-content {
     flex: 1;
     padding: 20px;
     background: white;
 }
   
 /* Header */
-.headerstockwarranty {
+.sdheaderstockdetails {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -25,18 +60,18 @@
     border-bottom: 2px solid #e0e0e0;
 }
   
-.headerstockwarranty h2 {
+.sdheaderstockdetails h2 {
     margin: 0;
 }
   
-.swheader-icons {
+.sdheader-icons {
     display: flex;
     align-items: center;
     gap: 10px;
 }
   
 /* Search Bar */
-.swsearch-bar {
+.sdsearch-bar {
     display: flex;
     align-items: center;
     border: 1px solid #ccc;
@@ -45,25 +80,25 @@
     background: white;
 }
   
-.swsearch-bar input {
+.sdsearch-bar input {
     border: none;
     outline: none;
     padding: 5px;
 }
   
-.swsearch-icon {
+.sdsearch-icon {
     color: gray;
 }
   
 /* Buttons */
-.swexport-btn, .swnew-item-btn {
+.sdexport-btn, .sdnew-item-btn {
     padding: 8px 12px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
 }
-.swfilter-btn {
+.sdfilter-btn {
     background: #ddd;
     border: none;
     padding: 8px 12px;
@@ -72,45 +107,48 @@
 }
 
   
-
+.sdexport-btn {
+    background: #6c757d;
+    color: white;
+}
   
-.swnew-item-btn {
-    background: #6a0dad !important;
-    color: white !important;
+.sdnew-item-btn {
+    background: #6a0dad;
+    color: white;
 }
   
 /* User Icon */
-.swuser-icon {
+.sduser-icon {
     font-size: 20px;
     cursor: pointer;
 }
   
 /* Notification Icon */
-.swnotification-icon {
+.sdnotification-icon {
     font-size: 20px;
     cursor: pointer;
 }
   
 /* Stock Table */
-.swstock-table {
+.sdstock-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
     background: white;
 }
   
-.swstock-table th, .swstock-table td {
+.sdstock-table th, .sdstock-table td {
     padding: 10px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
   
-.swstock-table th {
+.sdstock-table th {
     background: #f1f1f1;
 }
   
 /* Status Labels */
-.swstatus-label {
+.sdstatus-label {
     display: inline-block;  
     width: 100px;  
     text-align: center;  
@@ -120,36 +158,19 @@
     font-weight: bold;
     
 }
-.swwarranty-label {
-    display: inline-block;  
-    width: 100px;  
-    text-align: center;  
-    padding: 5px 0;  
-    border-radius: 15px;  
-    font-size: 14px;
-    font-weight: bold;
-    
-}
-
-.swworking {
+  
+.working {
     background: #b2f7b2;
     color: #2f7d2f;
 }
   
-.swnot-working {
+.not-working {
     background: #f7b2b2;
     color: #7d2f2f;
 }
-.swin-warranty{
-    background: rgba(255, 255, 0, 0.755);
-    color: black
-}
-.swout-of-warranty{
-    background: rgba(255, 162, 0, 0.795);
-    color: black;
-}
+  
 /* Filter Menu */
-.swfilter-menu {
+.sdfilter-menu {
     background: white;
     padding: 10px;
     border: 1px solid #ccc;
@@ -158,12 +179,12 @@
     z-index: 10;
 }
   
-.swfilter-menu label {
+.sdfilter-menu label {
     display: block;
     margin-bottom: 10px;
 }
   
-.swfilter-menu select {
+.sdfilter-menu select {
     width: 20%;
     padding: 5px;
     border: 1px solid #ccc;
@@ -171,12 +192,12 @@
 }
   
 /* User Dropdown */
-.swuser-menu {
+.sduser-menu {
     position: relative;
     display: inline-block;
 }
   
-.swuser-dropdown {
+.sduser-dropdown {
     position: absolute;
     right: 0;
     top: 30px;
@@ -187,23 +208,22 @@
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
   
-.swuser-dropdown p {
+.sduser-dropdown p {
     margin: 5px 0;
     cursor: pointer;
 }
   
-.swuser-dropdown p:hover {
+.sduser-dropdown p:hover {
     background: #59afbf;
 }
 
-.swbuttons{
+.newbuttons{
     display: flex;
     gap: 20px;
 }
 
-.swdatetype{
+.datetype{
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
-
