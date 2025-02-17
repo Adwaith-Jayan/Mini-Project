@@ -1,4 +1,4 @@
- /* General Styles */
+  /* General Styles */
 body {
   font-family: 'Arial', sans-serif;
   background-color: #f8f9fa;
@@ -61,7 +61,7 @@ body {
 
  /* Gradient Title Background */
 .form-title-container {
-  width: 100%;
+  width: 1100px;
   text-align: center;
   padding: 15px;
   border-radius: 10px;
@@ -74,15 +74,14 @@ body {
   font-size: 28px;
   font-weight: bold;
   text-align: center;
-  color: black;
+  color: rgb(23, 184, 184);
 }
 
 /* Apply Gold Color to 'System' */
 .form-title span {
-  color: #c49b22; /* Gold color */
+  color: #6bd6e9; /* Gold color */
   font-weight: bold;
 }
-
 
 /* Input Fields */
 .input-field {
