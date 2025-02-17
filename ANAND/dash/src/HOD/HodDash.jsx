@@ -9,7 +9,6 @@ import UpdateIcon from "@mui/icons-material/Update";
 import HealthAndSafetyIcon from "@mui/icons-material/HealthAndSafety";
 import SendIcon from "@mui/icons-material/Send";
 import AccountMenu from '../../../../ARJUN/react-app/src/assets/Usermenu';
-import AccountMenu from '../../../../ARJUN/react-app/src/assets/Usermenu';
 import { jwtDecode } from "jwt-decode";
 
 const notifications = [
