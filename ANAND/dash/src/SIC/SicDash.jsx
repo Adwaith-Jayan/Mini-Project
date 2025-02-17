@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import '../Principal/PrincipalDash.css';
 import { FaUserCircle, FaSignOutAlt, FaChartBar, FaCheckCircle, FaListAlt, FaBars } from 'react-icons/fa';
 import AccountMenu from '../../../../ARJUN/react-app/src/assets/Usermenu';
 import Button from '@mui/material/Button';
 import {jwtDecode} from "jwt-decode";
 import Sidebars from '../../../../ARJUN/react-app/src/assets/sidebar';
+import { Link } from 'react-router-dom';
+
 
 const notifications = [
     { message: 'New report from Verifier' },
@@ -15,8 +17,18 @@ const SicDash = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [username,setusername]= useState("");
     const [currentdate,setdate]=useState("");
+    const [role,setRole]=useState(null);
     
     useEffect(()=>{
+              const token = localStorage.getItem("token"); // Retrieve token from localStorage
+              if (token) {
+                try {
+                  const decoded = jwtDecode(token); // Decode token to get user info
+                  setRole(decoded.designation);
+                } catch (error) {
+                  console.error("Invalid Token:", error);
+                }
+              }
             const today = new Date().toLocaleDateString("en-GB", {
                 weekday: "short",
                 day: "2-digit",
@@ -24,7 +36,6 @@ const SicDash = () => {
                 year: "numeric",
               });
             setdate(today);
-            const token = localStorage.getItem("token");
             if(token){
                 try{
                     const decoded = jwtDecode(token);
@@ -39,7 +50,7 @@ const SicDash = () => {
         <div className="app-container">
             <Header username={username} currentdate={currentdate}/>
             <div className="main-area">
-                <Sidebars sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+                <Sidebars sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role}/>
                 <Dashboard />
             </div>
         </div>
