@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import express from "express";
 import User from "./usermodel.js";
-
+import Room from "./Roommodel.js";
+import Access from "./Access.js";
 const router = express.Router();
 
 // Register a new user
@@ -24,21 +25,12 @@ router.post("/", async (req, res) => {
     const Password = password;
 
 
-    const roomSchema = new mongoose.Schema({
-        name: String,
-        room_no: Number,
-        custodian: String,
-        in_charge: String
-    });
-    const accessSchema = new mongoose.Schema({
-      email_id: String,
-      room_no: Number
-    });
-
-    const Room = mongoose.model("Room", roomSchema, 'room');
-    const Access = mongoose.model("Access", accessSchema, 'access');
-    const Roomdetails = await Room.findOne({ name: inventory }); 
+    let RoomModel = mongoose.models.Room || mongoose.model("Room", roomSchema, "room");
+    let AccessModel = mongoose.models.Access || mongoose.model("Access", accessSchema, "access");
+    
+    const Roomdetails = await RoomModel.findOne({ name: inventory }); 
     const Roomno = Roomdetails.room_no;
+    const Accessdetails = await AccessModel.findOne({ room_no: Roomno }); 
     console.log(Roomdetails);
     console.log(Roomno); 
 
@@ -49,17 +41,27 @@ router.post("/", async (req, res) => {
       password: Password,
       designation: role
     });
+    if(Accessdetails)
+    {
+      Accessdetails.email_id=email;
+      Accessdetails.room_no=Roomno;
+      await Accessdetails.save();
+    }
+    else{
+      const newAccess = new Access({
+        email_id: email,
+        room_no: Roomno
+    });
+    await newAccess.save();
 
-    const newAccess = new Access({
-      email_id: email,
-      room_no: Roomno
-  });
+    }
+
+    
 
     // Save user to MongoDB
     await newUser.save();
-    await newAccess.save();
+    
 
-    Roomdetails.name=firstName;
     if(role.toLowerCase() ==="stock-in-charge")
     {
       Roomdetails.in_charge=firstName;
