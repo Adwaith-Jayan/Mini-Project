@@ -23,9 +23,6 @@ function Login() {
       if (role === "hodcse") {
         navigate("/Hoddash");
       }
-      else if (role==="pricipal"){
-        navigate("/principaldash");
-      }
       else if(role==="Stock-In-Charge")
       {
         navigate("/Sicdash");

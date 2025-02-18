@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Register.css";
 import registerimage from "../assets/loginimg.png";
@@ -14,6 +14,21 @@ const Register = () => {
 
   const [message, setMessage] = useState(""); // For success/error messages
   const [loading, setLoading] = useState(false); // Show a loading state
+  const [inventoryList, setInventoryList] = useState([]); // For storing the list of inventories
+
+  // Fetch inventory options from the database when the component mounts
+  useEffect(() => {
+    const fetchInventory = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/Room/inventory");
+        setInventoryList(response.data); // Set inventory data from the backend
+      } catch (error) {
+        console.error("Error fetching inventory:", error);
+      }
+    };
+    
+    fetchInventory();
+  }, []); // Empty dependency array means this runs once when the component mounts
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -90,11 +105,10 @@ const Register = () => {
                 onChange={handleChange} 
                 required
               >
-                <option value="">Enter Inventory eg. Lab.</option>
-                <option value="Dbmslab">DBMS Lab</option>
-                <option value="OSlab">OS Lab</option>
-                <option value="networklab">Network Lab</option>
-                <option value="Furniture">Furniture</option>
+                <option value="">Select Inventory</option>
+                {inventoryList.map((room) => (
+                  <option key={room._id} value={room.name}>{room.name}</option>
+                ))}
               </select>
             </div>
 
