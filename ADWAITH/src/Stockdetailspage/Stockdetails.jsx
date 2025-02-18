@@ -27,7 +27,10 @@ const Stockdetails = () => {
         if (!response.ok) throw new Error("Failed to fetch stock details");
 
         const data = await response.json();
-        setStocks(data);
+        console.log("Fetched Data:", data); // Debugging log
+
+        // Ensure data is always an array
+        setStocks(Array.isArray(data) ? data : [data]);
       } catch (err) {
         setError(err.message);
       } finally {
