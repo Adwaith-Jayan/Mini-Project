@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import connectDB from "./src/Backend/database.js";
 import loginauthRoutes from "./src/Backend/loginauth.js";
 import registerRoutes from "./src/Backend/register.js";
+import RoomRoutes from "./src/Backend/Room.js";
 
 dotenv.config();
 const app = express();
@@ -18,6 +19,7 @@ connectDB();
 // Routes
 app.use("/api/loginauth", loginauthRoutes);
 app.use("/api/register", registerRoutes);
+app.use("/api/Room", RoomRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

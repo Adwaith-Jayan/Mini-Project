@@ -8,15 +8,24 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function ProfileMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // Remove the token from storage
+    navigate("/", {replace: true}); // Redirect to login page
+    window.location.reload(); // Ensure the page reloads completely
+    window.history.pushState(null,null,"/");
   };
   return (
     <React.Fragment>
@@ -71,7 +80,7 @@ export default function ProfileMenu() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleClose}component={Link} to="/">
+        <MenuItem onClick={()=>{handleClose(),handleLogout()}}component={Link} to="/">
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
