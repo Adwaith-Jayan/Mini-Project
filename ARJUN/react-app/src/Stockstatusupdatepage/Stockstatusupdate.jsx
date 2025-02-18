@@ -48,20 +48,7 @@ const Stockstatusupdate = () => {
   return (
     <div className="stock-container">
       {/* Sidebar */}
-      <aside className={`sktsidebar ${sidebarOpen ? "open" : "closed"}`}>
-        <FaBars className="sktmenu-icon" onClick={toggleSidebar} />
-        {sidebarOpen && (
-          <ul>
-            <li></li>
-                  <li></li>
-                  <li><HomeIcon fontSize="medium"/>   Dashboard</li>
-                  <li><InventoryIcon fontSize="medium"/><Link to="/stockdetails">   Stock Details</Link></li>
-                  <li><UpdateIcon fontSize="medium"/> <Link to="/stockstatus"> Stock Status Update</Link> </li>
-                  <li><HealthAndSafetyIcon fontSize="medium"/> <Link to="/stockwarranty"> Stock Warranty</Link></li>
-                  <li><SendIcon fontSize="medium"/><Link to="/stocktransfer">   Stock Transfer</Link></li>
-                </ul>
-        )}
-      </aside>
+      
       <Sidebars sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />
 
       {/* Main Content */}

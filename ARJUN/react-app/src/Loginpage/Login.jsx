@@ -26,11 +26,7 @@ function Login() {
       else if (role==="pricipal"){
         navigate("/principaldash");
       }
-      else if (role==="stock-in-charge"){
-        navigate("/stockdetails");
-        navigate("/Hoddash");
-      }
-      else if(role==="stock-in-charge")
+      else if(role==="Stock-In-Charge")
       {
         navigate("/Sicdash");
       }
