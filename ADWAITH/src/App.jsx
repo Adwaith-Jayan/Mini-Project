@@ -3,7 +3,7 @@ import AssignFaculty from "./AssignFaculty/AssignFaculty";
 import MaintenanceList from "./MaintenanceList/MaintenanceList";
 import Login from "./Loginpage/Login";
 import Home from "./Homepage/Home";
-import SicDash from "./SIC/SicDash";  // Import SicDash component
+import SicDash from "../../ANAND/dash/src/SIC/SicDash"
 import Stockdetails from "./Stockdetailspage/Stockdetails";
 
 function App() {
