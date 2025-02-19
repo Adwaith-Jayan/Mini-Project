@@ -20,14 +20,14 @@ function Login() {
       
       const role = response.data.designation;
       console.log(role);
-      if (role === "hodcse") {
+      if (role.toLowerCase() === "hodcse") {
         navigate("/Hoddash");
       }
-      else if(role==="Stock-In-Charge")
+      else if(role.toLowerCase()==="stock-in-charge")
       {
         navigate("/Sicdash");
       }
-      else if(role==="Custodian")
+      else if(role.toLowerCase()==="custodian")
       {
         navigate("/custdash");
       }
