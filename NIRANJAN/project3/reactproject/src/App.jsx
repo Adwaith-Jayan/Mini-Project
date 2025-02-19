@@ -1,8 +1,18 @@
 import React from "react";
-import NewStockSystem from ".//NewStockSystem";
+//import NewStockSystem from ".//NewStockSystem";
+
+/*function App() {
+  return <NewStockSystem />;
+}*/
+
+import AssignedFaculties from ".//AssignedFaculties";
 
 function App() {
-  return <NewStockSystem />;
+  return (
+    <div className="app-container">
+      <AssignedFaculties />
+    </div>
+  );
 }
 
 export default App;
