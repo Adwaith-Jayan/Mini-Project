@@ -88,7 +88,7 @@ const Dashboard = ({navigate}) => (
             <Notifications notifications={notifications} />
         </div>
         <div className="actions">
-                <Button className='action-button' variant="contained">Add Stock</Button>
+                <Link to = "/addstocksic"><Button className='action-button' variant="contained">Add Stock</Button></Link>
                 <Link to = "/stockclears"><Button className='action-button' variant="contained">Stock Clearance</Button></Link>
                 <Button className='action-button' variant="contained">Send Email</Button>
                 <Button className='action-button' variant="contained">Transfer Log Details</Button>
@@ -109,7 +109,7 @@ const Notifications = ({ notifications }) => (
                 <li key={i}>{n.message}</li>
             ))}
         </ul>
-        <a href="#">View All</a>
+        <Link to="/notify">View All</Link>
     </div>
 );
 

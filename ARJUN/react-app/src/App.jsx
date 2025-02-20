@@ -16,6 +16,8 @@ import { Delete } from "lucide-react";
 import HodDash from "../../../ANAND/dash/src/HOD/HodDash";
 import SicDash from "../../../ANAND/dash/src/SIC/SicDash";
 import CustodianDash from "../../../ANAND/dash/src/Custodian/CustodianDash";
+import NotificationPanel from "./notificationpanel/notification";
+import AddStocksic from "./addstocksic/addstock";
 
 function App() {
   return (
@@ -34,6 +36,10 @@ function App() {
         <Route path="/register" element={<Register/>}/>
         <Route path="/Sicdash" element={<SicDash/>}/>
         <Route path="/custdash" element={<CustodianDash/>}/>
+        <Route path="/notify" element={<NotificationPanel/>}/>
+        <Route path="/addstocksic" element={<AddStocksic/>}/>
+
+        
 
       </Routes>
     </Router>

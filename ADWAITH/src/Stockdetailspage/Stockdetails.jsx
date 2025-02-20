@@ -130,7 +130,7 @@ const Stockdetails = () => {
               stocks.map((stock, index) => (
                 <tr key={index}>
                   <td>{stock.item_no}</td>
-                  <td>{stock.ident_no}</td>
+                  <td>{stock.indent_no}</td>
                   <td>{stock.item_name}</td>
                   <td>{new Date(stock.date_of_invoice).toLocaleDateString()}</td>
                   <td>{stock.description}</td>

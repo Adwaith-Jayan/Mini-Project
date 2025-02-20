@@ -27,7 +27,7 @@ const Item = mongoose.model("Item", itemSchema, "item");
 
 const includesSchema = new mongoose.Schema({
     item_no: String,
-    ident_no: String,
+    indent_no: String,
     sl_no: Number
 });
 const Includes = mongoose.model("Includes", includesSchema, "includes");
@@ -69,10 +69,10 @@ router.get("/stockdetails", async (req, res) => {
         const identNumbers = await Includes.find({ item_no: { $in: itemNumbers } });
         const stockDetails = await Promise.all(
             identNumbers.map(async (ident) => {
-                const stock = await Stock.findOne({ indent_no: ident.ident_no, sl_no: ident.sl_no });
+                const stock = await Stock.findOne({ indent_no: ident.indent_no, sl_no: ident.sl_no });
                 return stock ? {
                     item_no: ident.item_no,
-                    ident_no: stock.indent_no,
+                    indent_no: stock.indent_no,
                     item_name: stock.name,
                     date_of_invoice: stock.date_of_purchase,
                     description: stock.specification,
