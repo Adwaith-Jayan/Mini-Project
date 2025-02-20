@@ -15,7 +15,7 @@ const SECRET_KEY = "your_jwt_secret";
 const mongoURI = process.env.MONGO_URI || 'mongodb+srv://adwaithjayan:abcd1234@cluster0.u0feo.mongodb.net/DepartmentStockManagement?retryWrites=true&w=majority'; 
 
 
-const connectDB = async () => {
+/*const connectDB = async () => {
     try {
         await mongoose.connect(mongoURI, {
             useNewUrlParser: true,
@@ -26,8 +26,12 @@ const connectDB = async () => {
         console.error("❌ MongoDB Connection Error:", err);
         process.exit(1); 
     }
-};
-
+};*/
+mongoose.connect('mongodb://localhost:27017/yourdbname', {
+    // Remove deprecated options
+})
+.then(() => console.log('Connected to MongoDB'))
+.catch(err => console.error('Could not connect to MongoDB', err));
 
 connectDB();
 

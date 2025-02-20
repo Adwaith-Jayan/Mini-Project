@@ -24,7 +24,7 @@ export default function AccountMenu() {
     localStorage.removeItem("token"); // Remove the token from storage
     navigate("/", {replace: true}); // Redirect to login page
     window.location.reload(); // Ensure the page reloads completely
-    Window.history.pushState(null,"","/");
+    Window.history.pushState(null,null,"/");
   };
   return (
     <React.Fragment>

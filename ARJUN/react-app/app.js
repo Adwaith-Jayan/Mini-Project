@@ -1,10 +1,12 @@
 import express from "express";
-import cors from "cors";
 import dotenv from "dotenv";
+import cors from "cors";
 import connectDB from "./src/Backend/database.js";
 import loginauthRoutes from "./src/Backend/loginauth.js";
 import registerRoutes from "./src/Backend/register.js";
 import RoomRoutes from "./src/Backend/Room.js";
+import StockdetailsRoutes from "./src/Backend/Stockdetails.js";
+import StockstatusupdateRoutes from "./src/Backend/stockstatusupdate.js";
 
 dotenv.config();
 const app = express();
@@ -20,6 +22,8 @@ connectDB();
 app.use("/api/loginauth", loginauthRoutes);
 app.use("/api/register", registerRoutes);
 app.use("/api/Room", RoomRoutes);
+app.use("/api/stock", StockdetailsRoutes);
+app.use("/api/ustock", StockstatusupdateRoutes); // ✅ Add new endpoint for stock status updates
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

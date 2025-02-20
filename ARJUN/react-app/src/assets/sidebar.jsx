@@ -22,11 +22,11 @@ const Sidebars = ({ sidebarOpen, setSidebarOpen, role }) => {
                 <li></li>
                       <li></li>
                       <li> <HomeIcon fontSize="medium" />
-                      <span onClick={() => navigate(role === "Stock-In-Charge" ? "/Sicdash" : "/Custdash")}> Dashboard </span></li>
+                      <span onClick={() => navigate(role.toLowerCase() === "stock-in-charge" ? "/Sicdash" : "/Custdash")}> Dashboard </span></li>
                       <li><InventoryIcon fontSize="medium"/><Link to="/stockdetails">   Stock Details</Link></li>
                       <li><UpdateIcon fontSize="medium"/> <Link to="/stockstatus"> Stock Status Update</Link> </li>
                       <li><HealthAndSafetyIcon fontSize="medium"/> <Link to="/stockwarranty"> Stock Warranty</Link></li>
-                    {role === "Stock-In-Charge" && (
+                    {role.toLowerCase() === "stock-in-charge" && (
                         <li>
                             <Link to="/stocktransfer">
                                 <SendIcon fontSize="medium" /> Stock Transfer
