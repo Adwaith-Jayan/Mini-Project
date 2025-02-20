@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import './Addstock.css';
 import Button from '@mui/material/Button';
 import { TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {jwtDecode} from "jwt-decode";
 
 const AddStocksic = () => {
     const navigate = useNavigate();
+    const [Email, setEmail] = useState(null);
     const [formData, setFormData] = useState({
         name: '',
         sl_no: '',
@@ -25,16 +27,27 @@ const AddStocksic = () => {
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+          try {
+            const decoded = jwtDecode(token);
+            setEmail(decoded.email);
+          } catch (error) {
+            console.error("Invalid Token:", error);
+          }
+        }
+      }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const dbData = { ...formData, department: '' };
+        const dbData = { ...formData, Email};
 
         try {
-            const response = await axios.post('http://localhost:5000/api/forward-stock-tsk', dbData);
+            const response = await axios.post('http://localhost:5000/api/add-stock-sic', dbData);
             setMessage(response.data.message);
-            alert("Stock Forwarded Successfully!");
+            alert("Stock Added Successfully!");
             navigate('/Sicdash');
         } catch (error) {
             console.error("Error forwarding stock:", error);
@@ -114,8 +127,16 @@ const AddStocksic = () => {
                 <TextField 
                     label="specification" 
                     variant="outlined" 
-                    name="Specification" 
+                    name="specification" 
                     value={formData.specification} 
+                    onChange={handleChange} 
+                    required 
+                />
+                <TextField 
+                    label="Quantity" 
+                    variant="outlined" 
+                    name="qty" 
+                    value={formData.qty} 
                     onChange={handleChange} 
                     required 
                 />
