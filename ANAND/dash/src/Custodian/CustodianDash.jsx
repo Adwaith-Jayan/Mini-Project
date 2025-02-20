@@ -5,17 +5,26 @@ import AccountMenu from '../../../../ARJUN/react-app/src/assets/Usermenu';
 import Button from '@mui/material/Button';
 import Sidebars from '../../../../ARJUN/react-app/src/assets/sidebar';
 import {jwtDecode} from "jwt-decode";
-
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const notifications = [
     { message: 'New report from Verifier' },
     { message: 'New message from HOD' },
 ];
+const handleLogout = (navigate) => {
+    localStorage.removeItem("token"); // Remove the token from storage
+    navigate("/", {replace: true}); // Redirect to login page
+    window.location.reload(); // Ensure the page reloads completely
+    window.history.pushState(null,null,"/");
+  };
 
 const CustodianDash = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [username,setusername]= useState("");
     const [currentdate,setdate]=useState("");
+    const [role,setRole]=useState(null);
+    const navigate= useNavigate();
 
     useEffect(()=>{
         const today = new Date().toLocaleDateString("en-GB", {
@@ -34,14 +43,23 @@ const CustodianDash = () => {
                 console.error("Error decoding token : ",error);
             }
         }
+        
+        if (token) {
+            try {
+                const decoded = jwtDecode(token); // Decode token to get user info
+                setRole(decoded.designation);
+                } catch (error) {
+                    console.error("Invalid Token:", error);
+                }
+            }
     },[]);
 
     return (
         <div className="app-container">
             <Header username={username} currentdate={currentdate}/>
             <div className="main-area">
-                <Sidebars sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-                <Dashboard />
+                <Sidebars sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />
+                <Dashboard navigate={navigate} />
             </div>
         </div>
     );
@@ -61,7 +79,7 @@ const Header = ({username,currentdate}) => (
 );
 
 
-const Dashboard = () => (
+const Dashboard = ({navigate}) => (
     <main className="dashboard">
         <div className="dashboard-header">
             <h1>Dashboard</h1>
@@ -93,7 +111,7 @@ const Notifications = ({ notifications }) => (
 
 const LogoutButton = () => (
     <button className="logout-button">
-        <FaSignOutAlt className="logout-icon" />
+        <FaSignOutAlt className="logout-icon" onClick={()=>{handleLogout(navigate)}}/>
         Logout
     </button>
 );

@@ -29,14 +29,14 @@ router.get("/stockdetails", async (req, res) => {
     const itemNumbers = itemsInRoom.map(item => item.item_no);
     
     const identNumbers = await Includes.find({ item_no: { $in: itemNumbers } });
-    const identNoList = identNumbers.map(i => i.ident_no);
-    
+    const identNoList = identNumbers.map(i => i.indent_no);
+    console.log("identnmbrtlist",identNoList);
     const stockDetails = await Stock.find({ indent_no: { $in: identNoList } });
     const itemDetails = await Item.find({ item_no: { $in: itemNumbers } });
 
     const identMap = identNumbers.reduce((map, i) => {
-        if (!map[i.ident_no]) map[i.ident_no] = [];
-        map[i.ident_no].push(i.item_no);
+        if (!map[i.indent_no]) map[i.indent_no] = [];
+        map[i.indent_no].push(i.item_no);
         return map;
       }, {});
   
@@ -50,7 +50,7 @@ router.get("/stockdetails", async (req, res) => {
   
         return relatedItems.map(item_no => ({
           item_no,
-          ident_no: stock.indent_no || "N/A",
+          indent_no: stock.indent_no || "N/A",
           item_name: stock.name,
           date_of_invoice: stock.date_of_purchase,
           description: stock.specification,
