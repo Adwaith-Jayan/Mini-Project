@@ -30,7 +30,7 @@ router.get("/stockdetails", async (req, res) => {
     
     const identNumbers = await Includes.find({ item_no: { $in: itemNumbers } });
     const identNoList = identNumbers.map(i => i.indent_no);
-    
+    console.log("identnmbrtlist",identNoList);
     const stockDetails = await Stock.find({ indent_no: { $in: identNoList } });
     const itemDetails = await Item.find({ item_no: { $in: itemNumbers } });
 
