@@ -3,8 +3,11 @@ import AssignFaculty from "./AssignFaculty/AssignFaculty";
 import MaintenanceList from "./MaintenanceList/MaintenanceList";
 import Login from "./Loginpage/Login";
 import Home from "./Homepage/Home";
-import SicDash from "../../ANAND/dash/src/SIC/SicDash"
+import SicDash from "./SIC/SicDash";  // Import SicDash component
 import Stockdetails from "./Stockdetailspage/Stockdetails";
+import TskDash from "./TSK/TskDash";
+import MainStockdetails from "./MainStock/MainStockdetails";
+import ForwardStockTsk from "./ForwardStockTsk/ForwardStockTsk";
 
 function App() {
   return (
@@ -16,6 +19,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/Sicdash" element={<SicDash />} />  {/* Add this line */}
         <Route path="stockdetails" element={<Stockdetails/>}/>
+        <Route path="/Tskdash" element={<TskDash/>}/>
+        <Route path="/mainstockdetails" element={<MainStockdetails/>}/>
+        <Route path="/forwardstocktsk" element={<ForwardStockTsk/>}/>
       </Routes>
     </Router>
    

@@ -8,6 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -15,8 +16,15 @@ export default function AccountMenu() {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  const navigate = useNavigate();
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // Remove the token from storage
+    navigate("/", {replace: true}); // Redirect to login page
+    window.location.reload(); // Ensure the page reloads completely
+    Window.history.pushState(null,"","/");
   };
   return (
     <React.Fragment>
@@ -75,7 +83,7 @@ export default function AccountMenu() {
           <Avatar/> Profile
           
         </MenuItem>
-        <MenuItem onClick={handleClose} component={Link} to="/">
+        <MenuItem onClick={()=>{handleClose(),handleLogout()}} component={Link} to="/">
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

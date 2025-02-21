@@ -6,6 +6,8 @@ import cors from "cors";
 import mongoose from "mongoose";
 import loginRoutes from "./login.js";
 import stockRoutes from "./stockdetails.js";
+import forwardStockRoutes from "./forwardtsk.js";
+import mainRoutes from "./mainstockdetails.js";
 
 const app = express();
 app.use(express.json());
@@ -28,8 +30,11 @@ const connectDB = async () => {
 
 connectDB();
 
+// API Routes
 app.use(loginRoutes);
 app.use(stockRoutes);
+app.use(forwardStockRoutes);
+app.use(mainRoutes); // Added Main Stock Route
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
