@@ -21,10 +21,13 @@ function Login() {
       const role = response.data.designation;
       console.log(role);
       
-      if (role === "hodcse") {
+      if (role.toLowerCase() === "hodcse".toLowerCase()) {
         navigate("/Hoddash");
-      } else if (role === "stock-in-charge") {
+      } else if (role.toLowerCase() === "stock-in-charge".toLowerCase()) {
         navigate("/Sicdash");
+      }
+      else if(role.toLowerCase()==="tsk".toLowerCase()){
+        navigate("/Tskdash");
       }
     } catch (error) {
       alert(error.response?.data?.message || "Something went wrong");

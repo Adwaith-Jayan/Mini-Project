@@ -6,7 +6,7 @@
   }
   
   /* Sidebar */
-  .assisidebar {
+  .alsidebar {
     width: 60px;
     background: #2b4c5a;
     color: white;
@@ -17,32 +17,32 @@
     transition: width 0.3s;
   }
   
-  .assisidebar.open {
+  .alsidebar.open {
     width: 200px;
   }
-  .assisidebar.closed {
-    width: 60px;
+  .alsidebar.closed {
+    width: 20px;
 }
   
-  .assimenu-icon {
+  .almenu-icon {
     font-size: 20px;
     cursor: pointer;
     cursor: pointer;
   }
   
-  .assisidebar ul {
+  .alsidebar ul {
     margin-top: 20px;
     padding-left: 10px;
   }
   
-  .assisidebar ul li {
+  .alsidebar ul li {
     padding: 10px;
     list-style: none;
     cursor: pointer;
   }
   
   /* Main Content */
-  .assimain-content {
+  .almain-content {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -52,7 +52,7 @@
   }
   
   /* Header */
-  .assiheader-assign {
+  .header-assign {
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -63,46 +63,45 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
   
-  .assiwelcome-section {
+  .welcome-section {
     font-size: 16px;
   }
   
-  .assiwelcome-text {
+  .welcome-text {
     font-weight: bold;
     color: #2c3e50;
   }
   
-  .assidate-text {
+  .date-text {
     color: gray;
     font-size: 12px;
   }
   
-  .assiheader-icons {
+  .header-icons {
     display: flex;
     align-items: center;
     gap: 15px;
   }
   
-  .assisearch-icon, .assiuser-icon {
+  .alsearch-icon, .aluser-icon {
     font-size: 20px;
     cursor: pointer;
   }
   
   /* Form Section */
-  .assiform-container {
+  .alform-container {
     width: 50%;
     max-width: 500px;
-    max-height: 1000px;
+    max-height: 300px;
     margin-top: 10px;
     margin-left: 250px;
     padding: 80px;
     background: white;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    height: 1000px;
   }
   
-  .assititle {
+  .altitle {
     text-align: center;
     font-size: 22px;
     margin-bottom: 15 px;
@@ -110,38 +109,38 @@
     color: #2c3e50;
   }
   
-  .assiform {
+  .alform {
     display: flex;
     flex-direction: column;
     gap: 15px;
 
   }
   
-  .assiform input, .assiform select {
+  .alform input, .alform select {
     width: 100%;
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 5px;
   }
   
-  .assidate-picker {
+  .aldate-picker {
     display: flex;
     align-items: center;
     position: relative;
   }
   
-  .assidate-picker input {
+  .aldate-picker input {
     width: 100%;
     padding-right: 40px;
   }
   
-  .assicalendar-icon {
+  .alcalendar-icon {
     position: absolute;
     right: 10px;
     color: gray;
   }
   
-  .assiassign-btn {
+  .alassign-btn {
     background: #34495e;
     color: white;
     border: none;
@@ -150,6 +149,6 @@
     cursor: pointer;
   }
   
-  .assiassign-btn:hover {
+  .alassign-btn:hover {
     background: #2c3e50;
   }

@@ -65,19 +65,19 @@ router.get("/stockdetails", async (req, res) => {
 
         if (!itemNumbers.length) return res.json([]); // No items found
 
-        // Find ident_no and sl_no for each item_no
-        const identNumbers = await Includes.find({ item_no: { $in: itemNumbers } });
+        // Find indent_no and sl_no for each item_no
+        const indentNumbers = await Includes.find({ item_no: { $in: itemNumbers } });
         const stockDetails = await Promise.all(
-            identNumbers.map(async (ident) => {
-                const stock = await Stock.findOne({ indent_no: ident.indent_no, sl_no: ident.sl_no });
+            indentNumbers.map(async (indent) => {
+                const stock = await Stock.findOne({ indent_no: indent.indent_no, sl_no: indent.sl_no });
                 return stock ? {
-                    item_no: ident.item_no,
+                    item_no: indent.item_no,
                     indent_no: stock.indent_no,
                     item_name: stock.name,
                     date_of_invoice: stock.date_of_purchase,
                     description: stock.specification,
                     price: stock.price,
-                    status: (await Item.findOne({ item_no: ident.item_no }))?.status || "Unknown"
+                    status: (await Item.findOne({ item_no: indent.item_no }))?.status || "Unknown"
                 } : null;
             })
         );

@@ -16,8 +16,8 @@ const AssignFaculty = () => {
   return (
     <div className="assignfaculty-container">
       {/* Sidebar */}
-      <aside className={`assisidebar ${sidebarOpen ? "open" : "closed"}`}>
-              <FaBars className="assimenu-icon" onClick={toggleSidebar} />
+      <aside className={`alsidebar ${sidebarOpen ? "open" : "closed"}`}>
+              <FaBars className="almenu-icon" onClick={toggleSidebar} />
               {sidebarOpen && (
                 <ul>
                   <li>Dashboard</li>
@@ -26,22 +26,22 @@ const AssignFaculty = () => {
             </aside>
 
       {/* Main Content */}
-      <div className="assimain-content">
-        <header className="assiheader-assign">
-          <div className="assiwelcome-section">
-            <p className="assiwelcome-text">Welcome, <span>User</span></p>
-            <p className="assidate-text">{today}</p>
+      <div className="almain-content">
+        <header className="header-assign">
+          <div className="welcome-section">
+            <p className="welcome-text">Welcome, <span>User</span></p>
+            <p className="date-text">{today}</p>
           </div>
-          <div className="assiheader-icons">
-            <FaSearch className="assisearch-icon" />
-            <FaUser className="assiuser-icon" />
+          <div className="header-icons">
+            <FaSearch className="alsearch-icon" />
+            <FaUser className="aluser-icon" />
           </div>
         </header>
 
         {/* Form Section */}
-        <div className="assiform-container">
-          <h2 className="assititle">Assign Faculty</h2>
-          <form className="assiform">
+        <div className="alform-container">
+          <h2 className="altitle">Assign Faculty</h2>
+          <form className="alform">
             <input type="text" placeholder="Enter name of faculty" />
             <input type="email" placeholder="Enter Email of faculty" />
             <select>
@@ -55,11 +55,11 @@ const AssignFaculty = () => {
               <option>Building A</option>
               <option>Building B</option>
             </select>
-            <div className="assidate-picker">
+            <div className="aldate-picker">
               <input type="date" />
-              <FaCalendarAlt className="assicalendar-icon" />
+              <FaCalendarAlt className="alcalendar-icon" />
             </div>
-            <button className="assiassign-btn">Assign</button>
+            <button className="alassign-btn">Assign</button>
           </form>
         </div>
       </div>
