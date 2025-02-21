@@ -11,12 +11,12 @@ import Counter from './Counter.js';
 const router = express.Router();
 
 
-// API endpoint to forward stock
+
 router.post('/api/add-stock-sic', async (req, res) => {
     try {
         const { name,sl_no, indent_no,qty,warranty_period, date_of_purchase, price, specification,type,Email } = req.body;
 
-        // Validate input
+      
         if (!sl_no || !indent_no || !date_of_purchase || !price ||!name || !qty || !warranty_period || !specification) {
             return res.status(400).json({ error: "All fields are required!" });
         }
@@ -24,14 +24,14 @@ router.post('/api/add-stock-sic', async (req, res) => {
         let counter = await Counter.findOne({ name: 'item_no_counter' });
 
         if (!counter) {
-            // Initialize counter if not found
+            
             counter = new Counter({ name: 'item_no_counter', value: 0 });
             await counter.save();
         }
 
         let startCount = counter.value; 
         let endCount = startCount + qty; 
-        // Create new stock entry
+       
         const newStock = new Stock({
             name,
             sl_no,
@@ -43,7 +43,7 @@ router.post('/api/add-stock-sic', async (req, res) => {
             specification
         });
 
-        // Save to MongoDB
+       
         await newStock.save();
         if (!Email) {
             return res.status(400).json({ error: "Email is required!" });
