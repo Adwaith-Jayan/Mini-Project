@@ -1,25 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import "./NewStockSystem.css";
+import { FaBars, FaUser, FaSearch, FaCalendarAlt } from "react-icons/fa";
 
 const NewStockSystem = () => {
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
     return (
-        <div className="container">
+        <div className="nscontainer">
             {/* Sidebar */}
-            <div className="sidebar">
-                <a href="#">Dashboard</a>
-                <a href="#">Stock Status</a>
-            </div>
+            <aside className={`nssidebar ${sidebarOpen ? "open" : "closed"}`}>
+                <FaBars className="nsmenu-icon" onClick={toggleSidebar} />
+                {sidebarOpen && (
+                    <ul>
+                        <li>Dashboard</li>
+                    </ul>
+                )}
+            </aside>
 
             {/* Main Content */}
-            <div className="main-content">
-                <div className="header">
+            <div className="nsmain-content">
+                <div className="nsheader">
                     <h1>Welcome, User</h1>
                     <span className="search-icon">🔍</span>
                 </div>
 
-                <div className="form-container">
-                    <div className="form-title-container">
-                        <h2 className="form-title">
+                <div className="nsform-container">
+                    <div className="nsform-title-container">
+                        <h2 className="nsform-title">
                             New Stock <span>System</span>
                         </h2>
                     </div>
