@@ -4,6 +4,10 @@ import { FaSearch, FaBell, FaFilter } from "react-icons/fa";
 import AccountMenu from "../assets/Usermenu";
 import { jwtDecode } from "jwt-decode";
 import Sidebars from "../assets/sidebar";
+import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
+
+
 
 const Stockstatusupdate = () => {
   const [stocks, setStocks] = useState([]);
@@ -96,6 +100,7 @@ const Stockstatusupdate = () => {
             <button className="filter-btn" onClick={toggleFilterMenu}>
               <FaFilter /> Filter
             </button>
+            <Link to="/regcomplaint"><Button className="regbtn">Register Complaint</Button></Link>
           </div>
           <div className="header-icons">
             <FaBell className="notification-icon" />

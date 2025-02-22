@@ -89,6 +89,7 @@ const Dashboard = ({navigate}) => (
         </div>
         <div className="actions">
                 <Link to = "/addstocksic"><Button className='action-button' variant="contained">Add Stock</Button></Link>
+                <Link to="/maintenance"><Button className='action-button' variant="contained">Maintenance List</Button></Link>
                 <Link to = "/stockclears"><Button className='action-button' variant="contained">Stock Clearance</Button></Link>
                 <Button className='action-button' variant="contained">Send Email</Button>
                 <Button className='action-button' variant="contained">Transfer Log Details</Button>

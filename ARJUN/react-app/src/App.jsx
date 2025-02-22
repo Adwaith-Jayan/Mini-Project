@@ -18,6 +18,11 @@ import SicDash from "../../../ANAND/dash/src/SIC/SicDash";
 import CustodianDash from "../../../ANAND/dash/src/Custodian/CustodianDash";
 import NotificationPanel from "./notificationpanel/notification";
 import AddStocksic from "./addstocksic/Addstock";
+import MaintenanceList from "./MaintenanceList/MaintenanceList";
+import RegisterComplaint from "./registercomplaint/Registercomplaint";
+
+
+
 
 function App() {
   return (
@@ -38,6 +43,8 @@ function App() {
         <Route path="/custdash" element={<CustodianDash/>}/>
         <Route path="/notify" element={<NotificationPanel/>}/>
         <Route path="/addstocksic" element={<AddStocksic/>}/>
+        <Route path="/maintenance" element={<MaintenanceList/>}/>
+        <Route path="/regcomplaint" element={<RegisterComplaint/>}/>
 
         
 
