@@ -43,9 +43,11 @@ router.post("/", async (req, res) => {
     });
     if(Accessdetails)
     {
-      Accessdetails.email_id=email;
-      Accessdetails.room_no=Roomno;
-      await Accessdetails.save();
+      const newAccess = new Access({
+        email_id: email,
+        room_no: Roomno
+      });
+      await newAccess.save();
     }
     else{
       const newAccess = new Access({

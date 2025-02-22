@@ -18,52 +18,56 @@ router.get("/stockdetails", async (req, res) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const email = decoded.email;
-    
+
+    // Get room number based on user access
     const accessData = await Access.findOne({ email_id: email });
     if (!accessData) return res.status(404).json({ message: "No access data found" });
-    
-    const room_no = accessData.room_no;
-    
-    const itemsInRoom = await BelongsTo.find({ room_no }).select("item_no");
-    console.log(itemsInRoom);
-    const itemNumbers = itemsInRoom.map(item => item.item_no);
-    
-    const identNumbers = await Includes.find({ item_no: { $in: itemNumbers } });
-    const identNoList = identNumbers.map(i => i.indent_no);
-    console.log("identnmbrtlist",identNoList);
-    const stockDetails = await Stock.find({ indent_no: { $in: identNoList } });
-    const itemDetails = await Item.find({ item_no: { $in: itemNumbers } });
 
-    const identMap = identNumbers.reduce((map, i) => {
-        if (!map[i.indent_no]) map[i.indent_no] = [];
-        map[i.indent_no].push(i.item_no);
-        return map;
-      }, {});
-  
-      const itemMap = itemDetails.reduce((map, item) => {
-        map[item.item_no] = item.status;
-        return map;
-      }, {});
-  
-      const stockInfo = stockDetails.flatMap(stock => {
-        const relatedItems = identMap[stock.indent_no] || [];
-  
-        return relatedItems.map(item_no => ({
-          item_no,
-          indent_no: stock.indent_no || "N/A",
-          item_name: stock.name,
-          date_of_invoice: stock.date_of_purchase,
-          description: stock.specification,
-          price: stock.price,
-          status: itemMap[item_no] || "Unknown"
-        }));
-      });
-  
-      res.json(stockInfo);
-    } catch (error) {
-      console.error("❌ Error fetching stock details:", error);
-      res.status(500).json({ message: "Server error" });
-    }
-  });
+    const room_no = accessData.room_no;
+
+    // Find unique item numbers in the room
+    const itemsInRoom = await BelongsTo.find({ room_no }).distinct("item_no");
+
+    // Find indent numbers for those items
+    const indentRecords = await Includes.find({ item_no: { $in: itemsInRoom } });
+
+    // Use Set to avoid duplicate indent numbers
+    const indentNoSet = new Set(indentRecords.map((record) => record.indent_no));
+
+    // Fetch stock details for unique indent numbers
+    const stockDetails = await Stock.find({ indent_no: { $in: Array.from(indentNoSet) } });
+
+    // Fetch item details for the items in the room
+    const itemDetails = await Item.find({ item_no: { $in: itemsInRoom } });
+
+    // Map item status for quick lookup
+    const itemStatusMap = itemDetails.reduce((map, item) => {
+      map[item.item_no] = item.status;
+      return map;
+    }, {});
+
+    // Construct stock info while avoiding duplicates
+    const stockInfo = indentRecords.map((record) => {
+      const stock = stockDetails.find((s) => s.indent_no === record.indent_no);
+      if (!stock) return null;
+
+      return {
+        item_no: record.item_no,
+        indent_no: stock.indent_no || "N/A",
+        item_name: stock.name,
+        date_of_invoice: stock.date_of_purchase,
+        description: stock.specification,
+        price: stock.price,
+        status: itemStatusMap[record.item_no] || "Unknown",
+      };
+    }).filter(Boolean); // Remove null entries
+
+    res.json(stockInfo);
+  } catch (error) {
+    console.error("❌ Error fetching stock details:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 export default router;

@@ -4,17 +4,23 @@ import { FaSearch, FaUser, FaBars, FaBell, FaFilter } from "react-icons/fa";
 import AccountMenu from "../assets/Usermenu";
 import { jwtDecode } from "jwt-decode";
 import Sidebars from "../assets/sidebar";
+import Button from '@mui/material/Button';
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import * as XLSX from "xlsx";
+import { Link} from "react-router-dom"; 
 
 const Stockdetails = () => {
   const [stocks, setStocks] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
+  const [exportOpen, setExportOpen] = useState(false);
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  //const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
   const toggleFilterMenu = () => setFilterOpen(!filterOpen);
+  const toggleExportMenu = () => setExportOpen(!exportOpen);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -30,16 +36,21 @@ const Stockdetails = () => {
 
   useEffect(() => {
     const fetchStockDetails = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("No authentication token found");
+        setLoading(false);
+        return;
+      }
+
       try {
-        const token = localStorage.getItem("token");
-        console.log("Token being sent:", token);
         const response = await fetch("http://localhost:5000/api/stock/stockdetails", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
         if (!response.ok) throw new Error("Failed to fetch stock details");
+
         const data = await response.json();
-        console.log(data);
         setStocks(data);
       } catch (err) {
         setError(err.message);
@@ -51,12 +62,54 @@ const Stockdetails = () => {
     fetchStockDetails();
   }, []);
 
+  // Export to PDF
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+    doc.text("Stock Details", 14, 10);
+    const tableColumn = ["Item No", "Indent No", "Item Name", "Date of Invoice", "Description", "Price", "Status"];
+    const tableRows = stocks.map(stock => [
+      stock.item_no,
+      stock.indent_no,
+      stock.item_name,
+      new Date(stock.date_of_invoice).toLocaleDateString(),
+      stock.description,
+      stock.price,
+      stock.status,
+    ]);
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+    });
+
+    doc.save("Stock_Details.pdf");
+  };
+
+  // Export to Excel
+  const exportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(
+      stocks.map(stock => ({
+        "Item No": stock.item_no,
+        "Indent No": stock.indent_no,
+        "Item Name": stock.item_name,
+        "Date of Invoice": new Date(stock.date_of_invoice).toLocaleDateString(),
+        "Description": stock.description,
+        "Price": stock.price,
+        "Status": stock.status,
+      }))
+    );
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "StockDetails");
+
+    XLSX.writeFile(workbook, "Stock_Details.xlsx");
+  };
+
   return (
     <div className="sdstocks-container">
-      {/* Sidebar */}
       <Sidebars sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />
 
-      {/* Main Content */}
       <div className="sdmain-content">
         <header className="sdheaderstockdetails">
           <h2>Stocks</h2>
@@ -68,11 +121,28 @@ const Stockdetails = () => {
           <button className="sdfilter-btn" onClick={toggleFilterMenu}>
             <FaFilter /> Filter
           </button>
-          
+
           <div className="newbuttons">
-            <button className="sdexport-btn">Export</button>
-            <button className="sdnew-item-btn">+ New Items</button>
+            <button className="sdexport-btn" onClick={toggleExportMenu}>
+              Export
+            </button>
+
+            {role && role.toLowerCase() === "stock-in-charge" && (
+              <li>
+                <Link to="/addstocksic">
+                  <button className="sdnew-item-btn">+ New Items</button>
+                </Link>
+              </li>
+            )}
           </div>
+
+
+          {exportOpen && (
+            <div className="sdexport-menu">
+              <Button className="exporttopdfbtn" onClick={exportToPDF}>Export as PDF</Button>
+              <Button className="exporttoexcelbtn" onClick={exportToExcel}>Export as Excel</Button>
+            </div>
+          )}
 
           <div className="sdheader-icons">
             <FaBell className="sdnotification-icon" />
@@ -82,17 +152,18 @@ const Stockdetails = () => {
           </div>
         </header>
 
-        {/* Filter Dropdown */}
         {filterOpen && (
           <div className="sdfilter-menu">
-            <label>Status:
+            <label>
+              Status:
               <select>
                 <option value="all">All</option>
                 <option value="Working">Working</option>
                 <option value="Not Working">Not Working</option>
               </select>
             </label>
-            <label>Product:
+            <label>
+              Product:
               <select>
                 <option value="all">All</option>
                 <option value="CPU">CPU</option>
@@ -102,7 +173,6 @@ const Stockdetails = () => {
           </div>
         )}
 
-        {/* Stock Table */}
         <table className="sdstock-table">
           <thead>
             <tr>
@@ -117,11 +187,17 @@ const Stockdetails = () => {
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan="7">Loading...</td></tr>
+              <tr>
+                <td colSpan="7">Loading...</td>
+              </tr>
             ) : error ? (
-              <tr><td colSpan="7">Error: {error}</td></tr>
+              <tr>
+                <td colSpan="7">Error: {error}</td>
+              </tr>
             ) : stocks.length === 0 ? (
-              <tr><td colSpan="7">No stock details found</td></tr>
+              <tr>
+                <td colSpan="7">No stock details found</td>
+              </tr>
             ) : (
               stocks.map((stock, index) => (
                 <tr key={index}>
@@ -132,7 +208,11 @@ const Stockdetails = () => {
                   <td>{stock.description}</td>
                   <td>{stock.price}</td>
                   <td>
-                    <span className={`sdstatus-label ${stock.status === "Working" ? "working" : "not-working"}`}>
+                    <span
+                      className={`sdstatus-label ${
+                        stock.status === "Working" ? "working" : "not-working"
+                      }`}
+                    >
                       {stock.status}
                     </span>
                   </td>

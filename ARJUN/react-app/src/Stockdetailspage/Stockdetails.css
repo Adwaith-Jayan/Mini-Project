@@ -191,3 +191,27 @@
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+.sdexport-menu button {
+    margin-right: 15px; 
+  }
+  
+.exporttopdfbtn {
+    background-color: #b2d8e2 !important;
+    border-radius: 10px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+
+}
+.exporttoexcelbtn {
+    background-color: #b2d8e2 !important;
+    border-radius: 10px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+
+}
