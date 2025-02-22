@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
 
 const counterSchema = new mongoose.Schema({
-    name: { type: String, required: true, unique: true },
+    labname: { type: String, required: true},
+    itemname: { type: String, required: true},
     value: { type: Number, required: true, default: 0 }
 });
 

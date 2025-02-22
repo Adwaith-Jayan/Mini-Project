@@ -136,10 +136,14 @@ const AddStocksic = () => {
                     label="Quantity" 
                     variant="outlined" 
                     name="qty" 
+                    type="number"
                     value={formData.qty} 
-                    onChange={handleChange} 
+                    onChange={(e) => handleChange({ 
+                        target: { name: 'qty', value: parseInt(e.target.value, 10) || '' }
+                    })} 
                     required 
                 />
+
 
                 <Button 
                     type="submit" 

@@ -20,17 +20,7 @@ router.post('/api/add-stock-sic', async (req, res) => {
         if (!sl_no || !indent_no || !date_of_purchase || !price ||!name || !qty || !warranty_period || !specification) {
             return res.status(400).json({ error: "All fields are required!" });
         }
-
-        let counter = await Counter.findOne({ name: 'item_no_counter' });
-
-        if (!counter) {
-            
-            counter = new Counter({ name: 'item_no_counter', value: 0 });
-            await counter.save();
-        }
-
-        let startCount = counter.value; 
-        let endCount = startCount + qty; 
+ 
        
         const newStock = new Stock({
             name,
@@ -58,37 +48,42 @@ router.post('/api/add-stock-sic', async (req, res) => {
         const roomdata = await Room.findOne({ room_no: roomnodata });
         const labname = roomdata.name;
 
-        for(let i=startCount+1;i<=endCount;i++)
-        {
-            let itemnoformat = `RIT/CSE/${labname}/${name} ${i}`;
-            const newbelongs = new BelongsTo({
-                item_no: itemnoformat,
-                room_no: roomnodata
-            });
-            await newbelongs.save();
-            const newinclude = new Includes({
-                item_no: itemnoformat,
-                indent_no: indent_no,
-                sl_no: sl_no
-            });
-            await newinclude.save();
-
-            const newitem = new Item({
-              item_no: itemnoformat,
-              status: "Working",
-              type: type
-            });
-
-            await newitem.save();
-
-        }
+        let counter = await Counter.findOne({ labname: labname,itemname: name });
         
-        counter.value = endCount;
-        await counter.save();
 
+        if (!counter) {
+            
+            counter = new Counter({ labname: labname,itemname: name, value: 0 });
+            await counter.save();
+        }
 
+        let startCount = counter.value; 
+        let endCount = startCount + (parseInt(qty, 10) || 0);
 
-        res.status(201).json({ message: "Stock added successfully!", data: newStock });
+        const session = await mongoose.startSession();
+        session.startTransaction();
+
+        try {
+            for (let i = startCount + 1; i <= endCount; i++) {
+                let itemnoformat = `RIT/CSE/${labname}/${name} ${i}`;
+
+                await new BelongsTo({ item_no: itemnoformat, room_no: roomnodata }).save({ session });
+                await new Includes({ item_no: itemnoformat, indent_no, sl_no }).save({ session });
+                await new Item({ item_no: itemnoformat, status: "Working", type }).save({ session });
+            }
+
+            counter.value = endCount;
+            await counter.save({ session });
+
+            await session.commitTransaction();
+            return res.status(201).json({ message: 'Stock added successfully' });
+        } catch (error) {
+            await session.abortTransaction();
+            console.error('Error adding stock:', error);
+            return res.status(500).json({ message: 'Failed to add stock', error: error.message })
+        } finally {
+            session.endSession();
+        }
     } catch (error) {
         console.error("Error forwarding stock:", error);
         res.status(500).json({ error: "Internal Server Error" });

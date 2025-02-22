@@ -17,7 +17,7 @@ import HodDash from "../../../ANAND/dash/src/HOD/HodDash";
 import SicDash from "../../../ANAND/dash/src/SIC/SicDash";
 import CustodianDash from "../../../ANAND/dash/src/Custodian/CustodianDash";
 import NotificationPanel from "./notificationpanel/notification";
-import AddStocksic from "./addstocksic/addstock";
+import AddStocksic from "./addstocksic/Addstock";
 
 function App() {
   return (
