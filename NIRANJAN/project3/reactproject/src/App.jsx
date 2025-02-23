@@ -1,11 +1,12 @@
 import React from "react";
+/*
 import NewStockSystem from ".//NewStockSystem";
 
 function App() {
   return <NewStockSystem />;
-}
-
-/*import AssignedFaculties from ".//AssignedFaculties";
+}*/
+/*
+import AssignedFaculties from ".//AssignedFaculties";
 
 function App() {
   return (
@@ -13,8 +14,8 @@ function App() {
       <AssignedFaculties />
     </div>
   );
-}
-
+}*/
+/*
 import ReportPage from ".//ReportPage"; // Import the ReportPage component
 import ".//App.css";
 function App() {
@@ -25,5 +26,20 @@ function App() {
   );
 }
 */
+
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import RequestStockReport from ".//RequestStockReport";
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<RequestStockReport />} />
+      </Routes>
+    </Router>
+  );
+}
+
+
 
 export default App;

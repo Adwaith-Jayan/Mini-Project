@@ -1,8 +1,14 @@
 import React, { useState } from "react";
+import { FaBars } from "react-icons/fa";
 import "./AssignedFaculties.css";
 
 const AssignedFaculties = () => {
-  const [faculties, setFaculties] = useState([]); // Initially empty array
+  const [faculties, setFaculties] = useState([]); 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
 
   return (
     <div className="page-container">
@@ -18,12 +24,15 @@ const AssignedFaculties = () => {
 
       <div className="container">
         {/* Sidebar */}
-        <nav className="sidebar">
-          <ul>
-            <li>Dashboard</li>
-            <li>Store Details</li>
-          </ul>
-        </nav>
+        <aside className={sidebarOpen ? "nssidebar open" : "nssidebar closed"}>
+          <FaBars className="nsmenu-icon" onClick={toggleSidebar} />
+          {sidebarOpen && (
+            <ul>
+              <li>Dashboard</li>
+              <li>Stock Details</li>
+            </ul>
+          )}
+        </aside>
 
         {/* Main Content */}
         <div className="content">
