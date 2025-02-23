@@ -36,7 +36,7 @@ const MainStockdetails = () => {
         <FaBars className="sdmenu-icon" onClick={() => setSidebarOpen(!sidebarOpen)} />
         {sidebarOpen && (
           <ul>
-            <li><HomeIcon fontSize="medium" /> Dashboard</li>
+            <li><HomeIcon fontSize="medium" /><Link to="/Tskdash"> Dashboard</Link></li>
             <li><InventoryIcon fontSize="medium" /><Link to="/Mainstockdetails"> Main Stock</Link></li>
           </ul>
         )}
@@ -83,16 +83,17 @@ const MainStockdetails = () => {
               <th>Indent No</th>
               <th>Date of Purchase</th>
               <th>Price</th>
+              <th>Quantity</th> {/* ✅ Added Quantity Column */}
               <th>Department</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan="5">Loading...</td></tr>
+              <tr><td colSpan="6">Loading...</td></tr>
             ) : error ? (
-              <tr><td colSpan="5">Error: {error}</td></tr>
+              <tr><td colSpan="6">Error: {error}</td></tr>
             ) : stocks.length === 0 ? (
-              <tr><td colSpan="5">No stock details found</td></tr>
+              <tr><td colSpan="6">No stock details found</td></tr>
             ) : (
               stocks.map((stock, index) => (
                 <tr key={index}>
@@ -100,6 +101,7 @@ const MainStockdetails = () => {
                   <td>{stock.indent_no}</td>
                   <td>{new Date(stock.date_of_purchase).toLocaleDateString()}</td>
                   <td>{stock.price}</td>
+                  <td>{stock.quantity}</td> {/* ✅ Displaying Quantity */}
                   <td>{stock.department}</td>
                 </tr>
               ))

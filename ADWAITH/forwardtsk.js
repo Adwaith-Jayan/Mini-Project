@@ -1,43 +1,59 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+import TskForwardNotification from './tskforwardnotification.js';
 
+dotenv.config();
 const router = express.Router();
+const SECRET_KEY = process.env.JWT_SECRET || "your_jwt_secret"; // Use .env for security
 
-// Define schema for stock forwarding
 const stockSchema = new mongoose.Schema({
-    sl_no: { type: String, required: true },
+    sl_no: { type: Number, required: true }, 
     indent_no: { type: String, required: true },
     date_of_purchase: { type: String, required: true },
     price: { type: Number, required: true },
-    department: { type: String, default: "" } // Initially empty
+    quantity: { type: Number, required: true }, // ✅ Added quantity field
+    department: { type: String, default: "" }
 });
 
-// Create a model for the "main" collection
-const Stock = mongoose.model('main', stockSchema,'main');
+const Stock = mongoose.model('main', stockSchema, 'main');
+const User = mongoose.model('user', new mongoose.Schema({ email_id: String, designation: String }), 'user');
 
-// API endpoint to forward stock
 router.post('/api/forward-stock-tsk', async (req, res) => {
     try {
-        const { sl_no, indent_no, date_of_purchase, price, department } = req.body;
+        const token = req.headers.authorization?.split(" ")[1];
+        if (!token) {
+            return res.status(401).json({ error: "Unauthorized: No token provided" });
+        }
 
-        // Validate input
-        if (!sl_no || !indent_no || !date_of_purchase || !price) {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const senderEmail = decoded.email; // Extract email from token
+
+        const { sl_no, indent_no, date_of_purchase, price, quantity, department } = req.body;
+
+        if (!sl_no || !indent_no || !date_of_purchase || !price || !quantity) {
             return res.status(400).json({ error: "All fields are required!" });
         }
 
-        // Create new stock entry
-        const newStock = new Stock({
-            sl_no,
-            indent_no,
-            date_of_purchase,
-            price,
-            department: "" // Ensure department is empty if not provided
-        });
-
-        // Save to MongoDB
+        const newStock = new Stock({ sl_no, indent_no, date_of_purchase, price, quantity, department: "" });
         await newStock.save();
 
-        res.status(201).json({ message: "Stock forwarded successfully!", data: newStock });
+        const hod = await User.findOne({ designation: "hodcse" });
+        if (hod) {
+            const newNotification = new TskForwardNotification({
+                type: "tskstockforward",
+                sender: senderEmail,
+                receiver: hod.email_id,
+                indent_no,
+                sl_no,
+                quantity, // ✅ Sending quantity in the notification
+                status: "unread",
+            });
+            await newNotification.save();
+        }
+
+        res.status(201).json({ message: "Stock forwarded successfully!" });
     } catch (error) {
         console.error("Error forwarding stock:", error);
         res.status(500).json({ error: "Internal Server Error" });

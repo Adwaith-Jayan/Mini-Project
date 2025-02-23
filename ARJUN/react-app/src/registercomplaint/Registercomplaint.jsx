@@ -10,12 +10,13 @@ import axios from "axios";
 const RegisterComplaint = () => {
   const [stocks, setStocks] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [filterOpen, setFilterOpen] = useState(false);
+  //const [filterOpen, setFilterOpen] = useState(false);
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [emails, setEmail] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -39,14 +40,12 @@ const RegisterComplaint = () => {
       }
 
       try {
-        const response = await axios.get("http://localhost:5000/api/registercomplaint", {
+        const response = await axios.get("http://localhost:5000/api/complaints/registercomplaint", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        console.log("API Response:", response.data);
-        const filteredData = Array.isArray(response.data) ? response.data.filter(
-            (stock) => stock.status === "Not Working" && !stock.maintenance_date
-        ) : [];
-        console.log("Filtered Data:", filteredData);
+        const filteredData = Array.isArray(response.data)
+          ? response.data.filter((stock) => stock.status === "Not Working" && !stock.maintenance_date)
+          : [];
         setStocks(filteredData);
       } catch (err) {
         setError(err.message);
@@ -66,24 +65,44 @@ const RegisterComplaint = () => {
     );
   };
 
-  const handleSubmitComplaint = () => {
+  const handleSubmitComplaint = async () => {
+    if (!emails.trim() || !emails.includes("@")) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
     if (selectedItems.length === 0) {
       alert("No items selected for complaint.");
       return;
     }
 
-    const emailBody = selectedItems
-      .map(
-        (item) =>
-          `Item No: ${item.item_no}\nItem Name: ${item.item_name}\nDescription: ${item.description}\nPrice: ${item.price}\nStatus: ${item.status}\n`
-      )
-      .join("\n");
+    const complaintData = {
+      emails,
+      items: selectedItems.map(({ item_no, item_name, description, price, status }) => ({
+        item_no,
+        item_name,
+        description,
+        price,
+        status,
+      })),
+    };
 
-    const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=&su=Complaint%20Submission&body=From:%20ritstocksystem@gmail.com%0A%0ASelected%20Items%20for%20Complaint:%0A${encodeURIComponent(
-      emailBody
-    )}`;
-
-    window.open(gmailLink, "_blank");
+    setLoading(true);
+    try {
+      console.log("🚀 Sending complaintData:", complaintData);
+      const response = await axios.post("http://localhost:5000/api/complaints/sendcomplaint",complaintData,
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}`  },
+      });
+      alert("Complaint registered successfully: " + response.data.message);
+      setSelectedItems([]);
+      setEmail("");
+    } catch (error) {
+      console.error("Error submitting complaint:", error);
+      alert("Failed to register complaint. Please try again.");
+    } finally {
+      setLoading(true);
+    }
   };
 
   const filteredStocks = stocks.filter((stock) =>
@@ -92,11 +111,7 @@ const RegisterComplaint = () => {
 
   return (
     <div className="rgstocks-container">
-      <Sidebars
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-        role={role}
-      />
+      <Sidebars sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />
 
       <div className="rgmain-content">
         <header className="rgheader">
@@ -111,12 +126,6 @@ const RegisterComplaint = () => {
             />
           </div>
           <input className="datetype" type="date" />
-          <button
-            className="rgfilter-btn"
-            onClick={() => setFilterOpen(!filterOpen)}
-          >
-            <FaFilter /> Filter
-          </button>
 
           <div className="rgheader-icons">
             <FaBell className="rgnotification-icon" />
@@ -124,26 +133,16 @@ const RegisterComplaint = () => {
           </div>
         </header>
 
-        {filterOpen && (
-          <div className="rgfilter-menu">
-            <label>
-              Status:
-              <select>
-                <option value="all">All</option>
-                <option value="Working">Working</option>
-                <option value="Not Working">Not Working</option>
-              </select>
-            </label>
-            <label>
-              Product:
-              <select>
-                <option value="all">All</option>
-                <option value="CPU">CPU</option>
-                <option value="Monitor">Monitor</option>
-              </select>
-            </label>
-          </div>
-        )}
+        <div className="rgemail-input">
+          <label htmlFor="email">Recipient Email:</label>
+          <input className="rgemail"
+            type="email"
+            id="email"
+            value={emails}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter recipient email"
+          />
+        </div>
 
         <table className="rgstock-table">
           <thead>
@@ -178,9 +177,7 @@ const RegisterComplaint = () => {
                     <input
                       type="checkbox"
                       onChange={() => handleSelectItem(stock)}
-                      checked={selectedItems.some(
-                        (item) => item.item_no === stock.item_no
-                      )}
+                      checked={selectedItems.some((item) => item.item_no === stock.item_no)}
                     />
                   </td>
                   <td>{stock.item_no}</td>
@@ -190,7 +187,7 @@ const RegisterComplaint = () => {
                   <td>{stock.description}</td>
                   <td>{stock.price}</td>
                   <td>
-                    <span className="rgstatus-label not-working">
+                    <span className={`rgstatus-label ${stock.status.toLowerCase().replace(" ", "-")}`}>
                       {stock.status}
                     </span>
                   </td>
@@ -205,8 +202,9 @@ const RegisterComplaint = () => {
           color="primary"
           onClick={handleSubmitComplaint}
           style={{ marginTop: "10px" }}
+          disabled={loading}
         >
-          Register Complaint
+          {loading ? "Registering..." : "Register Complaint"}
         </Button>
       </div>
     </div>

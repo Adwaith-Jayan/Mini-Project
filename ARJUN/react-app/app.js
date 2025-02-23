@@ -27,7 +27,7 @@ app.use("/api/Room", RoomRoutes);
 app.use("/api/stock", StockdetailsRoutes);
 app.use("/api/ustock", StockstatusupdateRoutes); // ✅ Add new endpoint for stock status updates
 app.use("/",addstocksicRoutes);
-app.use("/api",RegistercomplaintRoutes);
+app.use("/api/complaints",RegistercomplaintRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

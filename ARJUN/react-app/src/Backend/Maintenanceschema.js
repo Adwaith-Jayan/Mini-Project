@@ -5,23 +5,26 @@ const MaintenanceSchema = new mongoose.Schema({
   item_no: {
     type: String,
     required: true,
-    unique: true,
+    ref: "Item", // Reference to the Item schema if needed
+  },
+  complaint_date: {
+    type: Date,
+    default: Date.now,
+    required: true,
   },
   service_provider: {
     type: String,
-    required: true,
   },
   amount: {
     type: Number,
-    required: true,
   },
-  maintenance_date: {
-    type: Date,
-    required: true,
+  status: {
+    type: String,
+    enum: ["Pending", "Completed"],
+    default: "Pending",
   },
   remarks: {
     type: String,
-    default: "Routine maintenance",
   },
 });
 

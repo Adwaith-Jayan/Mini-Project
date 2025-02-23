@@ -177,3 +177,11 @@
     border-radius: 5px;
 }
 
+.rgemail{
+    width: 200px;
+    height: 30px;
+    border-radius: 5px;
+    border-color: rgba(122, 110, 110, 0.693);
+    background-color: rgba(119, 184, 214, 0.327);
+    font-weight: bold;
+}
