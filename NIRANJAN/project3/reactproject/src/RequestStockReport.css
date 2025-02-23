@@ -1,0 +1,185 @@
+ /* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}
+
+/* Page Container */
+.page-container {
+    display: flex;
+}
+
+/* Sidebar */
+.nssidebar {
+    width: 60px;
+    height: 100vh;
+    background: #2b4c5a;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    transition: width 0.3s;
+    position: fixed;
+    left: 0;
+    top: 50px;
+}
+
+.nssidebar.open {
+    width: 200px;
+}
+.nssidebar.closed {
+    width: 60px;
+}
+
+.nsmenu-icon {
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.nssidebar ul {
+    margin-top: 20px;
+    padding-left: 10px;
+}
+
+.nssidebar ul li {
+    padding: 10px;
+    list-style: none;
+    cursor: pointer;
+}
+
+/* Top Navbar */
+.top-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 15px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.menu-icon {
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.icon {
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.user {
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.user-icon {
+    font-size: 20px;
+}
+
+ /* Main Content */
+.content {
+    width: 1200px;
+    flex-grow: 1;
+    margin-left: 60px; /* Adjusts to sidebar width */
+    padding: 20px;
+    transition: margin-left 0.3s;
+    /*min-height: calc(100vh - 50px);*/ /* Takes full screen height minus top navbar */
+    background-color: #f8f9fa; /* Matches background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Expand content when sidebar is open */
+.nssidebar.open ~ .content {
+    margin-left: 200px; /* Adjust margin based on sidebar width */
+}
+
+/* Report Container */
+.report-container {
+    width: 100%;
+    height: 500px;
+    margin-top: 20px;
+    margin-left: 20px;
+    max-width: 1200px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+ /* Report Header */
+.report-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white; /* Light background for the box */
+    padding: 15px 20px;
+    border-radius: 8px;
+    width: 90%;
+}
+
+/* Page Title */
+.page-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Request Button */
+.request-btn {
+    background-color: #a569bd;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Report Form */
+.report-form {
+    height: 400px;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background: #f4f4f4;
+    border-radius: 10px;
+}
+
+.form-section {
+    width: 45%;
+    text-align: center;
+    background: #e2e2e2;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.dropdown {
+    background: #d1d3d4;
+    padding: 12px;
+    border-radius: 20px;
+    text-align: center;
+    cursor: pointer;
+}

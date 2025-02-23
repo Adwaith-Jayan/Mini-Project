@@ -4,9 +4,11 @@ import mongoose from "mongoose";
 const MaintenanceSchema = new mongoose.Schema({
   item_no: {
     type: String,
-    required: true,
-    ref: "Item", // Reference to the Item schema if needed
+    ref: "Item",
+    required: true
+    
   },
+  
   complaint_date: {
     type: Date,
     default: Date.now,
