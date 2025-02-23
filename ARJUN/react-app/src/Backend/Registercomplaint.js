@@ -112,7 +112,7 @@ router.post("/sendcomplaint", async (req, res) => {
       // Create maintenance records
       const maintenanceRecords = items.map(item => ({
         item_no: item.item_no,
-        service_provider: emails, // Use user-provided email as service provider
+        service_provider: emails, 
         status: "Pending",
         complaint_date: new Date()
       }));
