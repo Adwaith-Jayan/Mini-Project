@@ -1,19 +1,7 @@
 import express from "express";
-import mongoose from "mongoose";
+import MainStock from "./mainstockmodel.js"; 
 
 const router = express.Router();
-
-// Define the schema for the "main" collection
-const stockSchema = new mongoose.Schema({
-    sl_no: { type: String, required: true },
-    indent_no: { type: String, required: true },
-    date_of_purchase: { type: Date, required: true },
-    price: { type: Number, required: true },
-    department: { type: String, default: "" }  // Default to empty string
-});
-
-// Create a model for the "main" collection
-const MainStock = mongoose.model('Main', stockSchema,'main');
 
 // Route to fetch all stock details
 router.get("/mainstock", async (req, res) => {
@@ -25,6 +13,5 @@ router.get("/mainstock", async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
-
 
 export default router;

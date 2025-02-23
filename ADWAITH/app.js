@@ -8,6 +8,8 @@ import loginRoutes from "./login.js";
 import stockRoutes from "./stockdetails.js";
 import forwardStockRoutes from "./forwardtsk.js";
 import mainRoutes from "./mainstockdetails.js";
+import notificationRoutes from "./notification.js"; 
+import notificationControllerRoutes from "./notificationcontroller.js";
 
 const app = express();
 app.use(express.json());
@@ -34,7 +36,9 @@ connectDB();
 app.use(loginRoutes);
 app.use(stockRoutes);
 app.use(forwardStockRoutes);
-app.use(mainRoutes); // Added Main Stock Route
+app.use(mainRoutes);
+app.use(notificationRoutes);
+app.use(notificationControllerRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));

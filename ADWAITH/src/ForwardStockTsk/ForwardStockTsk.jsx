@@ -13,6 +13,7 @@ const ForwardStockTsk = () => {
         indent_no: '',
         date_of_purchase: '',
         price: '',
+        quantity: '',  // ✅ Added Quantity field
         department: 'CSE' 
     });
 
@@ -25,15 +26,41 @@ const ForwardStockTsk = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const dbData = { ...formData, department: '' };
+        const token = localStorage.getItem("token"); 
+        if (!token) {
+            setMessage("Unauthorized: No token found. Please log in again.");
+            console.error("No token found");
+            return;
+        }
+
+        const dbData = {
+            ...formData,
+            sl_no: parseInt(formData.sl_no, 10), // Ensure sl_no is an integer
+            price: parseFloat(formData.price),   // Ensure price is a number
+            quantity: parseInt(formData.quantity, 10), // ✅ Ensure quantity is an integer
+            department: ''
+        };
+
+        if (isNaN(dbData.sl_no) || isNaN(dbData.price) || isNaN(dbData.quantity)) {
+            setMessage("Serial Number, Price, and Quantity must be valid numbers.");
+            return;
+        }
 
         try {
-            const response = await axios.post('http://localhost:5000/api/forward-stock-tsk', dbData);
+            const response = await axios.post(
+                'http://localhost:5000/api/forward-stock-tsk',
+                dbData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}` 
+                    }
+                }
+            );
             setMessage(response.data.message);
             alert("Stock Forwarded Successfully!");
             navigate('/Tskdash');
         } catch (error) {
-            console.error("Error forwarding stock:", error);
+            console.error("❌ Error forwarding stock:", error);
             setMessage(error.response?.data?.error || "Something went wrong!");
         }
     };
@@ -78,6 +105,16 @@ const ForwardStockTsk = () => {
                     variant="outlined" 
                     name="price" 
                     value={formData.price} 
+                    onChange={handleChange} 
+                    required 
+                />
+
+                <TextField 
+                    label="Quantity"  // ✅ Added Quantity field
+                    type="number" 
+                    variant="outlined" 
+                    name="quantity" 
+                    value={formData.quantity} 
                     onChange={handleChange} 
                     required 
                 />
