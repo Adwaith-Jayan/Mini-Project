@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const clearenceSchema = new mongoose.Schema({
   item_no: { type: String, required: true },
-  clearencedate: {type: Date},
+  clearance_date: {type: Date},
   remarks: { type: String, required: true },
   status: {
     type: String,

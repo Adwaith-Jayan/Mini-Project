@@ -1,8 +1,9 @@
-// maintenance.js (server)
+
 import express from "express";
 import Maintenance from "./Maintenanceschema.js";
 import Item from "./Item.js";
 import Clearance from "./clearenceschema.js";
+import MaintenanceHistory from "./Maintenancehistoryschema.js";
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ router.get("/list", async (req, res) => {
       repairDate: m.complaint_date,
       serviceProvider: m.service_provider,
       amount: m.amount || 0,
-      remarks: m.remarks || "No remarks",
+      remarks: m.remarks,
       itemStatus: itemMap.get(m.item_no)?.status || "Unknown",
       maintenanceStatus: m.status
     }));
@@ -65,49 +66,68 @@ router.put("/update", async (req, res) => {
   }
 });
 
-// POST /api/maintenance/complete - Fixed completion logic
+// POST /api/maintenance/complete 
 router.post("/complete", async (req, res) => {
-    const { id, field, value } = req.body;
-  
-    try {
-      const maintenance = await Maintenance.findById(id);
-      if (!maintenance) {
-        return res.status(404).json({ message: "Maintenance record not found" });
-      }
-  
-      const item = await Item.findOne({ item_no: maintenance.item_no });
-      if (!item) {
-        return res.status(404).json({ message: "Linked item not found" });
-      }
-  
-      // Update maintenance status
-      if (field === "maintenanceStatus") {
-        maintenance.status = value;
-        await maintenance.save();
-      }
-  
-      // Update item status
-      if (field === "itemStatus") {
-        item.status = value;
-        await item.save();
-  
-        // Handle clearance if not working
-        if (value === "Not Working") {
-          await Clearance.create({
+  const { id, field, value } = req.body;
+
+  try {
+    const maintenance = await Maintenance.findById(id);
+    if (!maintenance) {
+      return res.status(404).json({ message: "Maintenance record not found" });
+    }
+
+    const item = await Item.findOne({ item_no: maintenance.item_no });
+    if (!item) {
+      return res.status(404).json({ message: "Linked item not found" });
+    }
+
+   
+    if (field === "maintenanceStatus") {
+      maintenance.status = value;
+      await maintenance.save();
+    }
+
+   
+    if (field === "itemStatus") {
+      item.status = value;
+      await item.save();
+
+      
+      if (maintenance.status === "Completed") {
+      
+        const newHistory = new MaintenanceHistory({
+          item_no: maintenance.item_no,
+          status: maintenance.status,
+          completed_date: new Date(),
+          remarks: maintenance.remarks,
+          item_status: value,
+        });
+        await newHistory.save();
+
+        
+        if (value === "Not Working" && maintenance.status === "Completed" ) {
+          const newClearance = new Clearance({
             item_no: maintenance.item_no,
-            clearencedate: new Date(),
+            clearance_date: new Date(),
             remarks: maintenance.remarks,
             status: "Pending Clearance",
           });
+          await newClearance.save();
         }
-      }
+
   
-      res.json({ message: "Status updated successfully" });
-    } catch (error) {
-      console.error("Error updating status:", error);
-      res.status(500).json({ message: "Failed to update status" });
+        await Maintenance.findByIdAndDelete(id);
+      }
     }
-  });
+
+    res.json({ message: "Status updated successfully" });
+  } catch (error) {
+    console.error("Error updating status:", error);
+    res.status(500).json({ message: "Failed to update status" });
+  }
+});
+
+
   
 
 export default router;
