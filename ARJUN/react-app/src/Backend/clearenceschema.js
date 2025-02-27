@@ -6,7 +6,7 @@ const clearenceSchema = new mongoose.Schema({
   remarks: { type: String, required: true },
   status: {
     type: String,
-    enum: ["Pending Clearance", "Resolved"],
+    enum: ["Pending Clearance", "Cleared"],
     default: "Pending Clearance"
   }
 });

@@ -10,8 +10,7 @@ import StockstatusupdateRoutes from "./src/Backend/stockstatusupdate.js";
 import addstocksicRoutes from "./src/Backend/addstocksic.js";
 import RegistercomplaintRoutes from "./src/Backend/Registercomplaint.js";
 import maintenanceRoutes from "./src/Backend/maintenance.js";
-
-
+import ClearancestockRoutes from "./src/Backend/Clearancestock.js";
 
 dotenv.config();
 const app = express();
@@ -32,6 +31,8 @@ app.use("/api/ustock", StockstatusupdateRoutes); // ✅ Add new endpoint for sto
 app.use("/",addstocksicRoutes);
 app.use("/api/complaints",RegistercomplaintRoutes);
 app.use("/api/maintenance",maintenanceRoutes);
+app.use("/api",ClearancestockRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

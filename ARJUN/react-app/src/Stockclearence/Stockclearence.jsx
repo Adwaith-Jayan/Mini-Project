@@ -1,82 +1,123 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./stockclear.css";
 import { FaSearch, FaUser, FaBars, FaBell, FaFilter } from "react-icons/fa";
 import AccountMenu from "../assets/Usermenu";
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
-import HomeIcon from '@mui/icons-material/Home';
-import InventoryIcon from '@mui/icons-material/Inventory';
-import UpdateIcon from '@mui/icons-material/Update';
-import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
-import SendIcon from '@mui/icons-material/Send';
-import { Link } from "react-router-dom";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import Sidebars from "../assets/sidebar";
 
-
 const Stockclears = () => {
-  const [stocks, setStocks] = useState([
-    { id: "#7876", invoice: "30/06/2024", indent: "01/07/2024", name: "CPU", description: "Intel i5 12th gen", status: "Not Working" },
-    { id: "#7877", invoice: "30/06/2024", indent: "01/07/2024", name: "CPU", description: "Intel i5 12th gen", status: "Not Working" },
-    { id: "#7878", invoice: "28/06/2024", indent: "30/06/2024", name: "Monitor", description: "Monitor DELL", status: "Not Working" },
-    { id: "#7879", invoice: "28/06/2024", indent: "30/06/2024", name: "Monitor", description: "Monitor DELL", status: "Not Working" },
-    { id: "#7880", invoice: "28/06/2024", indent: "30/06/2024", name: "Monitor", description: "Monitor DELL", status: "Not Working" },
-  ]);
-
+  const [cstocks, setcStocks] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [checkedStocks, setCheckedStocks] = useState({});
   const [role, setRole] = useState(null);
   
-  const toggleFilterMenu = () => setFilterOpen(!filterOpen);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setRole(decoded.designation);
+      } catch (error) {
+        console.error("Invalid Token:", error);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchStockDetails = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+  
+      try {
+        const response = await fetch("http://localhost:5000/api/stockclearance", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        if (!response.ok) throw new Error("Failed to fetch stock details");
+  
+        const data = await response.json();
+        setcStocks(data);
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+  
+    fetchStockDetails();
+  }, []);
+
   const handleCheckboxChange = (id) => {
     setCheckedStocks((prev) => ({
       ...prev,
       [id]: !prev[id],
     }));
   };
-  useEffect(() => {
-      const token = localStorage.getItem("token"); // Retrieve token from localStorage
-      if (token) {
-        try {
-          const decoded = jwtDecode(token); // Decode token to get user info
-          setRole(decoded.designation);
-        } catch (error) {
-          console.error("Invalid Token:", error);
-        }
-      }
-    }, []);
+
+  const handleClearStocks = async () => {
+    const selectedItems = Object.keys(checkedStocks).filter((item_no) => checkedStocks[item_no]);
+    if (selectedItems.length === 0) {
+      alert("Please select items to clear.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5000/api/clear-stock", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ item_ids: selectedItems }),
+      });
+
+      if (!response.ok) throw new Error("Failed to clear stocks");
+
+      // Update UI after successful clearance
+      setcStocks((prev) =>
+        prev.map((stock) =>
+          selectedItems.includes(stock.item_no)
+            ? { ...stock, status: "Cleared", clearance_date: new Date().toISOString().split("T")[0] }
+            : stock
+        )
+      );
+
+      setCheckedStocks({});
+    } catch (error) {
+      console.error("Error clearing stocks:", error);
+    }
+  };
+
   return (
     <div className="clearstocks-container">
-      {/* Sidebar */}
       <Sidebars sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />
-
-      {/* Main Content */}
       <div className="clmain-content">
         <header className="headerstockclears">
-          <h2>Stock Clearence</h2>
+          <h2>Stock Clearance</h2>
           <div className="clsearch-bar">
             <FaSearch className="clsearch-icon" />
             <input type="text" placeholder="Search Item ID" />
-            </div>
-            <input className="cldatetype" type="date" />
-            <button className="clfilter-btn" onClick={toggleFilterMenu}>
-              <FaFilter /> Filter
-            </button>
-            
-            <div className="clnewbuttons">
-            <Button variant="contained" endIcon={<DeleteIcon />}>Clear Stocks</Button>
+          </div>
+          <input className="cldatetype" type="date" />
+          <button className="clfilter-btn" onClick={() => setFilterOpen(!filterOpen)}>
+            <FaFilter /> Filter
+          </button>
+
+          <div className="clnewbuttons">
+            <Button variant="contained" onClick={handleClearStocks} endIcon={<DeleteIcon />}>
+              Clear Stocks
+            </Button>
           </div>
 
           <div className="clheader-icons">
             <FaBell className="clnotification-icon" />
             <div className="cluser-menu">
-              <AccountMenu/>
+              <AccountMenu />
             </div>
           </div>
         </header>
 
-        {/* Filter Dropdown */}
         {filterOpen && (
           <div className="clfilter-menu">
             <label>Status:
@@ -96,39 +137,34 @@ const Stockclears = () => {
           </div>
         )}
 
-        {/* Stock Table */}
         <table className="clstock-table">
           <thead>
             <tr>
               <th>Select</th>
               <th>Item ID</th>
-              <th>Date of Invoice</th>
-              <th>Date of Indent</th>
-              <th>Item Name</th>
-              <th>Description</th>
+              <th>Remarks</th>
               <th>Status</th>
+              <th>Clearance Date</th>
             </tr>
           </thead>
           <tbody>
-            {stocks.map((stock, index) => (
-              <tr key={index}>
+            {cstocks.map((stock) => (
+              <tr key={stock.item_no}>
                 <td>
-                <input
-                  type="checkbox"
-                  checked={checkedStocks[stock.id] || false}
-                  onChange={() => handleCheckboxChange(stock.id)}
-                />
+                  <input
+                    type="checkbox"
+                    checked={checkedStocks[stock.item_no] || false}
+                    onChange={() => handleCheckboxChange(stock.item_no)}
+                  />
                 </td>
-                <td>{stock.id}</td>
-                <td>{stock.invoice}</td>
-                <td>{stock.indent}</td>
-                <td>{stock.name}</td>
-                <td>{stock.description}</td>
+                <td>{stock.item_no}</td>
+                <td>{stock.remarks}</td>
                 <td>
-                  <span className={`clstatus-label ${stock.status === "Working" ? "working" : "not-working"}`}>
+                  <span className={`clstatus-label ${stock.status === "Cleared" ? "cleared" : "pending"}`}>
                     {stock.status}
                   </span>
                 </td>
+                <td>{stock.clearance_date ? stock.clearance_date : "—"}</td>
               </tr>
             ))}
           </tbody>

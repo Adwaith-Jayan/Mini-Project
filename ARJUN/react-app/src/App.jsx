@@ -20,6 +20,7 @@ import NotificationPanel from "./notificationpanel/notification";
 import AddStocksic from "./addstocksic/Addstock";
 import MaintenanceList from "./MaintenanceList/MaintenanceList";
 import RegisterComplaint from "./registercomplaint/Registercomplaint";
+import Maintenancehistorydetails from "./Maintenancehistory/MaintenanceHistory";
 
 
 
@@ -45,6 +46,8 @@ function App() {
         <Route path="/addstocksic" element={<AddStocksic/>}/>
         <Route path="/maintenance" element={<MaintenanceList/>}/>
         <Route path="/regcomplaint" element={<RegisterComplaint/>}/>
+        <Route path="/maintenancehist" element={<Maintenancehistorydetails/>}/>
+
 
         
 
