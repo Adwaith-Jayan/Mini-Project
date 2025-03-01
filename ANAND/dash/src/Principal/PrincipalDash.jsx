@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import './PrincipalDash.css'
 import { FaUserCircle, FaSignOutAlt, FaChartBar, FaCheckCircle, FaListAlt, FaBars } from 'react-icons/fa';
 import AccountMenu from '../../../../ARJUN/react-app/src/assets/Usermenu';
@@ -8,6 +8,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import ArticleIcon from '@mui/icons-material/Article';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import { jwtDecode } from "jwt-decode";
+import Sidebarprincipal from '../../../../ARJUN/react-app/src/assets/sidebarforprincipal';
 
 const notifications = [
     { message: 'New report from Verifier' },
@@ -16,9 +17,9 @@ const notifications = [
 
 const PrincipalDash = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const namess = response.data.names;
     const [userName,setusername]= useState("");
     const [currentdate,setdate]=useState("");
+    const [role,setRole]=useState(null);
     
         useEffect(()=>{
             const today = new Date().toLocaleDateString("en-GB", {
@@ -37,13 +38,22 @@ const PrincipalDash = () => {
                     console.error("Error decoding token : ",error);
                 }
             }
+
+            if (token) {
+                try {
+                    const decoded = jwtDecode(token); // Decode token to get user info
+                    setRole(decoded.designation);
+                    } catch (error) {
+                        console.error("Invalid Token:", error);
+                    }
+                }
         },[]);
 
     return (
         <div className="app-container">
             <Header userName={userName} currentdate={currentdate}/>
             <div className="main-area">
-                <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+                <Sidebarprincipal sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />
                 <Dashboard />
             </div>
         </div>
@@ -53,8 +63,6 @@ const PrincipalDash = () => {
 const Header = ({userName,currentdate}) => (
     <header className="header">
         <div className="header-left">
-            <span>Welcome,{namess}</span>
-            <span>Thu 16 January 2025</span>
             <span>Welcome, {userName}</span>
             <span>{currentdate}</span>
         </div>
@@ -65,22 +73,6 @@ const Header = ({userName,currentdate}) => (
     </header>
 );
 
-const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
-    const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
-
-    return (
-        <aside className={`clsidebar ${sidebarOpen ? "open" : "closed"}`}>
-            <FaBars className="clmenu-icon" onClick={toggleSidebar} />
-            {sidebarOpen && (
-                <ul>
-                    <li><Link to="/Hoddash"><HomeIcon fontSize="medium" /> Dashboard</Link></li>
-                    <li><Link to="/stockverify"><VerifiedIcon fontSize="medium" /> Verification</Link></li>
-                    <li><Link to="/stockstatus"><ArticleIcon fontSize="medium" /> Reports </Link></li>
-                </ul>
-            )}
-        </aside>
-    );
-};
 
 const Dashboard = () => (
     <main className="dashboard">
@@ -89,7 +81,7 @@ const Dashboard = () => (
             <Notifications notifications={notifications} />
         </div>
         <div className="actions">
-            <Link to="/assign"><Button className='action-button' variant="contained">Assign Faculty For Verification</Button></Link>
+            <Link to="/assignfaculty"><Button className='action-button' variant="contained">Assign Faculty For Verification</Button></Link>
             <Button className='action-button' variant="contained">Request For Stock Details</Button>
             <Button className='action-button' variant="contained">Reports</Button>
         </div>

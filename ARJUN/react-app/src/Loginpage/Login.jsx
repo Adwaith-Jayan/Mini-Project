@@ -31,6 +31,10 @@ function Login() {
       {
         navigate("/custdash");
       }
+      else if(role.toLowerCase()==="principal")
+      {
+        navigate("/principaldash");
+      }
     } catch (error) {
       alert(error.response ? error.response.data.message : "Something went wrong");
     }

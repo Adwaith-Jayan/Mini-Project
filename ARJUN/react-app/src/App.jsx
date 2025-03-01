@@ -15,12 +15,14 @@ import UserProfile from "./profilesetting/Profilesetting";
 import { Delete } from "lucide-react";
 import HodDash from "../../../ANAND/dash/src/HOD/HodDash";
 import SicDash from "../../../ANAND/dash/src/SIC/SicDash";
+import PrincipalDash from "../../../ANAND/dash/src/Principal/PrincipalDash";
 import CustodianDash from "../../../ANAND/dash/src/Custodian/CustodianDash";
 import NotificationPanel from "./notificationpanel/notification";
 import AddStocksic from "./addstocksic/Addstock";
 import MaintenanceList from "./MaintenanceList/MaintenanceList";
 import RegisterComplaint from "./registercomplaint/Registercomplaint";
 import Maintenancehistorydetails from "./Maintenancehistory/MaintenanceHistory";
+import AssignFaculty from "./Assignfacultybyprincipal/Assignfaculty";
 
 
 
@@ -42,11 +44,13 @@ function App() {
         <Route path="/register" element={<Register/>}/>
         <Route path="/Sicdash" element={<SicDash/>}/>
         <Route path="/custdash" element={<CustodianDash/>}/>
+        <Route path="/principaldash" element={<PrincipalDash/>}/>
         <Route path="/notify" element={<NotificationPanel/>}/>
         <Route path="/addstocksic" element={<AddStocksic/>}/>
         <Route path="/maintenance" element={<MaintenanceList/>}/>
         <Route path="/regcomplaint" element={<RegisterComplaint/>}/>
         <Route path="/maintenancehist" element={<Maintenancehistorydetails/>}/>
+        <Route path="/assignfaculty" element={<AssignFaculty/>}/>
 
 
         
