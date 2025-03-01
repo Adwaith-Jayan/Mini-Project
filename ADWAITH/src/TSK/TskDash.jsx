@@ -7,17 +7,14 @@ import { Link, useNavigate } from "react-router-dom";
 import HomeIcon from '@mui/icons-material/Home';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import { jwtDecode } from "jwt-decode";
-
-const notifications = [
-    { message: 'New report from Verifier' },
-    { message: 'New message from HOD' },
-];
+import axios from "axios";
 
 const TskDash = () => {
     const navigate = useNavigate();
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [username, setUsername] = useState("");
     const [currentDate, setDate] = useState("");
+    const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
         const today = new Date().toLocaleDateString("en-GB", {
@@ -33,18 +30,28 @@ const TskDash = () => {
             try {
                 const decoded = jwtDecode(token);
                 setUsername(decoded.name);
+                fetchNotifications(decoded.email);
             } catch (error) {
                 console.error("Error decoding token: ", error);
             }
         }
     }, []);
 
+    const fetchNotifications = async (userEmail) => {
+        try {
+            const response = await axios.get(`http://localhost:5000/api/notifications?receiver=${userEmail}`);
+            setNotifications(response.data);
+        } catch (error) {
+            console.error("Error fetching notifications:", error);
+        }
+    };
+
     return (
         <div className="app-container">
             <Header username={username} currentDate={currentDate} />
             <div className="main-area">
                 <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-                <Dashboard navigate={navigate} />
+                <Dashboard navigate={navigate} notifications={notifications} />
             </div>
         </div>
     );
@@ -79,7 +86,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     );
 };
 
-const Dashboard = ({ navigate }) => (
+const Dashboard = ({ navigate, notifications }) => (
     <main className="dashboard">
         <div className="dashboard-header">
             <h1>Dashboard</h1>
@@ -100,9 +107,13 @@ const Notifications = ({ notifications }) => (
             <h2>Notifications</h2>
         </div>
         <ul>
-            {notifications.map((n, i) => (
-                <li key={i}>{n.message}</li>
-            ))}
+            {notifications.length > 0 ? (
+                notifications.map((n, i) => (
+                    <li key={i}>{n.message}</li>
+                ))
+            ) : (
+                <li>No new notifications</li>
+            )}
         </ul>
         <a href="#">View All</a>
     </div>

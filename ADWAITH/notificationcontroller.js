@@ -1,6 +1,6 @@
 import express from "express";
-import TskNotification from "./tskforwardnotification.js"; // ✅ Import Notifications Model
-import MainStock from "./mainstockmodel.js"; // ✅ Import MainStock Model
+import TskNotification from "./tskforwardnotification.js"; 
+import MainStock from "./mainstockmodel.js"; 
 
 const router = express.Router();
 

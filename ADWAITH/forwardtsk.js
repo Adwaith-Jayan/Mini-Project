@@ -47,7 +47,6 @@ router.post('/api/forward-stock-tsk', async (req, res) => {
                 receiver: hod.email_id,
                 indent_no,
                 sl_no,
-                quantity, // ✅ Sending quantity in the notification
                 status: "unread",
             });
             await newNotification.save();
