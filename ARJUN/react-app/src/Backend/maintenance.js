@@ -112,18 +112,10 @@ router.post("/complete", async (req, res) => {
         await newHistory.save();
 
         
-        if (value === "Not Working" && maintenance.status === "Completed" ) {
-          const newClearance = new Clearance({
-            item_no: maintenance.item_no,
-            clearance_date: new Date(),
-            remarks: maintenance.remarks,
-            status: "Pending Clearance",
-          });
-          await newClearance.save();
+        if (value === "Working") {
+          await Maintenance.findByIdAndDelete(id);
         }
-
-  
-        await Maintenance.findByIdAndDelete(id);
+        
       }
     }
 

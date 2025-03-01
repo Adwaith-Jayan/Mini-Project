@@ -78,7 +78,7 @@ const Stockclears = () => {
       setcStocks((prev) =>
         prev.map((stock) =>
           selectedItems.includes(stock.item_no)
-            ? { ...stock, status: "Cleared", clearance_date: new Date().toISOString().split("T")[0] }
+            ? { ...stock, status: "Cleared", clearance_date: new Date().toLocaleDateString()}
             : stock
         )
       );
@@ -164,7 +164,7 @@ const Stockclears = () => {
                     {stock.status}
                   </span>
                 </td>
-                <td>{stock.clearance_date ? stock.clearance_date : "—"}</td>
+                <td>{stock.clearance_date ? new Date(stock.clearance_date).toLocaleDateString() : "—"}</td>
               </tr>
             ))}
           </tbody>

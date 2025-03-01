@@ -13,6 +13,9 @@
     flex: 1;
     padding: 20px;
     background: white;
+        /* margin-left: 250px; 
+        overflow-y: auto;  
+        height: 100vh; */
 }
   
 /* Header */

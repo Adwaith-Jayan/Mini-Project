@@ -37,7 +37,8 @@ router.get("/stockclearance", async (req, res) => {
       const stockInfo = clearanceRecords.map((record) => ({
         item_no: record.item_no,
         remarks: record.remarks,
-        status: record.status || "Unknown"
+        status: record.status || "Unknown",
+        clearance_date: record.clearance_date
       }));
   
       res.json(stockInfo);
@@ -53,7 +54,7 @@ router.post("/clear-stock", async (req, res) => {
   try {
     await Clearance.updateMany(
       { item_no: { $in: item_ids } },
-      { $set: { status: "Cleared", clearance_date: new Date() } }
+      { $set: { status: "Cleared", clearance_date: new Date().toISOString()} }
     );
 
     res.status(200).json({ message: "Stock cleared successfully" });

@@ -4,10 +4,12 @@
     color: white;
     padding: 20px;
     transition: width 0.3s ease-in-out;
-    overflow: hidden;
+    overflow: hidden; 
     display: flex;
-    height: 100vh;
+    min-height: 100vh;
+    height: 100%;
     font-family: Arial, sans-serif;
+    overflow-y: auto;
 }
 
 .assidebar.closed {

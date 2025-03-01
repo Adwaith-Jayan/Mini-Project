@@ -20,6 +20,11 @@ const handleLogout = (navigate) => {
     window.history.pushState(null,null,"/");
   };
 
+const handlesendmail=()=>{
+    const gmaillink="https://accounts.google.com/AccountChooser?continue=https://mail.google.com/mail/?view=cm&fs=1";
+     window.open(gmaillink, "_blank")
+};
+
 const SicDash = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [username,setusername]= useState("");
@@ -92,7 +97,7 @@ const Dashboard = ({navigate}) => (
                 <Link to="/maintenance"><Button className='action-button' variant="contained">Maintenance List</Button></Link>
                 <Link to="/maintenancehist"><Button className='action-button' variant="contained">Maintenance History</Button></Link>
                 <Link to = "/stockclears"><Button className='action-button' variant="contained">Stock Clearance</Button></Link>
-                <Button className='action-button' variant="contained">Send Email</Button>
+                <Button onClick={()=>{handlesendmail()}} className='action-button' variant="contained">Send Email</Button>
                 <Button className='action-button' variant="contained">Transfer Log Details</Button>
                 <Button className='action-button' variant="contained">Stock Handover</Button>
 
