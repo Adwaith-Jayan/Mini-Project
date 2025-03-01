@@ -19,7 +19,7 @@ const Sidebarprincipal = ({ sidebarOpen, setSidebarOpen, role }) => {
                 <li></li>
                       <li></li>
                       <li> <HomeIcon fontSize="medium" />
-                      <span onClick={() => navigate(role.toLowerCase() === "principal" ? "/principaldash" : "/hoddash")}> Dashboard </span></li>
+                      <span onClick={() => navigate(role.toLowerCase() === "principal" ? "/principaldash" : "/Hoddash")}> Dashboard </span></li>
 
                       {role.toLowerCase() === "principal" && (
                         <li>

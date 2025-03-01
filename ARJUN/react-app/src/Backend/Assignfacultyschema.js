@@ -13,4 +13,5 @@ const assignfacultyprincipalNotificationSchema = new mongoose.Schema({
 });
 
 const AssignfacultyNotification = mongoose.models.AssignfacultyNotification || mongoose.model('AssignfacultyNotification', assignfacultyprincipalNotificationSchema, 'notifications');
+
 export default AssignfacultyNotification;

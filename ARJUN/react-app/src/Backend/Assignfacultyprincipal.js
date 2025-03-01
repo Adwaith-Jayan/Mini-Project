@@ -2,18 +2,19 @@ import express from 'express';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import AssignfacultyNotification from './Assignfacultyprincipalnotificationsch';
-import User from './usermodel';
-import Assignedfacultylist from './Assignedfacultylistschema';
+import AssignfacultyNotification from './Assignfacultyschema.js';
+import User from './usermodel.js';
+import Assignedfacultylist from "./Assignedfacultylistschema.js";
 
 dotenv.config();
 const router = express.Router();
 const SECRET_KEY = process.env.JWT_SECRET || "your_jwt_secret"; // Use .env for security
 
 
-router.post('/assign-faculty', async (req, res) => {
+router.post('/api/assign-faculty', async (req, res) => {
     try {
         const token = req.headers.authorization?.split(" ")[1];
+        console.log(token);
         if (!token) {
             return res.status(401).json({ error: "Unauthorized: No token provided" });
         }

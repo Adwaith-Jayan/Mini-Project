@@ -58,9 +58,13 @@ const AssignFaculty = () => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
-
+  const token = localStorage.getItem("token");
     try {
-      const response = await axios.post("http://localhost:5000/api/assign-faculty", formData);
+        const response = await axios.post("http://localhost:5000/api/assign-faculty",formData,
+        {
+                headers: {Authorization: `Bearer ${token}`,},
+            }
+        );
       if (response.status === 201) {
         setMessage("✅ Faculty assigned successfully!");
         setFormData({ facultyName: "", email: "", department: "CSE", premise: "", lastDate: "" });
@@ -79,12 +83,12 @@ const AssignFaculty = () => {
       <Sidebarprincipal sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />
 
       {/* Main Content */}
-      <div className="main-content">
-        <header className="header">
+      <div className="asfmain-content">
+        <header className="asfheader">
           <h2>Assign Faculty</h2>
-          <div className="header-icons">
-            <FaSearch className="search-icon" />
-            <FaBell className="notification-icon" />
+          <div className="asfheader-icons">
+            <FaSearch className="asfsearch-icon" />
+            <FaBell className="asfnotification-icon" />
             <AccountMenu />
           </div>
         </header>

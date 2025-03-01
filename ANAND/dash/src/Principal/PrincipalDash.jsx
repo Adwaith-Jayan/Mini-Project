@@ -4,9 +4,6 @@ import { FaUserCircle, FaSignOutAlt, FaChartBar, FaCheckCircle, FaListAlt, FaBar
 import AccountMenu from '../../../../ARJUN/react-app/src/assets/Usermenu';
 import Button from '@mui/material/Button';
 import { Link } from "react-router-dom";
-import HomeIcon from '@mui/icons-material/Home';
-import ArticleIcon from '@mui/icons-material/Article';
-import VerifiedIcon from '@mui/icons-material/Verified';
 import { jwtDecode } from "jwt-decode";
 import Sidebarprincipal from '../../../../ARJUN/react-app/src/assets/sidebarforprincipal';
 

@@ -1,20 +1,27 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Register.css";
+import { useSearchParams } from "react-router-dom";
 import registerimage from "../assets/loginimg.png";
 
 const Register = () => {
+
+  const [searchParams] = useSearchParams();
+  const notifId = searchParams.get("notifId");
+
   const [formData, setFormData] = useState({
     firstName: "",
     email: "",
     password: "",
     role: "",
     inventory: "",
+    lastdate: ""
   });
 
   const [message, setMessage] = useState(""); // For success/error messages
   const [loading, setLoading] = useState(false); // Show a loading state
   const [inventoryList, setInventoryList] = useState([]); // For storing the list of inventories
+
 
   // Fetch inventory options from the database when the component mounts
   useEffect(() => {
@@ -30,6 +37,34 @@ const Register = () => {
     fetchInventory();
   }, []); // Empty dependency array means this runs once when the component mounts
 
+  useEffect(() => {
+    if (notifId) {
+      const fetchNotificationData = async () => {
+        try {
+          const token = localStorage.getItem("token"); // Get token
+          const response = await axios.post("http://localhost:5000/api/Add-account",{ notifId },
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+
+          if (response.status === 200) {
+            const { facultyname, facultyemail, premise,last_date } = response.data.data;
+            setFormData((prev) => ({
+              ...prev,
+              firstName: facultyname,
+              email: facultyemail,
+              inventory: premise,
+              lastdate: last_date
+            }));
+          }
+        } catch (error) {
+          console.error("Error fetching notification data:", error);
+        }
+      };
+
+      fetchNotificationData();
+    }
+  }, [notifId]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -44,7 +79,7 @@ const Register = () => {
 
       if (response.status === 201) {
         setMessage("✅ Registration successful! You can now log in.");
-        setFormData({ firstName: "", email: "", password: "", role: "", inventory: "" });
+        setFormData({ firstName: "", email: "", password: "", role: "", inventory: "" ,lastdate: ""});
       }
     } catch (error) {
       setMessage("❌ Registration failed. Try again.");

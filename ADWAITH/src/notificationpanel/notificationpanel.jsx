@@ -10,24 +10,21 @@ const Notifications = () => {
         const fetchNotifications = async () => {
             try {
                 const token = localStorage.getItem("token");
-                if (!token) return;
+                if (!token) {
+                    console.error("❌ No token found. User is not authenticated.");
+                    return;
+                }
 
                 const decoded = jwtDecode(token);
                 const userEmail = decoded.email;
 
-                // 1️⃣ Log receiver email (for debugging)
-                await axios.get("http://localhost:5000/api/log-receiver", {
-                    params: { receiver: userEmail }
-                });
-
-                console.log("✅ Receiver email logged successfully:", userEmail);
-
-                // 2️⃣ Fetch detailed notifications
+                // ✅ Fetch notifications
                 const response = await axios.get("http://localhost:5000/api/fetch-notifications", {
-                    params: { receiver: userEmail }
+                    params: { receiver: userEmail },
+                    headers: { Authorization: `Bearer ${token}` } // ✅ Include token in request
                 });
 
-                console.log("🔍 Detailed Notifications:", response.data.data);
+                console.log("🔍 Fetched Notifications:", response.data.data);
                 setNotifications(response.data.data);
             } catch (error) {
                 console.error("❌ Error fetching notifications:", error);
@@ -39,8 +36,20 @@ const Notifications = () => {
 
     const handleAccept = async (notifId) => {
         try {
-            await axios.post("http://localhost:5000/api/accept-notification", { notifId });
+            const token = localStorage.getItem("token");
+            if (!token) {
+                console.error("❌ No token found. User is not authenticated.");
+                return;
+            }
+
+            await axios.post(
+                "http://localhost:5000/api/accept-notification",
+                { notifId },
+                { headers: { Authorization: `Bearer ${token}` } } // ✅ Include token
+            );
+
             setNotifications(notifications.filter((n) => n._id !== notifId)); // Remove from UI
+            console.log(`✅ Notification ${notifId} accepted.`);
         } catch (error) {
             console.error("❌ Error accepting notification:", error);
         }
@@ -48,8 +57,20 @@ const Notifications = () => {
 
     const handleReject = async (notifId) => {
         try {
-            await axios.post("http://localhost:5000/api/reject-notification", { notifId });
+            const token = localStorage.getItem("token");
+            if (!token) {
+                console.error("❌ No token found. User is not authenticated.");
+                return;
+            }
+
+            await axios.post(
+                "http://localhost:5000/api/reject-notification",
+                { notifId },
+                { headers: { Authorization: `Bearer ${token}` } } // ✅ Include token
+            );
+
             setNotifications(notifications.filter((n) => n._id !== notifId)); // Remove from UI
+            console.log(`❌ Notification ${notifId} rejected.`);
         } catch (error) {
             console.error("❌ Error rejecting notification:", error);
         }

@@ -10,6 +10,7 @@ import forwardStockRoutes from "./forwardtsk.js";
 import mainRoutes from "./mainstockdetails.js";
 import notificationRoutes from "./notification.js"; 
 import notificationControllerRoutes from "./notificationcontroller.js";
+import forwardactionRoutes from "./forwardaction.js";
 
 const app = express();
 app.use(express.json());
@@ -39,6 +40,7 @@ app.use(forwardStockRoutes);
 app.use(mainRoutes);
 app.use(notificationRoutes);
 app.use(notificationControllerRoutes);
+app.use(forwardactionRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
