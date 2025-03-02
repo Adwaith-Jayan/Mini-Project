@@ -30,10 +30,12 @@ router.post("/", async (req, res) => {
     }
 
     // Check if the email already exists
-
-    // const existingUser = await User.findOne({ email });
-    // if (existingUser) {
-    //   return res.status(409).json({ message: "Email already registered" });
+    // if(role.toLowerCase()!=="verifier")
+    // {
+    //   const existingUser = await User.findOne({ email_id: email });
+    //   if (existingUser) {
+    //     return res.status(409).json({ message: "Email already registered" });
+    //   }
     // }
 
     // Hash the password before saving

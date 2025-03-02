@@ -137,7 +137,7 @@ router.post("/api/Add-account", async (req, res) => {
 
         const { facultyname, facultyemail,premise,last_date } = notification;
 
-        res.json({data: notification });
+        res.json({data: notification});
 
     } catch (error) {
         console.error("❌ Error accepting notification:", error);

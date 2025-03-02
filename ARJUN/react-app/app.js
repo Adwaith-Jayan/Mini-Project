@@ -15,6 +15,7 @@ import AssignfacultyprincipalRoutes from "./src/Backend/Assignfacultyprincipal.j
 import notificationRoutes from "./src/Backend/notification.js";
 import notificationcontrollerRoutes from "./src/Backend/notificationcontroller.js";
 import AddaccountbynotiRoutes from "./src/Backend/Addaccountbynoti.js";
+import profilebackRoutes from "./src/Backend/profileback.js";
 
 
 dotenv.config();
@@ -41,6 +42,7 @@ app.use(AssignfacultyprincipalRoutes);
 app.use(notificationRoutes);
 app.use(notificationcontrollerRoutes);
 app.use(AddaccountbynotiRoutes);
+app.use("/api/profile",profilebackRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

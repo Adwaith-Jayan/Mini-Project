@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./stockverify.css";
 import { FaSearch, FaUser, FaBars, FaBell, FaFilter } from "react-icons/fa";
 import AccountMenu from "../assets/Usermenu";
@@ -6,7 +6,8 @@ import BasicButtons from "../assets/Buttons";
 import Button  from "@mui/material/Button";
 import SendIcon from '@mui/icons-material/Send';
 import HomeIcon from '@mui/icons-material/Home';
-
+import Sidebarverifier from "../assets/sidebarverifier";
+import { jwtDecode } from "jwt-decode";
 
 const Stockverifications = () => {
   const [stocks, setStocks] = useState([
@@ -19,8 +20,8 @@ const Stockverifications = () => {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
+  const [role,setRole]=useState(null);
 
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
   const toggleFilterMenu = () => setFilterOpen(!filterOpen);
 
   const handleStatusChange = (index, newStatus) => {
@@ -29,20 +30,22 @@ const Stockverifications = () => {
     setStocks(updatedStocks);
   };
 
+  useEffect(() => {
+          const token = localStorage.getItem("token"); // Retrieve token from localStorage
+                        if (token) {
+                          try {
+                            const decoded = jwtDecode(token); // Decode token to get user info
+                            setRole(decoded.designation);
+                          } catch (error) {
+                            console.error("Invalid Token:", error);
+                          }
+                        }
+            },[]);
+
   return (
     <div className="stockverificationcontainer">
       {/* Sidebar */}
-      <aside className={`vfsidebar ${sidebarOpen ? "open" : "closed"}`}>
-        <FaBars className="vfmenu-icon" onClick={toggleSidebar} />
-        {sidebarOpen && (
-          <ul>
-            <li></li>
-                  <li></li>
-                  <li><HomeIcon fontSize="medium"/>   Dashboard</li>
-                </ul>
-        )}
-      </aside>
-
+      <Sidebarverifier sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role}/>
       {/* Main Content */}
       <div className="vfmain-content">
         <header className="headerstockverificaton">
