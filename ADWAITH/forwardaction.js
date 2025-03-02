@@ -6,6 +6,7 @@ import TskForwardNotification from "./tskforwardnotification.js";
 import MainStock from "./mainstockmodel.js"; 
 import CseMain from "./csemainmodel.js";
 import HodAcceptNotification from "./HodAcceptNotification.js";
+import HodRejectNotification from "./hodrejectnotification.js";
 
 dotenv.config();
 const router = express.Router();
@@ -53,6 +54,7 @@ router.post("/api/accept-notification", async (req, res) => {
             sl_no,
             indent_no,
             quantity,
+            remaining:quantity,
             date_of_purchase,
             price
         });
@@ -62,6 +64,12 @@ router.post("/api/accept-notification", async (req, res) => {
         // if (!tskUser) {
         //     return res.status(404).json({ error: "TSK user not found" });
         // }
+
+        const stockUpdate = await MainStock.findOneAndUpdate(
+            { indent_no, sl_no }, 
+            { department: "CSE" }, 
+            { new: true }
+        );
 
         // ✅ Create a new notification entry for TSK
         const newNotification = new HodAcceptNotification({
@@ -84,6 +92,14 @@ router.post("/api/accept-notification", async (req, res) => {
 // ✅ Reject Notification API
 router.post("/api/reject-notification", async (req, res) => {
     try {
+        const token = req.headers.authorization?.split(" ")[1];
+        if (!token) {
+            return res.status(401).json({ error: "Unauthorized: No token provided" });
+        }
+
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const senderEmail = decoded.email; // Extract email from token
+
         const { notifId } = req.body;
         if (!notifId) {
             return res.status(400).json({ error: "Notification ID is required" });
@@ -92,7 +108,7 @@ router.post("/api/reject-notification", async (req, res) => {
         // ✅ Find and update notification status to "rejected"
         const notification = await TskForwardNotification.findByIdAndUpdate(
             notifId,
-            { status: "rejected" },
+            { status: "read" },
             { new: true }
         );
 
@@ -100,7 +116,25 @@ router.post("/api/reject-notification", async (req, res) => {
             return res.status(404).json({ error: "Notification not found" });
         }
 
-        res.json({ message: "Stock rejected successfully" });
+        const { indent_no, sl_no } = notification;
+
+        // ✅ Delete the corresponding stock entry from MainStock
+        const deletedStock = await MainStock.findOneAndDelete({ indent_no, sl_no });
+        if (!deletedStock) {
+            return res.status(404).json({ error: "Stock not found in MainStock" });
+        }
+
+        // ✅ Create a new notification entry for rejection
+        const newRejectNotification = new HodRejectNotification({
+            sender: senderEmail,
+            receiver: "tsk@rit.ac.in",
+            indent_no,
+            sl_no
+        });
+
+        await newRejectNotification.save();
+
+        res.json({ message: "Stock rejected, deleted from MainStock, and notification sent successfully" });
 
     } catch (error) {
         console.error("❌ Error rejecting notification:", error);

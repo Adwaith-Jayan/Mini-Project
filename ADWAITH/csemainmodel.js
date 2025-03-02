@@ -5,7 +5,8 @@ const cseMainSchema = new mongoose.Schema({
     indent_no: { type: String, required: true },
     date_of_purchase: { type: String, required: true },
     price: { type: Number, required: true },
-    quantity: { type: Number, required: true }
+    quantity: { type: Number, required: true },
+    remaining: { type: Number, required: true }
 });
 
 const CseMain = mongoose.model("csemain", cseMainSchema, "csemain");

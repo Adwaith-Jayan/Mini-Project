@@ -10,6 +10,7 @@ import MainStockdetails from "./MainStock/MainStockdetails";
 import ForwardStockTsk from "./ForwardStockTsk/ForwardStockTsk";
 import HodDash from "./HOD/HodDash";
 import NotificationPanel from "./notificationpanel/notificationpanel";
+import ForwardStockHOD from "./ForwardStockHOD/ForwardStockHOD";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/forwardstocktsk" element={<ForwardStockTsk/>}/>
         <Route path="/Hoddash" element={<HodDash/>}/>
         <Route path="/notify" element={<NotificationPanel/>}/>
+        <Route path="/forwardstockhod" element={<ForwardStockHOD/>}/>
       </Routes>
     </Router>
    

@@ -83,6 +83,7 @@ const Dashboard = ({ notifications }) => (
         <div className="actions">
             <Link to="/register"><Button className='action-button' variant="contained">Create Account</Button></Link>
             <Link to="/deleteacc"><Button className='action-button' variant="contained">Remove Account</Button></Link>
+            <Link to="/forwardstockhod"><Button className='action-button' variant="contained">Forward Stock</Button></Link>
         </div>
         <LogoutButton />
     </main>
