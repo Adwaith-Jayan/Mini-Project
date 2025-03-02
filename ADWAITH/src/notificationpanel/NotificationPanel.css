@@ -43,11 +43,31 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 40px); /* Ensure it takes the full height */
+    overflow: hidden; /* Prevent unwanted overflow */
 }
 
-.notinotification-panel h2 {
-    margin-bottom: 15px;
+/* Scrollable Notification List */
+.notinotification-list {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* Custom Scrollbar */
+.notinotification-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.notinotification-list::-webkit-scrollbar-thumb {
+    background-color: #b0b0b0;
+    border-radius: 3px;
+}
+
+.notinotification-list::-webkit-scrollbar-track {
+    background: #f0f0f0;
 }
 
 /* Notification Items */

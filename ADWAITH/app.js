@@ -5,12 +5,14 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import loginRoutes from "./login.js";
-import stockRoutes from "./stockdetails.js";
+// import stockRoutes from "./stockdetails.js";
 import forwardStockRoutes from "./forwardtsk.js";
 import mainRoutes from "./mainstockdetails.js";
 import notificationRoutes from "./notification.js"; 
 import notificationControllerRoutes from "./notificationcontroller.js";
 import forwardactionRoutes from "./forwardaction.js";
+import RoomRoutes from './Room.js';
+import forwardhodRoutes from "./forwardstockhod.js";
 
 const app = express();
 app.use(express.json());
@@ -35,12 +37,14 @@ connectDB();
 
 // API Routes
 app.use(loginRoutes);
-app.use(stockRoutes);
+// app.use(stockRoutes);
 app.use(forwardStockRoutes);
 app.use(mainRoutes);
 app.use(notificationRoutes);
 app.use(notificationControllerRoutes);
 app.use(forwardactionRoutes);
+app.use(RoomRoutes);
+app.use(forwardhodRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));

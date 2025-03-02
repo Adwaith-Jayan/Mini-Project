@@ -115,7 +115,7 @@ const Notifications = ({ notifications }) => (
                 <li>No new notifications</li>
             )}
         </ul>
-        <a href="#">View All</a>
+        <Link to="/notify">View All</Link>
     </div>
 );
 
