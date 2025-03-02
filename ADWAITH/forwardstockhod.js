@@ -2,6 +2,9 @@ import express from "express";
 import mongoose from "mongoose";
 import CseMain from "./csemainmodel.js";
 import Room from "./Roommodel.js";
+import Access from "./accessmodel.js";
+import User from "./models.js";
+import HODForwardNotification from "./HodForwardNotification.js";
 
 const router = express.Router();
 
@@ -28,7 +31,7 @@ router.get("/fetch-premises", async (req, res) => {
 });
 
 // Forward stock and update remaining quantity
-router.post("/forward-stock-hod", async (req, res) => {
+router.post("/api/forward-stock-hod", async (req, res) => {
     try {
         const { sl_no, indent_no, item_name, quantity, price, date_of_purchase, premise } = req.body;
 
@@ -61,10 +64,43 @@ router.post("/forward-stock-hod", async (req, res) => {
         stockItem.remaining -= parsedQuantity;
         await stockItem.save();
 
+        // Fetch room_no based on selected premise (room name)
+        const room = await Room.findOne({ name: premise });
+        if (!room) {
+            return res.status(404).json({ message: "Premise (room) not found" });
+        }
+
+        // Fetch email IDs from access collection for the room_no
+        const access = await Access.findOne({ room_no: room.room_no });
+        if (!access) {
+            return res.status(404).json({ message: "No access record found for this room." });
+        }
+
+        // Fetch Stock-In-Charge email
+        const stockInChargeUser = await User.findOne({ email_id: access.email_id, designation: "Stock-In-Charge" });
+        if (!stockInChargeUser) {
+            return res.status(404).json({ message: "No Stock-In-Charge found for this room." });
+        }
+
+        // Create notification entry with a single receiver
+        const notification = new HODForwardNotification({
+            type: "hodstockforward",
+            indent_no,
+            item_name,
+            quantity: parsedQuantity,
+            price: parsedPrice,
+            date_of_purchase: new Date(date_of_purchase),
+            sender: "arjunsabuakatsuki@gmail.com", // Replace with actual HOD email ID
+            receiver: stockInChargeUser.email_id, // Only one receiver
+            date: new Date()
+        });
+
+        await notification.save();
+
         res.status(200).json({ message: "Stock forwarded successfully!" });
     } catch (error) {
         console.error("Error forwarding stock:", error);
-        res.status(500).json({ message: "Failed to forward stock" });
+        res.status(500).json({ message: "Failed to forward stock", error: error.message });
     }
 });
 

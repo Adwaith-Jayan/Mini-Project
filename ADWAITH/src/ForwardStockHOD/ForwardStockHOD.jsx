@@ -7,12 +7,12 @@ import './ForwardStockHOD.css';
 
 const ForwardStockHOD = () => {
     const navigate = useNavigate();
-    
+
     // State for form data
     const [formData, setFormData] = useState({
         sl_no: '',
         indent_no: '',
-        item_name: '',  // User must enter this
+        item_name: '',
         quantity: '',
         price: '',
         date_of_purchase: '',
@@ -20,22 +20,26 @@ const ForwardStockHOD = () => {
     });
 
     const [message, setMessage] = useState('');
-    const [inventoryList, setInventoryList] = useState([]); // Room names
-    const [availableStock, setAvailableStock] = useState([]); // Available stock data
+    const [inventoryList, setInventoryList] = useState([]);
+    const [availableStock, setAvailableStock] = useState([]);
 
     // Fetch available stock when component loads
     useEffect(() => {
         const fetchAvailableStock = async () => {
             try {
                 const response = await axios.get("http://localhost:5000/fetch-stock");
+                console.log("Fetched stock data:", response.data);
                 if (response.data.length > 0) {
-                    const stockData = response.data[0]; // Fetch first available stock
+                    const stockData = response.data[0];
                     setFormData({
                         sl_no: stockData.sl_no,
                         indent_no: stockData.indent_no,
+                        item_name: stockData.item_name || "",  // Ensure item_name is filled
                         price: stockData.price,
-                        date_of_purchase: stockData.date_of_purchase,
-                        quantity: stockData.remaining, // Remaining stock is pre-filled
+                        date_of_purchase: stockData.date_of_purchase
+                            ? new Date(stockData.date_of_purchase).toISOString().split('T')[0]
+                            : '',
+                        quantity: stockData.remaining,
                         premise: ''
                     });
                 }
@@ -53,8 +57,8 @@ const ForwardStockHOD = () => {
     useEffect(() => {
         const fetchInventory = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/inventory");
-                setInventoryList(response.data); // Set room names from DB
+                const response = await axios.get("http://localhost:5000/fetch-premises");
+                setInventoryList(response.data);
             } catch (error) {
                 console.error("Error fetching inventory:", error);
             }
@@ -73,25 +77,28 @@ const ForwardStockHOD = () => {
         e.preventDefault();
 
         const updatedStock = {
-            ...formData,
             sl_no: parseInt(formData.sl_no, 10),
-            price: parseFloat(formData.price),
+            indent_no: formData.indent_no,
+            item_name: formData.item_name.trim(),
             quantity: parseInt(formData.quantity, 10),
-            department: 'CSE'
+            price: parseFloat(formData.price),
+            date_of_purchase: formData.date_of_purchase,
+            premise: formData.premise,
+            sender: "hod@example.com"
         };
 
-        if (isNaN(updatedStock.sl_no) || isNaN(updatedStock.price) || isNaN(updatedStock.quantity)) {
-            setMessage("Serial Number, Price, and Quantity must be valid numbers.");
+        if (!updatedStock.item_name || !updatedStock.premise) {
+            setMessage("Item Name and Premise are required.");
             return;
         }
 
         try {
-            await axios.post("http://localhost:5000/api/forward-stock-hod", updatedStock);
+            const response = await axios.post("http://localhost:5000/api/forward-stock-hod", updatedStock);
             alert("Stock Forwarded Successfully!");
-            navigate('/Tskdash');
+            navigate('/Hoddash');
         } catch (error) {
             console.error("Error forwarding stock:", error);
-            setMessage(error.response?.data?.error || "Something went wrong!");
+            setMessage(error.response?.data?.message || "Something went wrong!");
         }
     };
 
@@ -99,94 +106,25 @@ const ForwardStockHOD = () => {
         <div className="forward-container">
             <h1>Forward Stock</h1>
             {message && <p className="message">{message}</p>}
-            
+
             <form className="forward-form" onSubmit={handleSubmit}>
-                <TextField 
-                    label="Serial No" 
-                    variant="outlined" 
-                    name="sl_no" 
-                    value={formData.sl_no} 
-                    onChange={handleChange} 
-                    required 
-                    disabled 
-                />
-
-                <TextField 
-                    label="Indent No" 
-                    variant="outlined" 
-                    name="indent_no" 
-                    value={formData.indent_no} 
-                    onChange={handleChange} 
-                    required 
-                    disabled 
-                />
-
-                <TextField 
-                    label="Item Name" 
-                    variant="outlined" 
-                    name="item_name" 
-                    value={formData.item_name} 
-                    onChange={handleChange} 
-                    required 
-                />
-
-                <TextField 
-                    label="Quantity"  
-                    type="number" 
-                    variant="outlined" 
-                    name="quantity" 
-                    value={formData.quantity} 
-                    onChange={handleChange} 
-                    required 
-                />
-
-                <TextField 
-                    label="Price" 
-                    type="number" 
-                    variant="outlined" 
-                    name="price" 
-                    value={formData.price} 
-                    onChange={handleChange} 
-                    required 
-                    disabled 
-                />
-
-                <TextField 
-                    label="Date of Purchase" 
-                    type="date" 
-                    variant="outlined" 
-                    name="date_of_purchase" 
-                    value={formData.date_of_purchase} 
-                    onChange={handleChange} 
-                    InputLabelProps={{ shrink: true }} 
-                    required 
-                    disabled 
-                />
-
+                <TextField label="Serial No" variant="outlined" name="sl_no" value={formData.sl_no} required disabled />
+                <TextField label="Indent No" variant="outlined" name="indent_no" value={formData.indent_no} required disabled />
+                <TextField label="Item Name" variant="outlined" name="item_name" value={formData.item_name} onChange={handleChange} required />
+                <TextField label="Quantity" type="number" variant="outlined" name="quantity" value={formData.quantity} onChange={handleChange} required />
+                <TextField label="Price" type="number" variant="outlined" name="price" value={formData.price} required disabled />
+                <TextField label="Date of Purchase" type="date" variant="outlined" name="date_of_purchase" value={formData.date_of_purchase} required disabled />
+                
                 <FormControl variant="outlined" fullWidth>
                     <InputLabel>Premise</InputLabel>
-                    <Select
-                        name="premise"
-                        value={formData.premise}
-                        onChange={handleChange}
-                        label="Premise"
-                    >
+                    <Select name="premise" value={formData.premise} onChange={handleChange} label="Premise">
                         {inventoryList.map((room) => (
-                            <MenuItem key={room._id} value={room.name}>
-                                {room.name}
-                            </MenuItem>
+                            <MenuItem key={room._id} value={room.name}>{room.name}</MenuItem>
                         ))}
                     </Select>
                 </FormControl>
 
-                <Button 
-                    type="submit" 
-                    variant="contained" 
-                    color="primary" 
-                    endIcon={<SendIcon />}
-                >
-                    Forward
-                </Button>
+                <Button type="submit" variant="contained" color="primary" endIcon={<SendIcon />}>Forward</Button>
             </form>
         </div>
     );

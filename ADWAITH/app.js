@@ -5,7 +5,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import loginRoutes from "./login.js";
-import stockRoutes from "./stockdetails.js";
+// import stockRoutes from "./stockdetails.js";
 import forwardStockRoutes from "./forwardtsk.js";
 import mainRoutes from "./mainstockdetails.js";
 import notificationRoutes from "./notification.js"; 
@@ -37,7 +37,7 @@ connectDB();
 
 // API Routes
 app.use(loginRoutes);
-app.use(stockRoutes);
+// app.use(stockRoutes);
 app.use(forwardStockRoutes);
 app.use(mainRoutes);
 app.use(notificationRoutes);
