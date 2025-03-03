@@ -16,6 +16,8 @@ import notificationRoutes from "./src/Backend/notification.js";
 import notificationcontrollerRoutes from "./src/Backend/notificationcontroller.js";
 import AddaccountbynotiRoutes from "./src/Backend/Addaccountbynoti.js";
 import profilebackRoutes from "./src/Backend/profileback.js";
+import VerificationRoutes from "./src/Backend/Verification.js";
+import reportfetchRoutes from "./src/Backend/reportfetch.js";
 
 
 dotenv.config();
@@ -43,6 +45,9 @@ app.use(notificationRoutes);
 app.use(notificationcontrollerRoutes);
 app.use(AddaccountbynotiRoutes);
 app.use("/api/profile",profilebackRoutes);
+app.use("/api/stockverify",VerificationRoutes);
+app.use("/api",reportfetchRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
