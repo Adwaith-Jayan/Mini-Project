@@ -58,6 +58,30 @@ const Notifications = () => {
         }
     };
 
+    const handleview = async (notifId) => {
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                console.error("❌ No token found. User is not authenticated.");
+                return;
+            }
+            navigate(`/reportverify?notifId=${notifId}`);
+            await axios.post(
+                "http://localhost:5000/api/report/reportviews",
+                { notifId },
+                { headers: { Authorization: `Bearer ${token}` } } // ✅ Include token
+            );
+            
+            //navigate(`/reportverify/${notifId}`);
+            setNotifications(notifications.filter((n) => n._id !== notifId)); // Remove from UI
+            
+            console.log(`✅ Notification ${notifId} accepted.`);
+        } catch (error) {
+            console.error("❌ Error accepting notification:", error);
+        }
+    };
+
+
     const handleAccept = async (notifId) => {
         try {
             const token = localStorage.getItem("token");
@@ -144,6 +168,25 @@ const Notifications = () => {
                                     </div>
                                     <div className="notibtn-group">
                                         <button className="notiaccept-btn" onClick={() => handleAddacc(notif._id)}>✅ Add Account</button>
+                                    </div>
+                                </li>
+                            ) : null
+                        ))}
+
+
+                        {notifications.map((notif,index) => (
+                            notif.type === "verifier_report" ? (
+                                <li key={ `${notif._id}-${index}`} className="notinotification-item">
+                                    <div>
+                                        <strong>VERIFICATION REPORT BY VERIFIER</strong><br />
+                                        <strong>verifier name:</strong> {notif.verifier_name} <br />
+                                        <strong>verifier email:</strong> {notif.verifier_email} <br />
+                                        <strong>Premise:</strong> {notif.premise} <br />
+                                        <strong>Verify Date:</strong> {new Date(notif.verify_date).toLocaleDateString()} <br />
+
+                                    </div>
+                                    <div className="notibtn-group">
+                                        <button className="notiaccept-btn" onClick={() => handleview(notif._id)}>📄 View Report</button>
                                     </div>
                                 </li>
                             ) : null

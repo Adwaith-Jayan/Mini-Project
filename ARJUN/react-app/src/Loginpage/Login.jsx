@@ -25,7 +25,7 @@ function Login() {
       if (role.toLowerCase() === "hodcse") {
         navigate("/Hoddash");
       }
-      else if(role.toLowerCase()==="stock-in-charge")
+      else if(role.toLowerCase()==="stock-in-charge" || role.toLowerCase()==="furniture-custodian" )
       {
         navigate("/Sicdash");
       }

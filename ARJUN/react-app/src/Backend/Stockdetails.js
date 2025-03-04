@@ -18,7 +18,7 @@ router.get("/stockdetails", async (req, res) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const email = decoded.email;
-
+    const designation=decoded.designation;
     // Get room number based on user access
     const accessData = await Access.findOne({ email_id: email });
     if (!accessData) return res.status(404).json({ message: "No access data found" });
@@ -38,18 +38,40 @@ router.get("/stockdetails", async (req, res) => {
     const stockDetails = await Stock.find({ indent_no: { $in: Array.from(indentNoSet) } });
 
     // Fetch item details for the items in the room
-    const itemDetails = await Item.find({ item_no: { $in: itemsInRoom } });
+    //const itemDetails = await Item.find({ item_no: { $in: itemsInRoom } });
+    // const itemDetails = await Item.find({
+    //   item_no: { $in: itemsInRoom },
+    //   type: { $regex: "electronics", $options: "i" }
+    // });
+    const allItemsInRoom = await Item.find({ item_no: { $in: itemsInRoom } });
+    let electronicsItems=[];
 
-    // Map item status for quick lookup
-    const itemStatusMap = itemDetails.reduce((map, item) => {
+    if(designation.toLowerCase()==="stock-in-charge" || designation.toLowerCase()==="custodian" )
+    {
+        electronicsItems = allItemsInRoom.filter(
+        (item) => item.type.toLowerCase() === "electronics"
+      );
+    }
+    else if(designation.toLowerCase()==="furniture-custodian")
+    {
+        electronicsItems = allItemsInRoom.filter(
+        (item) => item.type.toLowerCase() === "furniture"
+      );
+    }
+    
+    
+    // Create a status map only for electronics items
+    const itemStatusMap = electronicsItems.reduce((map, item) => {
       map[item.item_no] = item.status;
       return map;
     }, {});
-
-    // Construct stock info while avoiding duplicates
-    const stockInfo = indentRecords.map((record) => {
-      const stock = stockDetails.find((s) => s.indent_no === record.indent_no);
-      if (!stock) return null;
+    
+    // Construct stock info, filtering only for electronics
+    const stockInfo = indentRecords
+      .filter((record) => itemStatusMap.hasOwnProperty(record.item_no)) // Only keep electronics
+      .map((record) => {
+        const stock = stockDetails.find((s) => s.indent_no === record.indent_no);
+        if (!stock) return null;
 
       return {
         item_no: record.item_no,
