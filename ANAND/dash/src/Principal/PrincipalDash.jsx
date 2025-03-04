@@ -6,17 +6,37 @@ import Button from '@mui/material/Button';
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import Sidebarprincipal from '../../../../ARJUN/react-app/src/assets/sidebarforprincipal';
-
-const notifications = [
-    { message: 'New report from Verifier' },
-    { message: 'New message from HOD' },
-];
+import axios from "axios";
 
 const PrincipalDash = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [userName,setusername]= useState("");
     const [currentdate,setdate]=useState("");
     const [role,setRole]=useState(null);
+    const [notifications, setNotifications] = useState([]);
+
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                if (!token) return;
+
+                const decoded = jwtDecode(token);
+                setusername(decoded.name);
+                const userEmail = decoded.email;
+
+                const response = await axios.get(`http://localhost:5000/api/notifications?receiver=${userEmail}`);
+                
+                console.log("Dashboard Notifications:", response.data); // Debugging
+
+                setNotifications(response.data);
+            } catch (error) {
+                console.error("Error fetching notifications:", error);
+            }
+        };
+
+        fetchNotifications();
+    }, []);
     
         useEffect(()=>{
             const today = new Date().toLocaleDateString("en-GB", {
@@ -27,15 +47,6 @@ const PrincipalDash = () => {
               });
             setdate(today);
             const token = localStorage.getItem("token");
-            if(token){
-                try{
-                    const decoded = jwtDecode(token);
-                    setusername(decoded.name);
-                }catch(error){
-                    console.error("Error decoding token : ",error);
-                }
-            }
-
             if (token) {
                 try {
                     const decoded = jwtDecode(token); // Decode token to get user info
@@ -51,7 +62,7 @@ const PrincipalDash = () => {
             <Header userName={userName} currentdate={currentdate}/>
             <div className="main-area">
                 <Sidebarprincipal sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />
-                <Dashboard />
+                <Dashboard notifications={notifications} />
             </div>
         </div>
     );
@@ -71,7 +82,7 @@ const Header = ({userName,currentdate}) => (
 );
 
 
-const Dashboard = () => (
+const Dashboard = ({notifications}) => (
     <main className="dashboard">
         <div className="dashboard-header">
             <h1>Dashboard</h1>
@@ -92,11 +103,15 @@ const Notifications = ({ notifications }) => (
             <h2>Notifications</h2>
         </div>
         <ul>
-            {notifications.map((n, i) => (
-                <li key={i}>{n.message}</li>
-            ))}
+        {notifications.length > 0 ? (
+                notifications.map((n, i) => (
+                    <li key={i}>{n.message || "New notification received"}</li>
+                ))
+            ) : (
+                <li>No new notifications</li>
+            )}
         </ul>
-        <a href="#">View All</a>
+        <Link to="/notify">View All</Link>
     </div>
 );
 

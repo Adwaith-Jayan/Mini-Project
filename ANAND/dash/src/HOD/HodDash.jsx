@@ -1,53 +1,79 @@
-import React, { useState, useEffect } from 'react';
-import '../Principal/PrincipalDash.css';
+import React, { useState,useEffect } from 'react';
+import './PrincipalDash.css'
 import { FaUserCircle, FaSignOutAlt, FaChartBar, FaCheckCircle, FaListAlt, FaBars } from 'react-icons/fa';
+import AccountMenu from '../../../../ARJUN/react-app/src/assets/Usermenu';
 import Button from '@mui/material/Button';
 import { Link } from "react-router-dom";
-import HomeIcon from "@mui/icons-material/Home";
-import InventoryIcon from "@mui/icons-material/Inventory";
-import UpdateIcon from "@mui/icons-material/Update";
-import HealthAndSafetyIcon from "@mui/icons-material/HealthAndSafety";
-import SendIcon from "@mui/icons-material/Send";
-import AccountMenu from '../../../../ARJUN/react-app/src/assets/Usermenu';
 import { jwtDecode } from "jwt-decode";
+import Sidebarprincipal from '../../../../ARJUN/react-app/src/assets/sidebarforprincipal';
+import axios from "axios";
 
-const notifications = [
-    { message: 'New report from Verifier' },
-    { message: 'New message from HOD' },
-];
 
-const HodDash = () => {
+const PrincipalDash = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [userName, setUserName] = useState("");
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            try {
-                const decoded = jwtDecode(token);
-                setUserName(decoded.name); 
-            } catch (error) {
-                console.error("Error decoding token:", error);
-            }
-        }
-    }, []);
+    const [userName,setusername]= useState("");
+    const [currentdate,setdate]=useState("");
+    const [role,setRole]=useState(null);
+    const [notifications, setNotifications] = useState([]);
 
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                if (!token) return;
+
+                const decoded = jwtDecode(token);
+                setusername(decoded.name);
+                const userEmail = decoded.email;
+
+                const response = await axios.get(`http://localhost:5000/api/notifications?receiver=${userEmail}`);
+                
+                console.log("Dashboard Notifications:", response.data); // Debugging
+
+                setNotifications(response.data);
+            } catch (error) {
+                console.error("Error fetching notifications:", error);
+            }
+        };
+
+        fetchNotifications();
+    }, []);
+    
+        useEffect(()=>{
+            const today = new Date().toLocaleDateString("en-GB", {
+                weekday: "short",
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              });
+            setdate(today);
+            const token = localStorage.getItem("token");
+            if (token) {
+                try {
+                    const decoded = jwtDecode(token); // Decode token to get user info
+                    setRole(decoded.designation);
+                    } catch (error) {
+                        console.error("Invalid Token:", error);
+                    }
+                }
+        },[]);
 
     return (
         <div className="app-container">
-             <Header userName={userName}/>
+            <Header userName={userName} currentdate={currentdate}/>
             <div className="main-area">
-                <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-                <Dashboard />
+                <Sidebarprincipal sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />
+                <Dashboard notifications={notifications} />
             </div>
         </div>
     );
 };
 
-const Header = ({userName}) => (
+const Header = ({userName,currentdate}) => (
     <header className="header">
         <div className="header-left">
             <span>Welcome, {userName}</span>
-            <span>Thu 16 January 2025</span>
+            <span>{currentdate}</span>
         </div>
         <div className="header-right">
             <input type="search" placeholder="Search..." />
@@ -56,32 +82,17 @@ const Header = ({userName}) => (
     </header>
 );
 
-const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
-    const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
-    return (
-        <aside className={`clsidebar ${sidebarOpen ? "open" : "closed"}`}>
-            <FaBars className="clmenu-icon" onClick={toggleSidebar} />
-            {sidebarOpen && (
-                <ul>
-                    <li><Link to="/Hoddash"><HomeIcon fontSize="medium" /> Dashboard</Link></li>
-                </ul>
-            )}
-        </aside>
-    );
-};
-
-const Dashboard = () => (
+const Dashboard = ({notifications}) => (
     <main className="dashboard">
         <div className="dashboard-header">
             <h1>Dashboard</h1>
             <Notifications notifications={notifications} />
         </div>
         <div className="actions">
-            <Link to ="/register"><Button className='action-button' variant="contained">Create Account</Button></Link>
-            <Link to ="/deleteacc"><Button className='action-button' variant="contained">Remove Account</Button></Link>
-            <Button className='action-button' variant="contained">Send Email</Button>
-            <Button className='action-button' variant="contained">Create New Stock System</Button>
+            <Link to="/assignfaculty"><Button className='action-button' variant="contained">Assign Faculty For Verification</Button></Link>
+            <Button className='action-button' variant="contained">Request For Stock Details</Button>
+            <Button className='action-button' variant="contained">Reports</Button>
         </div>
         <LogoutButton />
     </main>
@@ -93,11 +104,15 @@ const Notifications = ({ notifications }) => (
             <h2>Notifications</h2>
         </div>
         <ul>
-            {notifications.map((n, i) => (
-                <li key={i}>{n.message}</li>
-            ))}
+        {notifications.length > 0 ? (
+                notifications.map((n, i) => (
+                    <li key={i}>{n.message || "New notification received"}</li>
+                ))
+            ) : (
+                <li>No new notifications</li>
+            )}
         </ul>
-        <a href="#">View All</a>
+        <Link to="/notify">View All</Link>
     </div>
 );
 
@@ -108,4 +123,4 @@ const LogoutButton = () => (
     </button>
 );
 
-export default HodDash;
+export default PrincipalDash;
