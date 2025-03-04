@@ -56,7 +56,7 @@ const Reportdetails = () => {
   
           const data = response.data;
           setVerifierEmail(data.verifier_email);
-          setDateOfVerify(data.date_of_verify);
+          setDateOfVerify(new Date(data.verify_date).toLocaleDateString());
           setReports(data.itemDetails || []);
         console.log("Fetched data:", data);
 
