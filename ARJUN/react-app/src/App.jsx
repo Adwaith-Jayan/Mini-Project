@@ -26,7 +26,10 @@ import Maintenancehistorydetails from "./Maintenancehistory/MaintenanceHistory";
 import AssignFaculty from "./Assignfacultybyprincipal/Assignfaculty";
 import VerifierDash from "./verifierdashboard/verifierdash";
 import Reportdetails from "./Reportverifier/Reportverify";
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
 
 
 function App() {
@@ -56,6 +59,10 @@ function App() {
         <Route path="/stockverify" element={<Stockverifications/>}/>
         <Route path="/verifydash" element={<VerifierDash/>}/>
         <Route path="/reportverify" element={<Reportdetails/>}/>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
       </Routes>
     </Router>
   );

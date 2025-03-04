@@ -46,7 +46,11 @@ app.use(notificationcontrollerRoutes);
 app.use(AddaccountbynotiRoutes);
 app.use("/api/profile",profilebackRoutes);
 app.use("/api/stockverify",VerificationRoutes);
+<<<<<<< HEAD
 app.use("/api/report",reportfetchRoutes);
+=======
+app.use("/api",reportfetchRoutes);
+>>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
 
 
 const PORT = process.env.PORT || 5000;

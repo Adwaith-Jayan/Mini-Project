@@ -11,7 +11,11 @@ const SECRET_KEY = process.env.JWT_SECRET || "your_jwt_secret"; // Use .env for 
 
 
 
+<<<<<<< HEAD
 router.post("/reportviews", async (req, res) => {
+=======
+router.post("/report/reportviews", async (req, res) => {
+>>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
     try {
       const token = req.headers.authorization?.split(" ")[1];
       if (!token) {
@@ -23,7 +27,10 @@ router.post("/reportviews", async (req, res) => {
       const senderEmail = decoded.email;
   
       const { notifId } = req.body;
+<<<<<<< HEAD
       console.log(notifId);
+=======
+>>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
       if (!notifId) {
         return res.status(400).json({ error: "Notification ID is required" });
       }
@@ -38,22 +45,38 @@ router.post("/reportviews", async (req, res) => {
       if (!notification) {
         return res.status(404).json({ error: "Notification not found" });
       }
+<<<<<<< HEAD
       console.log(notification);
       const { verifier_email, date_of_verify } = notification;
   
       // ✅ Fetch all items verified by this email
       const items = await Verificationmodel.find({ verifier_email:verifier_email,verify_date:date_of_verify });
+=======
+  
+      const { verifier_email, date_of_verify } = notification;
+  
+      // ✅ Fetch all items verified by this email
+      const items = await Verificationmodel.find({ verifier_email:verifier_email,date_of_verify:date_of_verify });
+>>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
   
       if (!items.length) {
         return res.status(404).json({ error: "No items found for this verifier" });
       }
+<<<<<<< HEAD
       console.log(items);
+=======
+  
+>>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
       // ✅ Format the response
       const itemDetails = items.map((item) => ({
         item_no: item.item_no,
         status: item.status,
         remarks: item.Remarks,
+<<<<<<< HEAD
         date_of_verify: item.verify_date,
+=======
+        date_of_verify: item.date_of_verify,
+>>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
       }));
   
       // ✅ Send the response in table format
@@ -70,6 +93,9 @@ router.post("/reportviews", async (req, res) => {
   });
 
 
+<<<<<<< HEAD
   
 
+=======
+>>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
 export default router;

@@ -31,11 +31,19 @@ router.get("/api/fetch-notifications", async (req, res) => {
         
         // // 🔍 Fetch unread HodAcceptNotifications
         // const hodNotifications = await HodAcceptNotification.find({ receiver, status: "unread" });
+<<<<<<< HEAD
 
         const assignnotification= await AssignfacultyNotification.find({reciever: receiver,status: "unread"});
 
         const verifysnotification= await VerifyNotification.find({receiver: receiver,status: "unread"});
 
+=======
+
+        const assignnotification= await AssignfacultyNotification.find({receiver,status: "unread"});
+
+        const verifysnotification= await VerifyNotification.find({receiver,status: "unread"});
+
+>>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
 
 
 
