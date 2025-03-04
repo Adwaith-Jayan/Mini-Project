@@ -10,36 +10,25 @@ import "jspdf-autotable";
 import * as XLSX from "xlsx";
 import { useSearchParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-<<<<<<< HEAD
 import { useNavigate, useParams } from "react-router-dom";
 
-=======
->>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
 
 const Reportdetails = () => {
   const [reports, setReports] = useState([]);
   const [verifierEmail, setVerifierEmail] = useState("");
   const [dateOfVerify, setDateOfVerify] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-<<<<<<< HEAD
   const [role, setRole] = useState("");
-=======
->>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
   const [filterOpen, setFilterOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-<<<<<<< HEAD
-  const { notifId } = useParams();
-
-  //const [searchParams] = useSearchParams();
-  //const notifId = searchParams.get("notifId");
-=======
+  
 
   const [searchParams] = useSearchParams();
   const notifId = searchParams.get("notifId");
->>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
+  console.log(notifId);
 
   const toggleFilterMenu = () => setFilterOpen(!filterOpen);
   const toggleExportMenu = () => setExportOpen(!exportOpen);
@@ -52,10 +41,10 @@ const Reportdetails = () => {
         setLoading(false);
         return;
       }
-<<<<<<< HEAD
   
       const decoded = jwtDecode(token);
       setRole(decoded.designation);
+      
   
       try {
         const response = await axios.post(
@@ -64,12 +53,11 @@ const Reportdetails = () => {
           { headers: { Authorization: `Bearer ${token}` } }
         );
   
-        if (response.status === 200) {
+  
           const data = response.data;
           setVerifierEmail(data.verifier_email);
           setDateOfVerify(data.date_of_verify);
           setReports(data.itemDetails || []);
-        }
         console.log("Fetched data:", data);
 
       } catch (err) {
@@ -84,32 +72,6 @@ const Reportdetails = () => {
     }
   }, [notifId]); // Depend on notifId properly
   
-=======
-
-      try {
-        const response = await axios.post("http://localhost:5000/api/report/reportviews",
-            { notifId },
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-  
-          if (response.status === 200) {
-            const data = response.data;
-            setVerifierEmail(data.verifier_email);
-            setDateOfVerify(data.date_of_verify);
-            setReports(data.itemDetails || []); // Ensure reports is always an array
-          }
-        } catch (err) {
-          setError(err.response?.data?.message || "Failed to fetch report details");
-        } finally {
-          setLoading(false);
-        }
-      };
-  
-      if (notifId) {
-        fetchReportDetails();
-      }
-    }, [notifId]);
->>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
 
   const exportToPDF = () => {
     const doc = new jsPDF();
@@ -145,11 +107,7 @@ const Reportdetails = () => {
 
   return (
     <div className="report-container">
-<<<<<<< HEAD
       <Sidebarprincipal sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />
-=======
-      <Sidebarprincipal sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
->>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
       <div className="report-content">
         <header className="report-header">
           <h2>Verification Report</h2>
@@ -191,13 +149,8 @@ const Reportdetails = () => {
               </tr>
             </thead>
             <tbody>
-<<<<<<< HEAD
               {reports.filter(report => report.item_no.toString().includes(searchTerm)).map((report) => (
-                <tr key={report.item_no}>
-=======
-              {reports.filter(report => report.item_no.toString().includes(searchTerm)).map((report, index) => (
-                <tr key={index}>
->>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
+                <tr key={`${report.item_no}-${report.date_of_verify}`}>
                   <td>{report.item_no}</td>
                   <td>{report.status}</td>
                   <td>{report.remarks}</td>

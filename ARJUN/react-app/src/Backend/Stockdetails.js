@@ -46,13 +46,13 @@ router.get("/stockdetails", async (req, res) => {
     const allItemsInRoom = await Item.find({ item_no: { $in: itemsInRoom } });
     let electronicsItems=[];
 
-    if(designation.toLowerCase()==="stock-in-charge" || designation.toLowerCase()==="custodian" )
+    if(designation.toLowerCase()==="stock-in-charge" || designation.toLowerCase()==="custodian" || designation.toLowerCase()==="verifier" )
     {
         electronicsItems = allItemsInRoom.filter(
         (item) => item.type.toLowerCase() === "electronics"
       );
     }
-    else if(designation.toLowerCase()==="furniture-custodian")
+    else if(designation.toLowerCase()==="furniture-custodian" ||  designation.toLowerCase()==="verifier")
     {
         electronicsItems = allItemsInRoom.filter(
         (item) => item.type.toLowerCase() === "furniture"

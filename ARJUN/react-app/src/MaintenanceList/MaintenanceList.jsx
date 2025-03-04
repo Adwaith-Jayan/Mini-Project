@@ -138,7 +138,7 @@ const MaintenanceList = () => {
                 <tr key={item._id}>
                   <td>{item.itemId}</td>
                   <td>{new Date(item.repairDate).toLocaleDateString()}</td>
-                  <td>{item.serviceProvider}</td>
+                  <td className="emailservice">{item.serviceProvider}</td>
                   <td>
                     <TextField
                       type="number"

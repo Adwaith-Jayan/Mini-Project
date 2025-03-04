@@ -12,28 +12,16 @@ const Stockverifications = () => {
   const [stocks, setStocks] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
-<<<<<<< HEAD
   const [verifier, setVerifier] = useState({ name: "", email: "" });
   const [role, setRole] = useState(null);
   const [verifdata, setVerifdata] = useState([]);
-=======
-  const [verifier, setVerifier] = useState({ name: "", email: "", premise: "" });
-  const [role,setRole]=useState(null);
->>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       try {
         const decoded = jwtDecode(token);
-<<<<<<< HEAD
         setVerifier({ name: decoded.name, email: decoded.email });
-=======
-        setVerifier({
-          name: decoded.name,
-          email: decoded.email
-        });
->>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
         setRole(decoded.designation);
       } catch (error) {
         console.error("Invalid Token:", error);
@@ -73,11 +61,8 @@ const Stockverifications = () => {
       const token = localStorage.getItem("token");
       if (!token) return;
 
-<<<<<<< HEAD
       const updatedVerificationData = [];
 
-=======
->>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
       for (const stock of stocks) {
         const stockUpdateResponse = await fetch("http://localhost:5000/api/ustock/updateStatus", {
           method: "PUT",
@@ -90,11 +75,7 @@ const Stockverifications = () => {
           continue;
         }
 
-<<<<<<< HEAD
         const newVerificationData = {
-=======
-        const verificationData = {
->>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
           verifierName: verifier.name,
           verifierEmail: verifier.email,
           dateOfVerify: new Date().toISOString(),
@@ -103,19 +84,12 @@ const Stockverifications = () => {
           remarks: stock.Remarks || "",
         };
 
-<<<<<<< HEAD
         updatedVerificationData.push(newVerificationData);
 
         const verificationResponse = await fetch("http://localhost:5000/api/stockverify/Verification", {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
           body: JSON.stringify(newVerificationData),
-=======
-        const verificationResponse = await fetch("http://localhost:5000/api/stockverify/Verification", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-          body: JSON.stringify(verificationData),
->>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
         });
 
         if (!verificationResponse.ok) {
@@ -123,7 +97,6 @@ const Stockverifications = () => {
         }
       }
 
-<<<<<<< HEAD
       setVerifdata(updatedVerificationData);
 
       // Sending notification after all updates
@@ -140,9 +113,6 @@ const Stockverifications = () => {
       } catch (err) {
         console.error("Error sending notification:", err.message);
       }
-=======
-      alert("Stock status updated and verification records created successfully!");
->>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
     } catch (error) {
       console.error("Error processing stock verification:", error);
     }
@@ -150,11 +120,7 @@ const Stockverifications = () => {
 
   return (
     <div className="stockverificationcontainer">
-<<<<<<< HEAD
       <Sidebarverifier sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />
-=======
-      <Sidebarverifier sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role}/>
->>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
       <div className="vfmain-content">
         <header className="headerstockverificaton">
           <h2>Stock Verification</h2>
@@ -226,15 +192,9 @@ const Stockverifications = () => {
                 </td>
                 <td>
                   <select
-<<<<<<< HEAD
                   className={`vfstatus-dropdown ${
                     stock.status === "Working" ? "vfworking" : stock.status === "Not Working" ? "vfnot-working" : "vfnot-repairable"
                   }`}
-=======
-                    className={`vfstatus-dropdown ${
-                      stock.status === "Working" ? "vfworking" : stock.status === "Not Working" ? "vfnot-working" : "vfnot-repairable"
-                    }`}
->>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
                     value={stock.status}
                     onChange={(e) => handleStatusChange(index, e.target.value)}
                   >

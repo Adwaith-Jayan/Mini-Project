@@ -65,22 +65,14 @@ const Notifications = () => {
                 console.error("❌ No token found. User is not authenticated.");
                 return;
             }
-<<<<<<< HEAD
             navigate(`/reportverify?notifId=${notifId}`);
-=======
-            
->>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
             await axios.post(
                 "http://localhost:5000/api/report/reportviews",
                 { notifId },
                 { headers: { Authorization: `Bearer ${token}` } } // ✅ Include token
             );
-<<<<<<< HEAD
             
             //navigate(`/reportverify/${notifId}`);
-=======
-            navigate(`/reportverify?notifId=${notifId}`);
->>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
             setNotifications(notifications.filter((n) => n._id !== notifId)); // Remove from UI
             
             console.log(`✅ Notification ${notifId} accepted.`);
@@ -132,6 +124,7 @@ const Notifications = () => {
         }
     };
 
+    
     return (
         <div className="notidashboard">
             {/* Sidebar */}
@@ -182,15 +175,9 @@ const Notifications = () => {
                         ))}
 
 
-<<<<<<< HEAD
                         {notifications.map((notif,index) => (
                             notif.type === "verifier_report" ? (
                                 <li key={ `${notif._id}-${index}`} className="notinotification-item">
-=======
-                        {notifications.map((notif) => (
-                            notif.type === "verifier_report" ? (
-                                <li key={notif._id} className="notinotification-item">
->>>>>>> 2f5ebf7528be1b646a978b429338b94082f52c05
                                     <div>
                                         <strong>VERIFICATION REPORT BY VERIFIER</strong><br />
                                         <strong>verifier name:</strong> {notif.verifier_name} <br />
