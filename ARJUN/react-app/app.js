@@ -13,7 +13,7 @@ import maintenanceRoutes from "./src/Backend/maintenance.js";
 import ClearancestockRoutes from "./src/Backend/Clearancestock.js";
 import AssignfacultyprincipalRoutes from "./src/Backend/Assignfacultyprincipal.js";
 import notificationRoutes from "./src/Backend/notification.js";
-import notificationcontrollerRoutes from "./src/Backend/notificationcontroller.js";
+import notificationcontrollerRoutes from "./src/Backend/notificationcontrollerarjun.js";
 import AddaccountbynotiRoutes from "./src/Backend/Addaccountbynoti.js";
 import profilebackRoutes from "./src/Backend/profileback.js";
 import VerificationRoutes from "./src/Backend/Verification.js";
