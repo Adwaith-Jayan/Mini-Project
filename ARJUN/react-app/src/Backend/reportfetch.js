@@ -39,10 +39,10 @@ router.post("/reportviews", async (req, res) => {
         return res.status(404).json({ error: "Notification not found" });
       }
       console.log(notification);
-      const { verifier_email, date_of_verify } = notification;
+      const { verifier_email, verify_date } = notification;
   
       // ✅ Fetch all items verified by this email
-      const items = await Verificationmodel.find({ verifier_email:verifier_email,verify_date:date_of_verify });
+      const items = await Verificationmodel.find({ verifier_email:verifier_email,date_of_verify:verify_date });
   
       if (!items.length) {
         return res.status(404).json({ error: "No items found for this verifier" });
@@ -53,7 +53,7 @@ router.post("/reportviews", async (req, res) => {
         item_no: item.item_no,
         status: item.status,
         remarks: item.Remarks,
-        date_of_verify: item.date_of_verify,
+        date_of_verify: new Date(item.date_of_verify).toLocaleDateString()
 
       }));
       console.log(itemDetails);
@@ -61,7 +61,7 @@ router.post("/reportviews", async (req, res) => {
       // ✅ Send the response in table format
       res.json({
         verifier_email,
-        date_of_verify,
+        verify_date,
         itemDetails,
       });
   
