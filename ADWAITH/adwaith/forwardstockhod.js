@@ -41,7 +41,7 @@ router.post("/api/forward-stock-hod", async (req, res) => {
         }
 
         // ✅ Ensure valid number inputs
-        const parsedSLNo = parseInt(sl_no, 10);
+        const parsedSLNo = parseInt(sl_no, 10); // `sl_no` is a number
         const parsedQuantity = parseInt(quantity, 10);
         const parsedPrice = parseFloat(price);
 
@@ -49,35 +49,54 @@ router.post("/api/forward-stock-hod", async (req, res) => {
             return res.status(400).json({ message: "Invalid input format for SL No, Quantity, or Price" });
         }
 
-        // ✅ Find the stock item
-        const stockItem = await CseMain.findOne({ sl_no: parsedSLNo });
+        // ✅ Ensure indent_no is treated as a string
+        const parsedIndentNo = indent_no.trim(); // `indent_no` remains a string
+
+        // ✅ Use both `sl_no` (number) and `indent_no` (string) to fetch the correct stock item
+        const stockItem = await CseMain.findOne({ sl_no: parsedSLNo, indent_no: parsedIndentNo });
+
         if (!stockItem) {
             return res.status(404).json({ message: "Stock item not found" });
         }
 
-        // ✅ Check if enough quantity is available
+        // ✅ Check if enough quantity is available before updating
         if (stockItem.remaining < parsedQuantity) {
             return res.status(400).json({ message: "Insufficient stock available" });
         }
 
-        // ✅ Update the remaining quantity
-        stockItem.remaining -= parsedQuantity;
-        await stockItem.save();
+        // ✅ Deduct quantity atomically
+        const updatedStock = await CseMain.findOneAndUpdate(
+            { sl_no: parsedSLNo, indent_no: parsedIndentNo, remaining: { $gte: parsedQuantity } }, // Ensure correct stock
+            { $inc: { remaining: -parsedQuantity } }, // Deduct quantity
+            { new: true } // Return the updated document
+        );
 
-        // ✅ Fetch room details
+        if (!updatedStock) {
+            return res.status(400).json({ message: "Stock update failed. Possible concurrency issue." });
+        }
+
+        // ✅ Fetch the room
         const room = await Room.findOne({ name: premise });
         if (!room) {
             return res.status(404).json({ message: "Premise (room) not found" });
         }
 
-        // ✅ Fetch access details for the room
-        const access = await Access.findOne({ room_no: room.room_no });
-        if (!access) {
+        // ✅ Fetch access records
+        const accessRecords = await Access.find({ room_no: room.room_no });
+
+        if (!accessRecords || accessRecords.length === 0) {
             return res.status(404).json({ message: "No access record found for this room." });
         }
 
-        // ✅ Fetch Stock-In-Charge email
-        const stockInChargeUser = await User.findOne({ email_id: access.email_id, designation: "Stock-In-Charge" });
+        // ✅ Extract all email IDs from access records
+        const emailIds = accessRecords.map(access => access.email_id);
+
+        // ✅ Find the Stock-In-Charge user
+        const stockInChargeUser = await User.findOne({
+            email_id: { $in: emailIds },
+            designation: "Stock-In-Charge"
+        });
+
         if (!stockInChargeUser) {
             return res.status(404).json({ message: "No Stock-In-Charge found for this room." });
         }
@@ -85,15 +104,15 @@ router.post("/api/forward-stock-hod", async (req, res) => {
         // ✅ Create a new notification entry with status "unread"
         const notification = new HODForwardNotification({
             type: "hodstockforward",
-            indent_no,
+            indent_no: parsedIndentNo,
             item_name,
             quantity: parsedQuantity,
             price: parsedPrice,
             date_of_purchase: new Date(date_of_purchase),
             sender: "arjunsabuakatsuki@gmail.com", // Replace with actual HOD email ID
-            receiver: stockInChargeUser.email_id, // Only one receiver
+            receiver: stockInChargeUser.email_id,
             date: new Date(),
-            status: "unread" // ✅ Status is now set as "unread"
+            status: "unread"
         });
 
         await notification.save();
