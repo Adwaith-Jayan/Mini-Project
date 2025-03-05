@@ -121,7 +121,9 @@ const Register = () => {
                 <option value="">Enter Role</option>
                 <option value="Stock-In-Charge">Stock-In-Charge</option>
                 <option value="Custodian">Custodian</option>
+                <option value="Furniture-Custodian">Furniture-Custodian</option>
                 <option value="Verifier">Verifier</option>
+                <option value="Furniture-Verifier">Furniture-Verifier</option>
               </select>
             </div>
 
