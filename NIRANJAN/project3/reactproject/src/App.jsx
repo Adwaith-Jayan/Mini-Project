@@ -13,6 +13,7 @@ import HodDash from "./HOD/HodDash";
 import NewStockSystem from "./NewStockSystem";
 import FcDash from "./SIC/furniturecustodiandash";
 import FSdetails from "./Stockdetailspage/furniturestockdetails";
+import Deleteacc from "./deleteacc";
 function App() {
   return (
     <Router>
@@ -26,6 +27,10 @@ function App() {
         <Route path="/newstocksystem" element={<NewStockSystem />} />
         <Route path="/fcdash" element={<FcDash />} />
         <Route path="/fsdetails" element={<FSdetails />} />
+        <Route path="/deleteacc" element={<Deleteacc />} />
+
+         
+
         
       </Routes>
     </Router>

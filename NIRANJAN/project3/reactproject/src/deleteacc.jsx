@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./deleteacc.css";
-import loginimage from "../assets/loginimg.png";
+import loginimage from "./assets/loginimg.png";
 
 function Deleteacc() {
   const [email, setEmail] = useState("");
