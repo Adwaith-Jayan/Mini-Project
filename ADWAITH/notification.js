@@ -33,6 +33,9 @@ router.get("/api/notifications", async (req, res) => {
                 case "hodstockaccept":
                     message = "New message from HOD";
                     break;
+                case "hodstockreject":
+                    message = "New message from HOD";
+                    break;
                 default:
                     message = "New notification received";
                     break;

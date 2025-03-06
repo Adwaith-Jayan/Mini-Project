@@ -1,0 +1,7 @@
+changes made
+
+1.in login.js send email_id also
+2. ForwardStockTsk.jsx
+3. notification code is in forward.js
+4. notification schema is also created
+5. changes in HodDash.jsx

@@ -12,23 +12,25 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/login", { email, password });
+      const response = await axios.post("http://localhost:5000/api/login", { email, password });
       alert(response.data.message);
-      
+
       const token = response.data.token;
       localStorage.setItem("token", token);
-      
-      const role = response.data.designation;
-      console.log(role);
-      
-      if (role.toLowerCase() === "hodcse".toLowerCase()) {
+
+      const role = response.data.designation.toLowerCase();
+      console.log("User Role:", role);
+
+      if (role === "hodcse") {
         navigate("/Hoddash");
-      } else if (role.toLowerCase() === "stock-in-charge".toLowerCase()) {
+      } else if (role === "stock-in-charge") {
         navigate("/Sicdash");
-      }
-      else if(role.toLowerCase()==="tsk".toLowerCase()){
+      } else if (role === "tsk") {
         navigate("/Tskdash");
+      } else if(role==="furniture-custodian"){
+        navigate("/fcdash");
       }
+
     } catch (error) {
       alert(error.response?.data?.message || "Something went wrong");
     }

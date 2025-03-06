@@ -1,0 +1,154 @@
+.assignfaculty-container {
+    display: flex;
+    height: 100vh;
+    background: #f5f5f5;
+    width: 300vh;
+  }
+  
+  /* Sidebar */
+  .alsidebar {
+    width: 60px;
+    background: #2b4c5a;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    /* align-items: left; */
+    padding: 20px;
+    transition: width 0.3s;
+  }
+  
+  .alsidebar.open {
+    width: 200px;
+  }
+  .alsidebar.closed {
+    width: 20px;
+}
+  
+  .almenu-icon {
+    font-size: 20px;
+    cursor: pointer;
+    cursor: pointer;
+  }
+  
+  .alsidebar ul {
+    margin-top: 20px;
+    padding-left: 10px;
+  }
+  
+  .alsidebar ul li {
+    padding: 10px;
+    list-style: none;
+    cursor: pointer;
+  }
+  
+  /* Main Content */
+  .almain-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    width: 100%;
+    padding: 30px;
+  }
+  
+  /* Header */
+  .header-assign {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    padding: 10px 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .welcome-section {
+    font-size: 16px;
+  }
+  
+  .welcome-text {
+    font-weight: bold;
+    color: #2c3e50;
+  }
+  
+  .date-text {
+    color: gray;
+    font-size: 12px;
+  }
+  
+  .header-icons {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .alsearch-icon, .aluser-icon {
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
+  /* Form Section */
+  .alform-container {
+    width: 50%;
+    max-width: 500px;
+    max-height: 300px;
+    margin-top: 10px;
+    margin-left: 250px;
+    padding: 80px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .altitle {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 15 px;
+    margin-top: -20px;
+    color: #2c3e50;
+  }
+  
+  .alform {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+  }
+  
+  .alform input, .alform select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .aldate-picker {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  .aldate-picker input {
+    width: 100%;
+    padding-right: 40px;
+  }
+  
+  .alcalendar-icon {
+    position: absolute;
+    right: 10px;
+    color: gray;
+  }
+  
+  .alassign-btn {
+    background: #34495e;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .alassign-btn:hover {
+    background: #2c3e50;
+  }

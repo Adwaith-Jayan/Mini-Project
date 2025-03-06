@@ -34,7 +34,7 @@
 }
 
 /* Input fields */
-.addstock-form .MuiTextField-root {
+.addstock-form .MuiTextField-root{
   width: 85%;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -44,6 +44,12 @@
   transform: scale(1.02);
 }
 
+.selectpremise{
+  width: 60%;
+  height: 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
 /* Submit Button */
 .addstock-form .MuiButton-root {
   width: 50%;

@@ -9,17 +9,27 @@ const router = express.Router();
 const SECRET_KEY = process.env.JWT_SECRET || "your_jwt_secret"; // Use .env for security
 
 // Login Route
-router.post("/login", async (req, res) => {
+router.post("/", async (req, res) => {
     const { email, password } = req.body;
     console.log("🔹 Login Request Received:", email);
 
     try {
         const user = await User.findOne({ email_id: email });
-        if (!user) return res.status(400).json({ message: "User not found" });
+        if (!user) {
+            return res.status(400).json({ message: "User not found" });
+        }
 
-        if (password !== user.password) return res.status(400).json({ message: "Invalid password" });
+        // Simple password check (no bcrypt)
+        if (password !== user.password) {
+            return res.status(400).json({ message: "Invalid password" });
+        }
 
-        const token = jwt.sign({ email,email_id: user.email_id, name: user.name, designation: user.designation }, SECRET_KEY, { expiresIn: "1h" });
+        // Generate JWT Token
+        const token = jwt.sign(
+            { email_id: user.email_id, name: user.name, designation: user.designation },
+            SECRET_KEY,
+            { expiresIn: "1h" }
+        );
 
         res.json({ 
             message: "Login successful", 
@@ -35,15 +45,19 @@ router.post("/login", async (req, res) => {
 
 // Get User Details Route
 router.get("/user", async (req, res) => {
-    const token = req.headers.authorization?.split(" ")[1]; // Extract token
+    const token = req.headers.authorization?.split(" ")[1];
 
-    if (!token) return res.status(401).json({ message: "Unauthorized" });
+    if (!token) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
 
     try {
         const decoded = jwt.verify(token, SECRET_KEY);
-        const user = await User.findOne({ email_id: decoded.email });
+        const user = await User.findOne({ email_id: decoded.email_id });
 
-        if (!user) return res.status(404).json({ message: "User not found" });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
 
         res.json({ name: user.name, email: user.email_id, designation: user.designation });
     } catch (error) {

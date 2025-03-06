@@ -3,10 +3,12 @@ import "./login.css";
 import loginimage from "../assets/loginimg.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -23,7 +25,7 @@ function Login() {
       if (role.toLowerCase() === "hodcse") {
         navigate("/Hoddash");
       }
-      else if(role.toLowerCase()==="stock-in-charge")
+      else if(role.toLowerCase()==="stock-in-charge" || role.toLowerCase()==="furniture-custodian" )
       {
         navigate("/Sicdash");
       }
@@ -34,6 +36,14 @@ function Login() {
       else if(role.toLowerCase()==="principal")
       {
         navigate("/principaldash");
+      }
+      else if(role.toLowerCase()==="verifier")
+      {
+        navigate("/verifydash");
+      }
+      else if(role.toLowerCase()==="furniture-verifier")
+      {
+        navigate("/verifydash");
       }
     } catch (error) {
       alert(error.response ? error.response.data.message : "Something went wrong");
@@ -60,16 +70,21 @@ function Login() {
                 required
               />
             </div>
-            <div className="login-input">
+            <div className="login-input password-input">
               <label htmlFor="password">Password*</label>
-              <input
-                type="password"
-                id="password"
-                placeholder="Enter your Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <div className="password-wrapper">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  placeholder="Enter your Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <span className="eye-icon" onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <FaEye /> : <FaEyeSlash />}
+                </span>
+              </div>
             </div>
             <div className="login-checkbox">
               <input type="checkbox" id="remember-me" />

@@ -24,8 +24,8 @@ import MaintenanceList from "./MaintenanceList/MaintenanceList";
 import RegisterComplaint from "./registercomplaint/Registercomplaint";
 import Maintenancehistorydetails from "./Maintenancehistory/MaintenanceHistory";
 import AssignFaculty from "./Assignfacultybyprincipal/Assignfaculty";
-
-
+import VerifierDash from "./verifierdashboard/verifierdash";
+import Reportdetails from "./Reportverifier/Reportverify";
 
 
 function App() {
@@ -52,10 +52,9 @@ function App() {
         <Route path="/regcomplaint" element={<RegisterComplaint/>}/>
         <Route path="/maintenancehist" element={<Maintenancehistorydetails/>}/>
         <Route path="/assignfaculty" element={<AssignFaculty/>}/>
-
-
-        
-
+        <Route path="/stockverify" element={<Stockverifications/>}/>
+        <Route path="/verifydash" element={<VerifierDash/>}/>
+        <Route path="/reportverify" element={<Reportdetails/>}/>
       </Routes>
     </Router>
   );

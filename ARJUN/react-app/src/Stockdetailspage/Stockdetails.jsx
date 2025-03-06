@@ -18,6 +18,7 @@ const Stockdetails = () => {
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const toggleFilterMenu = () => setFilterOpen(!filterOpen);
   const toggleExportMenu = () => setExportOpen(!exportOpen);
@@ -106,6 +107,10 @@ const Stockdetails = () => {
     XLSX.writeFile(workbook, "Stock_Details.xlsx");
   };
 
+  const filteredStocks = stocks.filter((stock) =>
+    stock.item_no.toString().includes(searchTerm)
+  );
+
   return (
     <div className="sdstocks-container">
       <Sidebars sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />
@@ -115,7 +120,12 @@ const Stockdetails = () => {
           <h2>Stocks</h2>
           <div className="sdsearch-bar">
             <FaSearch className="sdsearch-icon" />
-            <input type="text" placeholder="Search Item ID" />
+            <input
+              type="text"
+              placeholder="Search Item ID"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
           <input className="datetype" type="date" />
           <button className="sdfilter-btn" onClick={toggleFilterMenu}>
@@ -194,12 +204,12 @@ const Stockdetails = () => {
               <tr>
                 <td colSpan="7">Error: {error}</td>
               </tr>
-            ) : stocks.length === 0 ? (
+            ) : filteredStocks.length === 0 ? (
               <tr>
                 <td colSpan="7">No stock details found</td>
               </tr>
             ) : (
-              stocks.map((stock, index) => (
+              filteredStocks.map((stock, index) => (
                 <tr key={index}>
                   <td>{stock.item_no}</td>
                   <td>{stock.indent_no}</td>

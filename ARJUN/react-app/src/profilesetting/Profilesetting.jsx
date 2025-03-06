@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./profile.css";
 import { FaUserCircle } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
@@ -6,60 +6,105 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { FaSearch, FaUser, FaBars, FaBell, FaFilter } from "react-icons/fa";
 import ProfileMenu from "../assets/profileuser";
 import Button from "@mui/material/Button";
-import HomeIcon from '@mui/icons-material/Home';
-import InventoryIcon from '@mui/icons-material/Inventory';
-import UpdateIcon from '@mui/icons-material/Update';
-import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
-import SendIcon from '@mui/icons-material/Send';
-import { Link } from "react-router-dom";
-
+import { jwtDecode } from "jwt-decode";
+import Sidebarprincipal from "../assets/sidebarforprincipal";
+import Sidebarverifier from "../assets/sidebarverifier";
+import Sidebars from "../assets/sidebar";
 
 const UserProfile = () => {
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [isEditable, setIsEditable] = useState(false);
-    const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-    };
+    const [role,setRole]=useState(null);
+    const [userName, setUserName] = useState("");
+    const [emails,setEmail]=useState("");
 
   const [formData, setFormData] = useState({
     fullName: "",
     designation: "",
-    email: "user@gmail.com",
+    email: ""
   });
 
   const handleEdit = (e) => {
     setIsEditable(true); 
   };
-  const handleditsubmit=(e)=>{
+  const handleEditSubmit = async () => {
     setIsEditable(false);
-  }
+    try {
+      const response = await fetch("http://localhost:5000/api/profile/updateUser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email, // Identify user by email
+          name: formData.fullName, // Updated name
+        }),
+      });
 
+      const data = await response.json();
+      if (data.success) {
+        alert("Profile updated successfully!");
+        setUserName(formData.fullName); // Update displayed name
+      } else {
+        alert("Error updating profile.");
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
+  };
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+
+  useEffect(() => {
+    const token = localStorage.getItem("token"); // Retrieve token from localStorage
+    if (token) {
+      try {
+        const decoded = jwtDecode(token); // Decode token to get user info
+        setRole(decoded.designation);
+        setUserName(decoded.name);
+        setEmail(decoded.email);
+
+        // Set initial form data
+        setFormData({
+          fullName: decoded.name || "",
+          designation: decoded.designation || "",
+          email: decoded.email || ""
+        });
+      } catch (error) {
+        console.error("Error decoding token: ", error);
+      }
+    }
+  }, []);
+
+  
+
+    const getSidebar = () => {
+      if (!role) return null; // Prevents calling .toLowerCase() on null
+      switch (role.toLowerCase()) {
+        case "principal":
+        case "hodcse":
+          return <Sidebarprincipal sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />;
+        case "verifier":
+          return <Sidebarverifier sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />;
+        case "custodian":
+        case "stock-in-charge":
+          return <Sidebars sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />;
+        default:
+          return null;
+      }
+    };
+    
+
   return (
     <div className="profilepage">
     <div className="profile-container">
-      <aside className={`pssidebar ${sidebarOpen ? "open" : "closed"}`}>
-              <FaBars className="psmenu-icon" onClick={toggleSidebar} />
-              {sidebarOpen && (
-                <ul>
-                  <li></li>
-                  <li></li>
-                  <li><HomeIcon fontSize="medium"/>   Dashboard</li>
-                  <li><InventoryIcon fontSize="medium"/><Link to="/stockdetails">   Stock Details</Link></li>
-                  <li><UpdateIcon fontSize="medium"/> <Link to="/stockstatus"> Stock Status Update</Link> </li>
-                  <li><HealthAndSafetyIcon fontSize="medium"/> <Link to="/stockwarranty"> Stock Warranty</Link></li>
-                  <li><SendIcon fontSize="medium"/><Link to="/stocktransfer">   Stock Transfer</Link></li>
-                </ul>
-              )}
-            </aside>
-
+        {getSidebar()}
       <div className="profile-content">
         <header className="profile-header">
-          <h2>Welcome, User</h2>
+          <h2>Welcome, {userName}</h2>
           <div className="psheader-icons">
             <FaBell className="psnotification-icon" />
             <ProfileMenu/>
@@ -70,7 +115,7 @@ const UserProfile = () => {
           <div className="profile-info">
             <FaUserCircle className="profile-icon" />
             <div>
-              <h3>User</h3>
+              <h3>{userName}</h3>
               <p>{formData.email}</p>
             </div>
             <button className="edit-btn" onClick={handleEdit}><FiEdit /> Edit</button>
@@ -92,12 +137,11 @@ const UserProfile = () => {
           <div className="psemail-section">
             <h4>My email Address</h4>
             <p>{formData.email}</p>
-            <button className="add-email-btn"><IoIosAddCircleOutline /> Add Email Address</button>
           </div>
 
           <button className="change-password-btn">Change Password</button>
           <div className="submit-btn-container">
-          <Button className="Submiteditbtn" variant="contained" onClick={handleditsubmit}>Submit</Button>
+          <Button className="Submiteditbtn" variant="contained" onClick={handleEditSubmit}>Submit</Button>
           </div>
         </div>
         
