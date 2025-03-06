@@ -35,7 +35,7 @@ router.post("/Verification", async (req, res) => {
             verifier_name: verifierName,
             verifier_email: verifierEmail,
             item_no: itemNo,
-            date_of_verify: dateOfVerify,
+            date_of_verify: new Date(dateOfVerify).toLocaleDateString(),
             status: statusOfItem,
             Remarks: remarks || ""
         });
@@ -86,7 +86,7 @@ router.post("/notifverification", async (req, res) => {
             verifier_name: verifierName,
             verifier_email: verifierEmail,
             premise: roomname ? roomname.name : "Unknown",
-            verify_date: dateOfVerify,
+            verify_date: new Date(dateOfVerify).toLocaleDateString(),
             status: "unread",
             date: new Date().toISOString()
         });

@@ -9,7 +9,9 @@ import {jwtDecode} from "jwt-decode";
 
 const AddStocksic = () => {
     const navigate = useNavigate();
-    const [Email, setEmail] = useState(null);
+    const [Email, setEmail] = useState("");
+    const [role,setRole]=useState("");
+    const [inventoryList, setInventoryList] = useState([]);
     const [formData, setFormData] = useState({
         name: '',
         sl_no: '',
@@ -19,7 +21,8 @@ const AddStocksic = () => {
         date_of_purchase: '',
         price: '',
         specification: '',
-        type: ''
+        type: '',
+        inventory: ''
     });
 
     const [message, setMessage] = useState('');
@@ -33,19 +36,47 @@ const AddStocksic = () => {
           try {
             const decoded = jwtDecode(token);
             setEmail(decoded.email);
+            setRole(decoded.designation);
           } catch (error) {
             console.error("Invalid Token:", error);
           }
         }
       }, []);
 
+      useEffect(() => {
+        const fetchInventory = async () => {
+          try {
+            const response = await axios.get("http://localhost:5000/api/Room/allinventorys");
+            setInventoryList(response.data); // Set inventory data from the backend
+          } catch (error) {
+            console.error("Error fetching inventory:", error);
+          }
+        };
+        
+        fetchInventory();
+      }, []);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const token = localStorage.getItem("token"); 
+        if (!token) {
+            alert("Unauthorized! No token found.");
+            return;
+        }
 
         const dbData = { ...formData, Email};
 
         try {
-            const response = await axios.post('http://localhost:5000/api/add-stock-sic', dbData);
+            const response = await axios.post(
+                'http://localhost:5000/api/add-stock-sic', 
+                dbData, 
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}` // Pass token in headers
+                    }
+                }
+            );
             setMessage(response.data.message);
             alert("Stock Added Successfully!");
             navigate('/Sicdash');
@@ -143,6 +174,20 @@ const AddStocksic = () => {
                     })} 
                     required 
                 />
+                {role.toLowerCase() === "furniture-custodian" && (
+                        <select className='selectpremise' 
+                            name="inventory" 
+                            value={formData.inventory} 
+                            onChange={handleChange} 
+                            required
+                        >
+                        <option value="">Select Inventory</option>
+                        {inventoryList.map((room) => (
+                        <option key={room._id} value={room.name}>{room.name}</option>
+                        ))}
+                    </select>
+                    )}
+                
 
 
                 <Button 

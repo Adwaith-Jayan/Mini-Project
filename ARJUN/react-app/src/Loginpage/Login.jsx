@@ -41,6 +41,10 @@ function Login() {
       {
         navigate("/verifydash");
       }
+      else if(role.toLowerCase()==="furniture-verifier")
+      {
+        navigate("/verifydash");
+      }
     } catch (error) {
       alert(error.response ? error.response.data.message : "Something went wrong");
     }
