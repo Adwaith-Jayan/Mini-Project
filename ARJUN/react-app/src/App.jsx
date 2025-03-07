@@ -27,8 +27,8 @@ import AssignFaculty from "./Assignfacultybyprincipal/Assignfaculty";
 import VerifierDash from "./verifierdashboard/verifierdash";
 import Reportdetails from "./Reportverifier/Reportverify";
 import Reportlist from "./reportlist/reportlist";
-
-
+import StockRequest from "./Requeststock/Requeststock";
+import Assignedfacultydetails from "./assignfacultylist/assignfacultylist";
 
 function App() {
   return (
@@ -58,6 +58,8 @@ function App() {
         <Route path="/verifydash" element={<VerifierDash/>}/>
         <Route path="/reportverify" element={<Reportdetails/>}/>
         <Route path="/reportlist" element={<Reportlist/>}/>
+        <Route path="/stockdetreq" element={<StockRequest/>}/>
+        <Route path="/facultylist" element={<Assignedfacultydetails/>}/>
       </Routes>
     </Router>
   );

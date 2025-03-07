@@ -5,17 +5,29 @@ import VerifyNotification from "./Verifynotificationschema.js";
 import Access from "./Access.js";
 import Room from "./Roommodel.js";
 import User from "./usermodel.js";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 import mongoose from "mongoose";
 import Clearance from "./clearenceschema.js";
 import Maintenance from "./Maintenanceschema.js";
 import Assignedfacultylist from "./Assignedfacultylistschema.js";
 
+
+dotenv.config();
 const router = express.Router();
+
+const SECRET_KEY = process.env.JWT_SECRET || "your_jwt_secret";
 
 // Route to create a new verification entry
 router.post("/Verification", async (req, res) => {
     try {
         const { verifierName, verifierEmail, dateOfVerify, itemNo, statusOfItem, remarks } = req.body;
+        const token = req.headers.authorization?.split(" ")[1];
+        if (!token) {
+            return res.status(401).json({ error: "Unauthorized: No token provided" });
+        }
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const designation=decoded.designation;
 
         // Validate required fields
         if (!verifierName || !verifierEmail || !itemNo || !dateOfVerify || !statusOfItem || !remarks) {
@@ -43,6 +55,7 @@ router.post("/Verification", async (req, res) => {
 
         const assignedfaculty = await Assignedfacultylist.findOne({facultyemail: verifierEmail ,status:"Pending"})
         if (assignedfaculty) {
+            assignedfaculty.verified_date =new Date(dateOfVerify).toLocaleDateString();
             assignedfaculty.status = "Completed"; 
             await assignedfaculty.save(); 
         } else {
@@ -81,6 +94,12 @@ router.post("/notifverification", async (req, res) => {
         if (!verifierName || !verifierEmail || !itemNo || !dateOfVerify || !statusOfItem) {
             return res.status(400).json({ error: "Missing required fields" });
         }
+        const token = req.headers.authorization?.split(" ")[1];
+        if (!token) {
+            return res.status(401).json({ error: "Unauthorized: No token provided" });
+        }
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const designation=decoded.designation;
 
         const principal = await User.findOne({ designation: "principal" });
         if (!principal) {
@@ -90,19 +109,39 @@ router.post("/notifverification", async (req, res) => {
         const roomnode = await Access.findOne({ email_id: verifierEmail });
         const roomname = roomnode ? await Room.findOne({ room_no: roomnode.room_no }) : null;
 
-        const newverifierNotification = new VerifyNotification({
-            type: "verifier_report",
-            sender: verifierEmail,
-            receiver: principal.email_id,
-            verifier_name: verifierName,
-            verifier_email: verifierEmail,
-            premise: roomname ? roomname.name : "Unknown",
-            verify_date: new Date(dateOfVerify).toLocaleDateString(),
-            status: "unread",
-            date: new Date().toISOString()
-        });
-
-        await newverifierNotification.save();
+        if(designation.toLowerCase()==="furniture-verifier")
+        {
+            const newverifierNotification = new VerifyNotification({
+                type: "verifier_report",
+                sender: verifierEmail,
+                receiver: principal.email_id,
+                verifier_name: verifierName,
+                verifier_email: verifierEmail,
+                premise: "CSE Furniture",
+                verify_date: new Date(dateOfVerify).toLocaleDateString(),
+                status: "unread",
+                date: new Date().toISOString()
+            });
+    
+            await newverifierNotification.save(); 
+        }
+        else
+        {
+            const newverifierNotification = new VerifyNotification({
+                type: "verifier_report",
+                sender: verifierEmail,
+                receiver: principal.email_id,
+                verifier_name: verifierName,
+                verifier_email: verifierEmail,
+                premise: roomname ? roomname.name : "Unknown",
+                verify_date: new Date(dateOfVerify).toLocaleDateString(),
+                status: "unread",
+                date: new Date().toISOString()
+            });
+    
+            await newverifierNotification.save();
+        }
+        
         await Access.deleteMany({email_id: verifierEmail});
         await User.deleteMany({email_id: verifierEmail});
         return res.status(201).json({ message: "Verification message sent successfully" });

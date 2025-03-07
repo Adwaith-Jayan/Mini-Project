@@ -24,7 +24,7 @@ const Sidebarprincipal = ({ sidebarOpen, setSidebarOpen, role }) => {
                       {role.toLowerCase() === "principal" && (
                         <li>
                             <Link to="/reports">
-                            <li><Link to=""><ArticleIcon fontSize="medium" /> Reports </Link></li>
+                            <li><Link to="/reportlist"><ArticleIcon fontSize="medium" /> Reports </Link></li>
                             </Link>
                         </li>
                     )}

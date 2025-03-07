@@ -18,7 +18,8 @@ import AddaccountbynotiRoutes from "./src/Backend/Addaccountbynoti.js";
 import profilebackRoutes from "./src/Backend/profileback.js";
 import VerificationRoutes from "./src/Backend/Verification.js";
 import reportfetchRoutes from "./src/Backend/reportfetch.js";
-
+import requeststockdetailsRoutes from "./src/Backend/requeststockdetails.js";
+import AssignedfacultyfetchRoutes from "./src/Backend/Assignedfacultyfetch.js";
 
 dotenv.config();
 const app = express();
@@ -47,6 +48,8 @@ app.use(AddaccountbynotiRoutes);
 app.use("/api/profile",profilebackRoutes);
 app.use("/api/stockverify",VerificationRoutes);
 app.use("/api/report",reportfetchRoutes);
+app.use("/api/request",requeststockdetailsRoutes);
+app.use("/api/faculty",AssignedfacultyfetchRoutes);
 
 
 const PORT = process.env.PORT || 5000;

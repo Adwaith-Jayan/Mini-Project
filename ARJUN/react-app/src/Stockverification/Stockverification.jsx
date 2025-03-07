@@ -117,7 +117,7 @@ const Stockverifications = () => {
 
         if (!verifnotifresponse.ok) throw new Error("Failed to send notification");
 
-        alert("Verification notification sent!");
+        alert("Verification notification sent! ✅");
       } catch (err) {
         console.error("Error sending notification:", err.message);
       }
