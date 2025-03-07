@@ -34,6 +34,9 @@ const RequestStockReport = () => {
             <ul>
               <li>Dashboard</li>
               <li>Stock Details</li>
+              <li>Stock Status Update</li>
+              <li>Stock Warranty</li>
+              <li>Stock Transfer</li>
             </ul>
           )}
       </aside>
