@@ -1,26 +1,31 @@
 import express from "express";
-import User from "./models.js"; // Ensure you have a User model
+import User from "./models.js"; // Import User from models.js
+import Access from "./Access.js"; // Import Access from Access.js
 
 const router = express.Router();
 
-// Delete user by email_id
-router.delete("/delete", async (req, res) => {
+// DELETE user and access entries
+router.post("/api/delete-account", async (req, res) => {
   try {
-    const { email_id } = req.body;
-    if (!email_id) {
-      return res.status(400).json({ message: "Email ID is required" });
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
     }
 
-    const user = await User.findOne({ email_id });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    // Delete user entry
+    const userDeleted = await User.deleteOne({ email_id: email });
 
-    await User.deleteOne({ email_id });
-    return res.status(200).json({ message: "User deleted successfully" });
+    // Delete multiple access entries
+    const accessDeleted = await Access.deleteMany({ email_id: email });
+
+    res.json({
+      message: "Account deleted successfully",
+      userDeleted: userDeleted.deletedCount,
+      accessDeleted: accessDeleted.deletedCount,
+    });
   } catch (error) {
-    console.error("Error deleting user:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Server error", error });
   }
 });
 

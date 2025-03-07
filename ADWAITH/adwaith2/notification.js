@@ -39,6 +39,10 @@ router.get("/api/notifications", async (req, res) => {
                 case "hodstockforward":
                     message="New Message from Hod";
                     break;
+                case "sicstockaccept":
+                    message="New Message from Stock-In-Charge";
+                    break;
+                
                 default:
                     message = "New notification received";
                     break;

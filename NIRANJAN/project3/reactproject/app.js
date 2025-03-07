@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 import loginRoutes from "./login.js";
 import roomRoutes from "./roomRoutes.js";
 import stockRoutes from "./stockdetails.js";
-import deleteacc from "./deleteacc.js"; // ✅ Added stock route
+import deleteaccRoutes from "./deleteacc.js"; 
 
 const app = express();
 app.use(express.json());
@@ -34,7 +34,7 @@ connectDB();
 app.use("/api/login", loginRoutes);
 app.use("/api/rooms", roomRoutes);
 app.use("/api/stocks", stockRoutes); // ✅ Now stockdetails.js is registered
-app.use("/api/delete",deleteacc);
+app.use(deleteaccRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));

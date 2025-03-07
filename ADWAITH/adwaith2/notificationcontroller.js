@@ -3,6 +3,7 @@ import TskNotification from "./tskforwardnotification.js";
 import HodAcceptNotification from "./HodAcceptNotification.js";
 import HODForwardNotification from "./HodForwardNotification.js";
 import MainStock from "./mainstockmodel.js";
+import SicStockAccept from "./SicStockAccept.js";
 
 const router = express.Router();
 
@@ -25,14 +26,16 @@ router.get("/api/fetch-notifications", async (req, res) => {
 
     try {
         // 🔍 Fetch unread TskForwardNotifications
-        const tskNotifications = await TskNotification.find({ receiver, status: "unread" });
+        const tskNotifications = await TskNotification.find({ receiver, status: "unread",type:"tskstockforward" });
         
         // 🔍 Fetch unread HodAcceptNotifications
-        const hodNotifications = await HodAcceptNotification.find({ receiver, status: "unread" });
+        const hodNotifications = await HodAcceptNotification.find({ receiver, status: "unread",type:"hodstockaccept" });
         
         // 🔍 Fetch unread HodForwardNotifications
-        const hodForwardNotifications = await HODForwardNotification.find({ receiver, status: "unread" });
-        console.log(hodForwardNotifications);
+        const hodForwardNotifications = await HODForwardNotification.find({ receiver, status: "unread",type:"hodstockforward" });
+
+        //Fetch unread sic accept notification
+        const sicStockAcceptNotifications = await SicStockAccept.find({ receiver, status: "unread" ,type:"sicstockaccept"});
 
         // 🔄 Process TskForwardNotifications
         const detailedTskNotifications = await Promise.all(
@@ -80,8 +83,25 @@ router.get("/api/fetch-notifications", async (req, res) => {
             createdAt: notification.date,
         }));
 
+        // 🔄 Process SicStockAcceptNotifications
+        const detailedSicStockAcceptNotifications = sicStockAcceptNotifications.map((notification) => ({
+            _id: notification._id,
+            type: notification.type,  // ✅ "sicstockaccept"
+            indent_no: notification.indent_no,
+            quantity: notification.quantity,
+            receiver: notification.receiver,
+            message: "Stock allocated successfully",
+            status: notification.status,
+            createdAt: notification.date,
+        }));
+
         // ✅ Merge all notifications
-        const allNotifications = [...detailedTskNotifications, ...detailedHodNotifications, ...detailedHodForwardNotifications];
+        const allNotifications = [
+            ...detailedTskNotifications,
+            ...detailedHodNotifications,
+            ...detailedHodForwardNotifications,
+            ...detailedSicStockAcceptNotifications,
+        ];
 
         // ✅ Send processed notifications to frontend
         res.json({ data: allNotifications });
