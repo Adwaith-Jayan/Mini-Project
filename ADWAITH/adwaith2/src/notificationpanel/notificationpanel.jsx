@@ -39,6 +39,9 @@ const Notifications = () => {
                     if (notif.type === "hodstockforward") {
                         return notif.indent_no && notif.quantity && notif.message;
                     }
+                    if (notif.type === "sicstockaccept") {
+                        return notif.indent_no && notif.quantity && notif.message;
+                    }
                     return false; // Exclude all other notification types
                 });
 
@@ -51,6 +54,15 @@ const Notifications = () => {
 
         fetchNotifications();
     }, []);
+
+    const handleMarkRead = async (notifId) => {
+        try {
+            await axios.post("http://localhost:5000/api/mark-notification-read", { notifId });
+            setNotifications(notifications.filter((n) => n._id !== notifId));
+        } catch (error) {
+            console.error("❌ Error marking notification as read:", error);
+        }
+    };
 
     const handleAction = async (notifId, action) => {
         try {
@@ -81,7 +93,16 @@ const Notifications = () => {
             }
     
             if (action === "accept") {
-                navigate(`/addstockforward?notifId=${notifId}`);
+                axios.post("http://localhost:5000/api/create-sicstockaccept", { notifId })
+                    .then(response => {
+                        console.log("✅ SicStockAccept Notification Created:", response.data);
+                    })
+                    .catch(error => {
+                        console.error("❌ Error creating SicStockAccept notification:", error);
+                    })
+                    .finally(() => {
+                        navigate(`/addstockforward?notifId=${notifId}`);
+                    });
             } else {
                 await axios.post("http://localhost:5000/api/hod-reject-notification", { notifId }, { headers: { Authorization: `Bearer ${token}` } });
                 setNotifications(notifications.filter((n) => n._id !== notifId));
@@ -125,6 +146,7 @@ const Notifications = () => {
                                             <strong>CSE HOD accepted the Stock</strong><br />
                                             <strong>Indent No:</strong> {notif.indent_no} <br />
                                             <strong>Sl No:</strong> {notif.sl_no} <br />
+                                            <button className="notimark-btn" onClick={() => handleMarkRead(notif._id)}>✔️</button>
                                         </div>
                                     )}
 
@@ -140,6 +162,16 @@ const Notifications = () => {
                                             </div>
                                         </div>
                                     )}
+                                    {notif.type === "sicstockaccept" && (
+                                        <div>
+                                            <strong>STOCK ALLOCATED SUCCESSFULLY</strong><br />
+                                            <strong>Indent No:</strong> {notif.indent_no} <br />
+                                            <strong>Quantity:</strong> {notif.quantity} <br />
+                                            <strong>Receiver:</strong> {notif.receiver} <br />
+                                            <button className="notimark-btn" onClick={() => handleMarkRead(notif._id)}>✔️</button>
+                                        </div>
+                                    )}
+
                                 </li>
                             ))}
                         </ul>

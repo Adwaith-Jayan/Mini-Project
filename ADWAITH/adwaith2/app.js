@@ -15,6 +15,8 @@ import RoomRoutes from './Room.js';
 import forwardhodRoutes from "./forwardstockhod.js";
 import addstocksicRoutes from "./addstocksic.js";
 import hodforwardactionRoutes from "./hodforwardaction.js";
+import SicStockAcceptNotfSenderRoutes from "./SicStockAcceptNotfSender.js";
+import markreadRoutes from "./markread.js";
 
 const app = express();
 app.use(express.json());
@@ -45,10 +47,12 @@ app.use(mainRoutes);
 app.use(notificationRoutes);
 app.use(notificationControllerRoutes);
 app.use(forwardactionRoutes);
-app.use(RoomRoutes);
+app.use("/api/Room", RoomRoutes);
 app.use(forwardhodRoutes);
 app.use(addstocksicRoutes);
 app.use(hodforwardactionRoutes);
+app.use(SicStockAcceptNotfSenderRoutes);
+app.use(markreadRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));

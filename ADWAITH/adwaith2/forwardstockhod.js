@@ -81,24 +81,43 @@ router.post("/api/forward-stock-hod", async (req, res) => {
             return res.status(404).json({ message: "Premise (room) not found" });
         }
 
-        // ✅ Fetch access records
-        const accessRecords = await Access.find({ room_no: room.room_no });
+        let emailIds = [];
+        if (premise !== "CSE Furniture") {
+            // ✅ Fetch access records only if premise is not CSE Furniture
+            const accessRecords = await Access.find({ room_no: room.room_no });
 
-        if (!accessRecords || accessRecords.length === 0) {
-            return res.status(404).json({ message: "No access record found for this room." });
+            if (!accessRecords || accessRecords.length === 0) {
+                return res.status(404).json({ message: "No access record found for this room." });
+            }
+
+            // ✅ Extract all email IDs from access records
+            emailIds = accessRecords.map(access => access.email_id);
         }
 
-        // ✅ Extract all email IDs from access records
-        const emailIds = accessRecords.map(access => access.email_id);
+        // ✅ Determine recipient based on premise type
+        let recipientDesignation = "Stock-In-Charge";
+        if (premise === "CSE Furniture") {
+            recipientDesignation = "Furniture-Custodian";
+        }
 
-        // ✅ Find the Stock-In-Charge user
-        const stockInChargeUser = await User.findOne({
-            email_id: { $in: emailIds },
-            designation: "Stock-In-Charge"
-        });
+        let recipientUser;
+        if (premise !== "CSE Furniture"){
 
-        if (!stockInChargeUser) {
-            return res.status(404).json({ message: "No Stock-In-Charge found for this room." });
+             recipientUser = await User.findOne({
+                email_id: { $in: emailIds },
+                designation: recipientDesignation
+            });
+        }
+        else{
+             recipientUser = await User.findOne({
+                designation: recipientDesignation
+            });
+
+        }
+
+
+        if (!recipientUser) {
+            return res.status(404).json({ message: `No ${recipientDesignation} found for this room.` });
         }
 
         // ✅ Create a new notification entry with status "unread"
@@ -110,7 +129,7 @@ router.post("/api/forward-stock-hod", async (req, res) => {
             price: parsedPrice,
             date_of_purchase: new Date(date_of_purchase),
             sender: "arjunsabuakatsuki@gmail.com", // Replace with actual HOD email ID
-            receiver: stockInChargeUser.email_id,
+            receiver: recipientUser.email_id,
             date: new Date(),
             status: "unread"
         });
