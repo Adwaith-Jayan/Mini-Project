@@ -91,7 +91,7 @@ const Dashboard = ({notifications}) => (
         <div className="actions">
             <Link to="/assignfaculty"><Button className='action-button' variant="contained">Assign Faculty For Verification</Button></Link>
             <Button className='action-button' variant="contained">Request For Stock Details</Button>
-            <Button className='action-button' variant="contained">Reports</Button>
+            <Link to="/reportlist"><Button className='action-button' variant="contained">Reports</Button></Link>
         </div>
         <LogoutButton />
     </main>

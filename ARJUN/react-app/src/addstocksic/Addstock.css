@@ -23,6 +23,7 @@
   border-radius: 10px;
   background: linear-gradient(135deg, #6366f1, #f59e0b);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  margin-bottom: 30px;
 }
 
 /* Form styling */

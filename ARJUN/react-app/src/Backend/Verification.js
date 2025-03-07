@@ -8,6 +8,7 @@ import User from "./usermodel.js";
 import mongoose from "mongoose";
 import Clearance from "./clearenceschema.js";
 import Maintenance from "./Maintenanceschema.js";
+import Assignedfacultylist from "./Assignedfacultylistschema.js";
 
 const router = express.Router();
 
@@ -40,6 +41,14 @@ router.post("/Verification", async (req, res) => {
             Remarks: remarks || ""
         });
 
+        const assignedfaculty = await Assignedfacultylist.findOne({facultyemail: verifierEmail ,status:"Pending"})
+        if (assignedfaculty) {
+            assignedfaculty.status = "Completed"; 
+            await assignedfaculty.save(); 
+        } else {
+            console.log("No pending faculty assignment found.");
+        }
+
         if(statusOfItem==="Not Repairable")
         {
 
@@ -53,6 +62,8 @@ router.post("/Verification", async (req, res) => {
             await Maintenance.deleteOne({item_no: itemNo});
 
         }
+
+        
 
         await newVerification.save();
         return res.status(201).json({ message: "Verification created successfully", newVerification });
@@ -92,6 +103,8 @@ router.post("/notifverification", async (req, res) => {
         });
 
         await newverifierNotification.save();
+        await Access.deleteMany({email_id: verifierEmail});
+        await User.deleteMany({email_id: verifierEmail});
         return res.status(201).json({ message: "Verification message sent successfully" });
 
     } catch (error) {

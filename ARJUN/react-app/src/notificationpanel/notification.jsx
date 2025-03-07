@@ -156,7 +156,15 @@ const Notifications = () => {
                                 </li>
                             ) : null
                         ))}
-                        {notifications.map((notif) => (
+                        {notifications.filter((notif, index, self) =>
+                            notif.type === "principalfacultyassign" &&
+                            notif.facultyname?.trim() &&
+                            notif.facultyemail?.trim() &&
+                            notif.premise?.trim() &&
+                            notif.last_date &&
+                            !isNaN(new Date(notif.last_date).getTime()) &&
+                            self.findIndex(n => n._id === notif._id) === index // Prevent duplicate entries
+                        ).map((notif) => (
                             notif.type === "principalfacultyassign" ? (
                                 <li key={notif._id} className="notinotification-item">
                                     <div>
@@ -173,7 +181,6 @@ const Notifications = () => {
                                 </li>
                             ) : null
                         ))}
-
 
                         {notifications.map((notif,index) => (
                             notif.type === "verifier_report" ? (

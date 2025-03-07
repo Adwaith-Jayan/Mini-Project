@@ -50,13 +50,27 @@ router.post("/reportviews", async (req, res) => {
       }
       
       // ✅ Format the response
-      const itemDetails = items.map((item) => ({
-        item_no: item.item_no,
-        status: item.status,
-        remarks: item.Remarks,
-        date_of_verify: new Date(item.date_of_verify).toLocaleDateString()
+      // const itemDetails = items.map((item) => ({
+      //   item_no: item.item_no,
+      //   status: item.status,
+      //   remarks: item.Remarks,
+      //   date_of_verify: new Date(item.date_of_verify).toLocaleDateString()
 
-      }));
+      // }));
+      const uniqueItems = new Map();
+          items.forEach((item) => {
+            if (!uniqueItems.has(item.item_no)) {
+              uniqueItems.set(item.item_no, {
+                item_no: item.item_no,
+                status: item.status,
+                remarks: item.Remarks,
+                date_of_verify: new Date(item.date_of_verify).toLocaleDateString("en-GB"),
+              });
+            }
+          });
+
+      const itemDetails = Array.from(uniqueItems.values());
+
       console.log(itemDetails);
   
       // ✅ Send the response in table format

@@ -136,6 +136,7 @@ const AddStocksic = () => {
                     InputLabelProps={{ shrink: true }} 
                     required 
                 />
+                {role.toLowerCase() !== "furniture-custodian" && (
                 <TextField 
                     label="Warranty Period" 
                     variant="outlined" 
@@ -144,7 +145,7 @@ const AddStocksic = () => {
                     onChange={handleChange} 
                     required 
                 />
-
+                )}
                 <TextField 
                     label="Price" 
                     type="number" 

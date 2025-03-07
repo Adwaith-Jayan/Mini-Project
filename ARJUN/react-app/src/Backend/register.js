@@ -14,6 +14,9 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  tls: {
+    rejectUnauthorized: false,  // Fix self-signed certificate error
+  },
 });
 
 // Register a new user
@@ -51,7 +54,7 @@ router.post("/", async (req, res) => {
     });
 
     await newUser.save();
-    console.log(`✅ User ${email} created successfully`);
+   
 
     // ✅ If role is NOT furniture-verifier or furniture-custodian, fetch Roomdetails
     let Roomdetails = null;
@@ -97,8 +100,7 @@ router.post("/", async (req, res) => {
       console.log(`✅ Room details updated for ${inventory}`);
     }
 
-    // ✅ Send success response BEFORE email to prevent user confusion
-    res.status(201).json({ message: "User registered successfully" });
+   
 
     // ✅ Send email for verifier roles (async to avoid blocking)
     if (role.toLowerCase() === "verifier") {
@@ -123,6 +125,9 @@ router.post("/", async (req, res) => {
       };
       await transporter.sendMail(mailOptions);
     }
+    console.log(`✅ User ${email} created successfully`);
+    // ✅ Send success response before sending emails
+    res.status(201).json({ message: "User registered successfully" });
 
   } catch (error) {
     console.error("❌ Error in registration:", error);

@@ -32,7 +32,7 @@ router.get("/api/fetch-notifications", async (req, res) => {
         // // 🔍 Fetch unread HodAcceptNotifications
         // const hodNotifications = await HodAcceptNotification.find({ receiver, status: "unread" });
 
-        const assignnotification= await AssignfacultyNotification.find({reciever: receiver,status: "unread"});
+        const assignnotification= await AssignfacultyNotification.find({receiver: receiver,status: "unread"});
 
         const verifysnotification= await VerifyNotification.find({receiver: receiver,status: "unread"});
 
@@ -135,6 +135,59 @@ router.get("/api/fetch-notifications", async (req, res) => {
 
         // ✅ Merge both notifications
         const allNotifications = [/*...detailedTskNotifications, ...detailedHodNotifications,*/ ...assignNotifications, ...verifyNotifications];
+
+        // ✅ Send processed notifications to frontend
+        res.json({ data: allNotifications });
+    } catch (error) {
+        console.error("❌ Error fetching notifications:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+
+router.get("/api/fetchreport", async (req, res) => {
+    const { receiver } = req.query;
+    if (!receiver) {
+        return res.status(400).json({ error: "Receiver email is required" });
+    }
+
+    try {
+
+        const verifysnotification= await VerifyNotification.find({receiver: receiver,status: "read"});
+
+
+        const verifyNotifications = await Promise.all(
+            verifysnotification.map(async (vnotification) => {
+                if (vnotification.type === "verifier_report") {
+                    // 🔍 Fetch indent_no & sl_no
+                    const { verifier_name, verifier_email,premise,verify_date } = vnotification;
+
+
+                    return {
+                        _id: vnotification._id,
+                        type: vnotification.type, // ✅ Send Type
+                        verifier_name,
+                        verifier_email,
+                        premise,
+                        verify_date,
+                        status: vnotification.status,
+                        createdAt: vnotification.date
+                    };
+                }
+
+                // Return other notifications as they are where type is not stock forward
+                return {
+                    _id: vnotification._id,
+                    type: vnotification.type, // ✅ Send Type
+                    status: vnotification.status,
+                    createdAt: vnotification.date,
+                };
+            })
+        );
+
+
+        // ✅ Merge both notifications
+        const allNotifications = [/*...detailedTskNotifications, ...detailedHodNotifications,*/ ...verifyNotifications];
 
         // ✅ Send processed notifications to frontend
         res.json({ data: allNotifications });

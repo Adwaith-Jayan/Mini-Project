@@ -7,6 +7,7 @@ import SendIcon from "@mui/icons-material/Send";
 import Sidebarverifier from "../assets/sidebarverifier";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Stockverifications = () => {
   const [stocks, setStocks] = useState([]);
@@ -15,6 +16,7 @@ const Stockverifications = () => {
   const [verifier, setVerifier] = useState({ name: "", email: "" });
   const [role, setRole] = useState(null);
   const [verifdata, setVerifdata] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -57,6 +59,12 @@ const Stockverifications = () => {
   };
 
   const handleSubmit = async () => {
+
+    const confirmSubmission = window.confirm("After submission, the account will be deleted. Do you want to proceed?");
+    
+    if (!confirmSubmission) {
+        return; // Exit the function if the user cancels
+    }
     try {
       const token = localStorage.getItem("token");
       if (!token) return;
@@ -116,6 +124,8 @@ const Stockverifications = () => {
     } catch (error) {
       console.error("Error processing stock verification:", error);
     }
+    navigate('/');
+
   };
 
   return (

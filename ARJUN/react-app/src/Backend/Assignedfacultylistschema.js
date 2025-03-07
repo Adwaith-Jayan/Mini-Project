@@ -6,7 +6,8 @@ const AssignedfacultylistSchema = new mongoose.Schema({
     department: { type: String },
     premise: { type: String, required: true },
     assigned_date: { type: Date, default: Date.now },
-    last_date: { type: Date}
+    last_date: { type: Date},
+    status: { type: String, default: "Pending" }
 
 });
 

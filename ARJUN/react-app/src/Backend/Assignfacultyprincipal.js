@@ -36,7 +36,8 @@ router.post('/api/assign-faculty', async (req, res) => {
             department: department,
             premise: premise,
             assigned_date: new Date().toISOString(),
-            last_date: lastDate
+            last_date: lastDate,
+            status: "Pending"
         });
         await newassignedfaculty.save();
 

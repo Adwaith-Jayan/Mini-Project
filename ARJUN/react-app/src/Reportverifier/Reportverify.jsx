@@ -84,7 +84,7 @@ const Reportdetails = () => {
       report.item_no,
       report.status,
       report.remarks,
-      new Date(report.date_of_verify).toLocaleDateString(),
+      new Date(report.date_of_verify).toLocaleDateString("en-GB"),
     ]);
 
     doc.autoTable({ head: [tableColumn], body: tableRows, startY: 40 });
@@ -97,7 +97,7 @@ const Reportdetails = () => {
         "Item No": report.item_no,
         "Status": report.status,
         "Remarks": report.remarks,
-        "Date of Verify": new Date(report.date_of_verify).toLocaleDateString(),
+        "Date of Verify": new Date(report.date_of_verify).toLocaleDateString("en-GB"),
       }))
     );
     const workbook = XLSX.utils.book_new();
@@ -154,7 +154,7 @@ const Reportdetails = () => {
                   <td>{report.item_no}</td>
                   <td>{report.status}</td>
                   <td>{report.remarks}</td>
-                  <td>{new Date(report.date_of_verify).toLocaleDateString()}</td>
+                  <td>{new Date(report.date_of_verify).toLocaleDateString("en-GB")}</td>
                 </tr>
               ))}
             </tbody>
