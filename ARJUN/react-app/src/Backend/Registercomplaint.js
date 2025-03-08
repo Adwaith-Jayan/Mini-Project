@@ -32,27 +32,53 @@ router.get("/registercomplaint", async (req, res) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const email = decoded.email;
+    const roomname = decoded.roomname;
+    let roomNos = [];
+    let itemType = "electronics";
 
-    // Fetch user access data
-    const accessData = await Access.findOne({ email_id: email });
-    if (!accessData) return res.status(404).json({ message: "No access data found" });
+    // Determine itemType and fetch room numbers
+    if (roomname.toLowerCase() === "cse furniture") {
+      const accessData = await Access.find({ email_id: email });
+      if (!accessData.length) return res.status(404).json({ message: "No access data found" });
+      roomNos = accessData.map(data => data.room_no);
+      itemType = "furniture";
+    } else {
+      const accessData = await Access.findOne({ email_id: email });
+      if (!accessData) return res.status(404).json({ message: "No access data found" });
+      roomNos = [accessData.room_no];
+    }
 
-    const room_no = accessData.room_no;
-    const itemsInRoom = await BelongsTo.find({ room_no }).distinct("item_no");
+    if (roomNos.length === 0) return res.status(404).json({ message: "No rooms found for the given email" });
+
+    // Get item numbers belonging to the rooms
+    const itemsInRoom = await BelongsTo.find({ room_no: { $in: roomNos } }).distinct("item_no");
+
+    // Get maintenance items
     const maintenanceItems = await Maintenance.find().distinct("item_no");
 
-    // Find not working items not under maintenance
+    // Get items matching the type
+    const filteredItems = await Item.find({
+      item_no: { $in: itemsInRoom },
+      type: { $regex: `^${itemType}$`, $options: "i" },  // Direct filter instead of post-processing
+    });
+    console.log(filteredItems);
+
+    // Get not working items that are not under maintenance
     const notWorkingItems = await Item.find({
-      item_no: { $in: itemsInRoom, $nin: maintenanceItems },
+      item_no: { $in: filteredItems.map(item => item.item_no), $nin: maintenanceItems },
       status: "Not Working",
     });
 
-    // Fetch indent and stock details
-    const indentRecords = await Includes.find({ item_no: { $in: notWorkingItems.map(item => item.item_no) } });
-    const indentNoSet = new Set(indentRecords.map(record => record.indent_no));
-    const stockDetails = await Stock.find({ indent_no: { $in: Array.from(indentNoSet) } });
+    if (notWorkingItems.length === 0) {
+      return res.json([]); // Return empty array if no matching items
+    }
 
-    // Prepare stock info response
+    // Get indent details
+    const indentRecords = await Includes.find({ item_no: { $in: notWorkingItems.map(item => item.item_no) } });
+    const indentNos = indentRecords.map(record => record.indent_no);
+    const stockDetails = await Stock.find({ indent_no: { $in: indentNos } });
+
+    // Prepare response
     const stockInfo = indentRecords.map((record) => {
       const stock = stockDetails.find(s => s.indent_no === record.indent_no);
       const item = notWorkingItems.find(i => i.item_no === record.item_no);
@@ -75,6 +101,7 @@ router.get("/registercomplaint", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 // Send complaint email
 router.post("/sendcomplaint", async (req, res) => {

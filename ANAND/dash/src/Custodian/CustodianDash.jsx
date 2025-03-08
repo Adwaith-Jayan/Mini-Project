@@ -3,15 +3,12 @@ import '../Principal/PrincipalDash.css';
 import { FaUserCircle, FaSignOutAlt, FaChartBar, FaCheckCircle, FaListAlt, FaBars } from 'react-icons/fa';
 import AccountMenu from '../../../../ARJUN/react-app/src/assets/Usermenu';
 import Button from '@mui/material/Button';
-import Sidebars from '../../../../ARJUN/react-app/src/assets/sidebar';
+import Sidebardash from '../../../../ARJUN/react-app/src/assets/Sidebarfordash';
 import {jwtDecode} from "jwt-decode";
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
-const notifications = [
-    { message: 'New report from Verifier' },
-    { message: 'New message from HOD' },
-];
 const handleLogout = (navigate) => {
     sessionStorage.removeItem("token"); // Remove the token from storage
     navigate("/", {replace: true}); // Redirect to login page
@@ -23,8 +20,33 @@ const CustodianDash = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [username,setusername]= useState("");
     const [currentdate,setdate]=useState("");
+    const [premisename,setPremisename]= useState("");
     const [role,setRole]=useState(null);
+    const [notifications, setNotifications] = useState([]);
     const navigate= useNavigate();
+
+    useEffect(() => {
+                const fetchNotifications = async () => {
+                    try {
+                        const token = sessionStorage.getItem("token");
+                        if (!token) return;
+        
+                        const decoded = jwtDecode(token);
+                        setusername(decoded.name);
+                        const userEmail = decoded.email;
+        
+                        const response = await axios.get(`http://localhost:5000/api/notifications?receiver=${userEmail}`);
+                        
+                        console.log("Dashboard Notifications:", response.data); // Debugging
+        
+                        setNotifications(response.data);
+                    } catch (error) {
+                        console.error("Error fetching notifications:", error);
+                    }
+                };
+        
+                fetchNotifications();
+            }, []);
 
     useEffect(()=>{
         const today = new Date().toLocaleDateString("en-GB", {
@@ -48,6 +70,7 @@ const CustodianDash = () => {
             try {
                 const decoded = jwtDecode(token); // Decode token to get user info
                 setRole(decoded.designation);
+                setPremisename(decoded.roomname);
                 } catch (error) {
                     console.error("Invalid Token:", error);
                 }
@@ -56,42 +79,43 @@ const CustodianDash = () => {
 
     return (
         <div className="app-container">
-            <Header username={username} currentdate={currentdate}/>
+            <Header username={username} currentdate={currentdate} premisename={premisename}/>
             <div className="main-area">
-                <Sidebars sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />
-                <Dashboard navigate={navigate} />
+                <Sidebardash sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />
+                <Dashboard notifications={notifications} navigate={navigate} />
             </div>
         </div>
     );
 };
 
-const Header = ({username,currentdate}) => (
+const Header = ({username,currentdate,premisename}) => (
     <header className="header">
         <div className="header-left">
             <span>Welcome, {username}</span>
             <span>{currentdate}</span>
         </div>
         <div className="header-right">
-           <span>Premise Name</span>
+           <span>{premisename}</span>
             <AccountMenu />
         </div>
     </header>
 );
 
 
-const Dashboard = ({navigate}) => (
+const Dashboard = ({notifications,navigate}) => (
     <main className="dashboard">
         <div className="dashboard-header">
             <h1>Dashboard</h1>
             <Notifications notifications={notifications} />
         </div>
         <div className="actions">
-            <Button className='action-button' variant="contained">Add Stock</Button>
-            <Button className='action-button' variant="contained">Transfer Log Details</Button>
-            <Button className='action-button' variant="contained">Send Email</Button>
-            <Button className='action-button' variant="contained">Stock Handover</Button>
+                <Link to="/maintenance"><Button className='action-button' variant="contained">Maintenance List</Button></Link>
+                <Link to="/maintenancehist"><Button className='action-button' variant="contained">Maintenance History</Button></Link>
+                <Button onClick={()=>{handlesendmail()}} className='action-button' variant="contained">Send Email</Button>
+                <Button className='action-button' variant="contained">Transfer Log Details</Button>
+                <Button className='action-button' variant="contained">Stock Handover</Button>
         </div>
-        <LogoutButton />
+        <LogoutButton navigate={navigate} />
     </main>
 );
 
@@ -101,15 +125,19 @@ const Notifications = ({ notifications }) => (
             <h2>Notifications</h2>
         </div>
         <ul>
-            {notifications.map((n, i) => (
-                <li key={i}>{n.message}</li>
-            ))}
+        {notifications.length > 0 ? (
+                notifications.map((n, i) => (
+                    <li key={i}>{n.message || "New notification received"}</li>
+                ))
+            ) : (
+                <li>No new notifications</li>
+            )}
         </ul>
-        <a href="#">View All</a>
+        <Link to="/notify">View All</Link>
     </div>
 );
 
-const LogoutButton = () => (
+const LogoutButton = ({navigate}) => (
     <button className="logout-button">
         <FaSignOutAlt className="logout-icon" onClick={()=>{handleLogout(navigate)}}/>
         Logout
