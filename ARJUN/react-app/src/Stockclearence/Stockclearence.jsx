@@ -39,6 +39,7 @@ const Stockclears = () => {
         if (!response.ok) throw new Error("Failed to fetch stock details");
   
         const data = await response.json();
+        console.log(data);
         setcStocks(data);
       } catch (err) {
         console.error(err.message);
@@ -90,9 +91,9 @@ const Stockclears = () => {
   };
 
   return (
-    <div className="clearstocks-container">
+    <div className="sdstocks-container">
       <Sidebars sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role} />
-      <div className="clmain-content">
+      <div className="sdmain-content">
         <header className="headerstockclears">
           <h2>Stock Clearance</h2>
           <div className="clsearch-bar">

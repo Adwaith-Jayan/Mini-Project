@@ -3,15 +3,12 @@ import '../Principal/PrincipalDash.css';
 import { FaUserCircle, FaSignOutAlt, FaChartBar, FaCheckCircle, FaListAlt, FaBars } from 'react-icons/fa';
 import AccountMenu from '../../../../ARJUN/react-app/src/assets/Usermenu';
 import Button from '@mui/material/Button';
+import Sidebardash from '../../../../ARJUN/react-app/src/assets/Sidebarfordash';
 import {jwtDecode} from "jwt-decode";
-import Sidebars from '../../../../ARJUN/react-app/src/assets/sidebar';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
-const notifications = [
-    { message: 'New report from Verifier' },
-    { message: 'New message from HOD' },
-];
 
 const handleLogout = (navigate) => {
     sessionStorage.removeItem("token"); // Remove the token from storage
@@ -28,10 +25,34 @@ const handlesendmail=()=>{
 const SicDash = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [username,setusername]= useState("");
+    const [premisename,setPremisename]= useState("");
     const [currentdate,setdate]=useState("");
     const [role,setRole]=useState(null);
+    const [notifications, setNotifications] = useState([]);
     const navigate= useNavigate();
     
+    useEffect(() => {
+            const fetchNotifications = async () => {
+                try {
+                    const token = sessionStorage.getItem("token");
+                    if (!token) return;
+    
+                    const decoded = jwtDecode(token);
+                    setusername(decoded.name);
+                    const userEmail = decoded.email;
+    
+                    const response = await axios.get(`http://localhost:5000/api/notifications?receiver=${userEmail}`);
+                    
+                    console.log("Dashboard Notifications:", response.data); // Debugging
+    
+                    setNotifications(response.data);
+                } catch (error) {
+                    console.error("Error fetching notifications:", error);
+                }
+            };
+    
+            fetchNotifications();
+        }, []);
     
     useEffect(()=>{
               const token = sessionStorage.getItem("token"); // Retrieve token from localStorage
@@ -53,7 +74,7 @@ const SicDash = () => {
             if(token){
                 try{
                     const decoded = jwtDecode(token);
-                    setusername(decoded.name);
+                    setPremisename(decoded.roomname);
                 }catch(error){
                     console.error("Error decoding token : ",error);
                 }
@@ -62,23 +83,23 @@ const SicDash = () => {
 
     return (
         <div className="app-container">
-            <Header username={username} currentdate={currentdate}/>
+            <Header username={username} currentdate={currentdate} premisename={premisename}/>
             <div className="main-area">
-                <Sidebars sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role}/>
-                <Dashboard navigate={navigate} />
+                <Sidebardash sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} role={role}/>
+                <Dashboard notifications={notifications} navigate={navigate} />
             </div>
         </div>
     );
 };
 
-const Header = ({username,currentdate}) => (
+const Header = ({username,currentdate,premisename}) => (
     <header className="header">
         <div className="header-left">
             <span>Welcome, {username}</span>
             <span>{currentdate}</span>
         </div>
         <div className="header-right">
-           <span>Premise Name</span>
+           <span>{premisename}</span>
             <AccountMenu />
         </div>
     </header>
@@ -86,7 +107,7 @@ const Header = ({username,currentdate}) => (
 
 
 
-const Dashboard = ({navigate}) => (
+const Dashboard = ({notifications,navigate}) => (
     <main className="dashboard">
         <div className="dashboard-header">
             <h1>Dashboard</h1>
@@ -112,9 +133,13 @@ const Notifications = ({ notifications }) => (
             <h2>Notifications</h2>
         </div>
         <ul>
-            {notifications.map((n, i) => (
-                <li key={i}>{n.message}</li>
-            ))}
+        {notifications.length > 0 ? (
+                notifications.map((n, i) => (
+                    <li key={i}>{n.message || "New notification received"}</li>
+                ))
+            ) : (
+                <li>No new notifications</li>
+            )}
         </ul>
         <Link to="/notify">View All</Link>
     </div>
