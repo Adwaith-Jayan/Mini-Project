@@ -5,9 +5,11 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
     try {
-        const { room_no, name, type } = req.body;
+        let { room_no, name, type } = req.body;
 
-        if (!room_no || !name || !type) {
+        room_no = parseInt(room_no, 10);
+
+        if (!name || !type) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
