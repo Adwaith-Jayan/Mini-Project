@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./login.css";
+import "./Login.css";
 import loginimage from "../assets/loginimg.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -39,7 +39,10 @@ function Login() {
         navigate("/principaldash");
       } else if (role.toLowerCase() === "verifier" || role.toLowerCase() === "furniture-verifier") {
         navigate("/verifydash");
+      } else if (role.toLowerCase() === "tsk") {
+        navigate("/Tskdash");
       }
+      
     } catch (error) {
       alert(error.response ? error.response.data.message : "Something went wrong");
     }
