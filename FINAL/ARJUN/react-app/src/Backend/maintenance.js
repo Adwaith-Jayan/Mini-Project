@@ -15,14 +15,45 @@ const router = express.Router();
 
 // GET /api/maintenance/list - Fixed population logic
 router.get("/list", async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ message: "Unauthorized" });
+
   try {
-    const maintenanceList = await Maintenance.find();
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const email = decoded.email;
+    const roomname = decoded.roomname;
+    let roomNos = [];
+    let itemType = "electronics";
+
+    // Determine itemType and fetch room numbers
+    if (roomname.toLowerCase() === "cse furniture") {
+      const accessData = await Access.find({ email_id: email });
+      if (!accessData.length) return res.status(404).json({ message: "No access data found" });
+      roomNos = accessData.map(data => data.room_no);
+      itemType = "furniture";
+    } else {
+      const accessData = await Access.findOne({ email_id: email });
+      if (!accessData) return res.status(404).json({ message: "No access data found" });
+      roomNos = [accessData.room_no];
+    }
+
+    if (roomNos.length === 0) return res.status(404).json({ message: "No rooms found for the given email" });
+
+    // Get item numbers belonging to the rooms
+    const itemsInRoom = await BelongsTo.find({ room_no: { $in: roomNos } }).distinct("item_no");
+    
+    // Get maintenance items
+    const maintenanceList = await Maintenance.find({ item_no: { $in: itemsInRoom } });
     console.log("Found maintenance records:", maintenanceList.length);
 
-    const itemNumbers = [...new Set(maintenanceList.map(m => m.item_no))];
-    const items = await Item.find({ item_no: { $in: itemNumbers } });
+    // Fetch item details
+    const items = await Item.find({
+      item_no: { $in: maintenanceList.map(m => m.item_no) },
+      type: { $regex: `^${itemType}$`, $options: "i" },
+    });
     const itemMap = new Map(items.map(item => [item.item_no, item]));
 
+    // Transform response
     const transformedList = maintenanceList.map(m => ({
       _id: m._id,
       itemId: m.item_no,
@@ -31,7 +62,7 @@ router.get("/list", async (req, res) => {
       amount: m.amount || 0,
       remarks: m.remarks,
       itemStatus: itemMap.get(m.item_no)?.status || "Unknown",
-      maintenanceStatus: m.status
+      maintenanceStatus: m.status,
     }));
 
     console.log("Transformed records:", transformedList.length);
@@ -44,6 +75,7 @@ router.get("/list", async (req, res) => {
     });
   }
 });
+
 
 // PUT /api/maintenance/update - Fixed update logic
 router.put("/update", async (req, res) => {
