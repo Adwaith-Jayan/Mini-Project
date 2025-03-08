@@ -41,6 +41,7 @@ router.get("/list", async (req, res) => {
 
     // Get item numbers belonging to the rooms
     const itemsInRoom = await BelongsTo.find({ room_no: { $in: roomNos } }).distinct("item_no");
+    console.log(itemsInRoom);
     
     // Get maintenance items
     const maintenanceList = await Maintenance.find({ item_no: { $in: itemsInRoom } });
@@ -51,10 +52,10 @@ router.get("/list", async (req, res) => {
       item_no: { $in: maintenanceList.map(m => m.item_no) },
       type: { $regex: `^${itemType}$`, $options: "i" },
     });
-    const itemMap = new Map(items.map(item => [item.item_no, item]));
+    console.log(items);
 
     // Transform response
-    const transformedList = maintenanceList.map(m => ({
+    const transformedList = items.map(m => ({
       _id: m._id,
       itemId: m.item_no,
       repairDate: m.complaint_date,
@@ -166,32 +167,44 @@ router.get("/maintenancehistory", async (req, res) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const email = decoded.email;
+    const roomname = decoded.roomname;
+    let roomNos = [];
+    let itemType = "electronics";
 
-    // Get room number based on user access
-    const accessData = await Access.findOne({ email_id: email });
-    if (!accessData) return res.status(404).json({ message: "No access data found" });
+    // Determine itemType and fetch room numbers
+    if (roomname.toLowerCase() === "cse furniture") {
+      const accessData = await Access.find({ email_id: email });
+      if (!accessData.length) return res.status(404).json({ message: "No access data found" });
+      roomNos = accessData.map(data => data.room_no);
+      itemType = "furniture";
+    } else {
+      const accessData = await Access.findOne({ email_id: email });
+      if (!accessData) return res.status(404).json({ message: "No access data found" });
+      roomNos = [accessData.room_no];
+    }
 
-    const room_no = accessData.room_no;
+    if (roomNos.length === 0) return res.status(404).json({ message: "No rooms found for the given email" });
 
-    // Find unique item numbers in the room
-    const itemsInRoom = await BelongsTo.find({ room_no }).distinct("item_no");
+    // Get item numbers belonging to the rooms
+    const itemsInRoom = await BelongsTo.find({ room_no: { $in: roomNos } }).distinct("item_no");
 
     // Find indent numbers for those items
     const maintenanceRecords = await MaintenanceHistory.find({ item_no: { $in: itemsInRoom } });
 
 
     // Map item status for quick lookup
-    const itemStatusMap = maintenanceRecords.reduce((map, item) => {
-      map[item.item_no] = item.item_status;
-      return map;
-    }, {});
-    const maintenanceStatusMap = maintenanceRecords.reduce((map, item) => {
-      map[item.item_no] = item.status;
-      return map;
-    }, {});
+    const items = await Item.find({
+      item_no: { $in: maintenanceRecords.map(m => m.item_no) },
+      type: { $regex: `^${itemType}$`, $options: "i" },
+    });
+    console.log(items);
+
+    const itemNos = items.map(item => item.item_no);
+    const maintenancehis = await MaintenanceHistory.find({ item_no: { $in: itemNos } });
+    console.log(maintenancehis);
 
     // Construct stock info while avoiding duplicates
-    const stockInfo = maintenanceRecords.map((record) => ({
+    const stockInfo = maintenancehis.map((record) => ({
       item_no: record.item_no,
       status: record.status || "Unknown",
       completed_date: record.completed_date, // This now ensures correct dates
