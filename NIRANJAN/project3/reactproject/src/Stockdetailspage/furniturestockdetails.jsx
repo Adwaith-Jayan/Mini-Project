@@ -15,7 +15,7 @@ const FSdetails = () => {
   useEffect(() => {
     const fetchStockDetails = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         const response = await fetch("http://localhost:5000/api/stocks", { // ✅ Fixed endpoint
           headers: { Authorization: `Bearer ${token}` },
         });

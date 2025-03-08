@@ -26,7 +26,7 @@ const ForwardStockTsk = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const token = localStorage.getItem("token"); 
+        const token = sessionStorage.getItem("token"); 
         if (!token) {
             setMessage("Unauthorized: No token found. Please log in again.");
             console.error("No token found");

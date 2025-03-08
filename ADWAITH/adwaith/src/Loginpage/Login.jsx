@@ -16,7 +16,7 @@ function Login() {
       alert(response.data.message);
       
       const token = response.data.token;
-      localStorage.setItem("token", token);
+      sessionStorage.setItem("token", token);
       
       const role = response.data.designation;
       console.log(role);

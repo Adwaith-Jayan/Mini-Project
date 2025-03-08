@@ -15,7 +15,7 @@ const MaintenanceList = () => {
   const toggleFilterMenu = () => setFilterOpen(!filterOpen);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (token) {
       try {
         const decoded = jwtDecode(token);
@@ -29,7 +29,7 @@ const MaintenanceList = () => {
   useEffect(() => {
     const fetchMaintenanceData = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         const response = await fetch("http://localhost:5000/api/maintenance/list", {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -49,7 +49,7 @@ const MaintenanceList = () => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
         body: JSON.stringify({ id, field, value }),
       });
@@ -66,7 +66,7 @@ const MaintenanceList = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
         body: JSON.stringify({ id, field, value }),
       });

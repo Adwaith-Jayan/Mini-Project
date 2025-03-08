@@ -18,7 +18,7 @@ const Maintenancehistorydetails = () => {
   const toggleFilterMenu = () => setFilterOpen(!filterOpen);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (token) {
       try {
         const decoded = jwtDecode(token);
@@ -31,7 +31,7 @@ const Maintenancehistorydetails = () => {
 
   useEffect(() => {
     const fetchStockDetails = async () => {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) {
         setError("No authentication token found");
         setLoading(false);

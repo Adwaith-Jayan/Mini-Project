@@ -18,7 +18,7 @@ const Stockstatusupdate = () => {
   const toggleFilterMenu = () => setFilterOpen(!filterOpen);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (token) {
       try {
         const decoded = jwtDecode(token);
@@ -32,7 +32,7 @@ const Stockstatusupdate = () => {
   useEffect(() => {
     const fetchStockDetails = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         const response = await fetch("http://localhost:5000/api/stock/stockdetails", {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -60,7 +60,7 @@ const Stockstatusupdate = () => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // Include token if required
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`, // Include token if required
         },
         body: JSON.stringify({
           item_no: stocks[index].item_no, // Use item_no instead of id
@@ -154,15 +154,21 @@ const Stockstatusupdate = () => {
                   <td>{stock.description}</td>
                   <td>{stock.price}</td>
                   <td>
+                  {stock.status === "Not Repairable" ? (
+                    <span className="not-repairable-text">Not Repairable</span>
+                  ) : (
                     <select
-                      className={`status-dropdown ${stock.status === "Working" ? "working" : "not-working"}`}
+                      className={`status-dropdown ${
+                        stock.status === "Working" ? "working" : "not-working"
+                      }`}
                       value={stock.status}
                       onChange={(e) => handleStatusChange(index, e.target.value)}
                     >
                       <option value="Working">Working</option>
                       <option value="Not Working">Not Working</option>
                     </select>
-                  </td>
+                  )}
+                </td>
                 </tr>
               ))
             )}

@@ -13,7 +13,7 @@ const notifications = [
     { message: 'New message from HOD' },
 ];
 const handleLogout = (navigate) => {
-    localStorage.removeItem("token"); // Remove the token from storage
+    sessionStorage.removeItem("token"); // Remove the token from storage
     navigate("/", {replace: true}); // Redirect to login page
     window.location.reload(); // Ensure the page reloads completely
     window.history.pushState(null,null,"/");
@@ -34,7 +34,7 @@ const CustodianDash = () => {
             year: "numeric",
           });
         setdate(today);
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         if(token){
             try{
                 const decoded = jwtDecode(token);

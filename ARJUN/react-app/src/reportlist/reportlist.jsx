@@ -11,7 +11,7 @@ const Reportlist = () => {
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
-                const token = localStorage.getItem("token");
+                const token = sessionStorage.getItem("token");
                 if (!token) {
                     console.error("❌ No token found. User is not authenticated.");
                     return;
@@ -38,7 +38,7 @@ const Reportlist = () => {
 
     const handleview = async (notifId) => {
         try {
-            const token = localStorage.getItem("token");
+            const token = sessionStorage.getItem("token");
             if (!token) {
                 console.error("❌ No token found. User is not authenticated.");
                 return;

@@ -27,7 +27,7 @@ const AddStockforward = () => {
     });
     
     useEffect(() => {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         if (token) {
             try {
                 const decoded = jwtDecode(token);
@@ -79,7 +79,7 @@ const AddStockforward = () => {
             return;
         }
 
-        const token = localStorage.getItem("token"); 
+        const token = sessionStorage.getItem("token"); 
         if (!token) {
             alert("Unauthorized! No token found.");
             return;

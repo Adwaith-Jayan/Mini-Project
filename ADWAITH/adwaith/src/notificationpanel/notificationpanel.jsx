@@ -9,7 +9,7 @@ const Notifications = () => {
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
-                const token = localStorage.getItem("token");
+                const token = sessionStorage.getItem("token");
                 if (!token) {
                     console.error("❌ No token found. User is not authenticated.");
                     return;
@@ -52,7 +52,7 @@ const Notifications = () => {
 
     const handleAction = async (notifId, action) => {
         try {
-            const token = localStorage.getItem("token");
+            const token = sessionStorage.getItem("token");
             if (!token) {
                 console.error("❌ No token found. User is not authenticated.");
                 return;

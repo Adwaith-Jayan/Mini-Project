@@ -15,7 +15,7 @@ const Stockclears = () => {
   const [role, setRole] = useState(null);
   
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (token) {
       try {
         const decoded = jwtDecode(token);
@@ -28,7 +28,7 @@ const Stockclears = () => {
 
   useEffect(() => {
     const fetchStockDetails = async () => {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) return;
   
       try {
@@ -67,7 +67,7 @@ const Stockclears = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
         body: JSON.stringify({ item_ids: selectedItems }),
       });

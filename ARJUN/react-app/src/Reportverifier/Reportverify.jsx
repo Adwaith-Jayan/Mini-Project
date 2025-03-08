@@ -35,7 +35,7 @@ const Reportdetails = () => {
 
   useEffect(() => {
     const fetchReportDetails = async () => {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) {
         setError("No authentication token found");
         setLoading(false);

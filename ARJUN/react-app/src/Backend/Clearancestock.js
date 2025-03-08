@@ -6,6 +6,7 @@ import Clearance from "./clearenceschema.js";
 import Access from "./Access.js";
 import BelongsTo from "./BelongsTo.js";
 import Includes from "./Includes.js";
+import Item from "./Item.js";
 import Stock from "./Stock.js";
 
 const router = express.Router();
@@ -56,7 +57,11 @@ router.post("/clear-stock", async (req, res) => {
       { item_no: { $in: item_ids } },
       { $set: { status: "Cleared", clearance_date: new Date().toISOString()} }
     );
-
+    await Promise.all([
+      BelongsTo.deleteMany({ item_no: { $in: item_ids } }),
+      Includes.deleteMany({ item_no: { $in: item_ids } }),
+      Item.deleteMany({ item_no: { $in: item_ids } })
+    ]);
     res.status(200).json({ message: "Stock cleared successfully" });
   } catch (error) {
     console.error("Error updating stock clearance:", error);

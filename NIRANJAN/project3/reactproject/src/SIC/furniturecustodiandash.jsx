@@ -25,7 +25,7 @@ const FcDash = () => {
 
     useEffect(() => {
         const fetchUserData = async () => {
-            const token = localStorage.getItem("token");
+            const token = sessionStorage.getItem("token");
 
             if (!token) {
                 navigate("/login");
@@ -135,7 +135,7 @@ const LogoutButton = () => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
         navigate("/login");
     };
 

@@ -19,7 +19,7 @@ const Stockverifications = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (token) {
       try {
         const decoded = jwtDecode(token);
@@ -33,7 +33,7 @@ const Stockverifications = () => {
 
   useEffect(() => {
     const fetchStockDetails = async () => {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) return;
 
       try {
@@ -66,7 +66,7 @@ const Stockverifications = () => {
         return; // Exit the function if the user cancels
     }
     try {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) return;
 
       const updatedVerificationData = [];

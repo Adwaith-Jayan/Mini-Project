@@ -18,7 +18,7 @@ const PrincipalDash = () => {
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
-                const token = localStorage.getItem("token");
+                const token = sessionStorage.getItem("token");
                 if (!token) return;
 
                 const decoded = jwtDecode(token);
@@ -46,7 +46,7 @@ const PrincipalDash = () => {
                 year: "numeric",
               });
             setdate(today);
-            const token = localStorage.getItem("token");
+            const token = sessionStorage.getItem("token");
             if (token) {
                 try {
                     const decoded = jwtDecode(token); // Decode token to get user info

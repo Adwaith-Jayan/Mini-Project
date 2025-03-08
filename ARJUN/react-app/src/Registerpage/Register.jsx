@@ -41,7 +41,7 @@ const Register = () => {
     if (notifId) {
       const fetchNotificationData = async () => {
         try {
-          const token = localStorage.getItem("token"); // Get token
+          const token = sessionStorage.getItem("token"); // Get token
           const response = await axios.post("http://localhost:5000/api/Add-account",{ notifId },
             { headers: { Authorization: `Bearer ${token}` } }
           );

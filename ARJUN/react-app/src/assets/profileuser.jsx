@@ -22,7 +22,7 @@ export default function ProfileMenu() {
     setAnchorEl(null);
   };
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Remove the token from storage
+    sessionStorage.removeItem("token"); // Remove the token from storage
     navigate("/", {replace: true}); // Redirect to login page
     window.location.reload(); // Ensure the page reloads completely
     window.history.pushState(null,null,"/");

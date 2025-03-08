@@ -19,7 +19,7 @@ const RegisterComplaint = () => {
   const [emails, setEmail] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (token) {
       try {
         const decoded = jwtDecode(token);
@@ -32,7 +32,7 @@ const RegisterComplaint = () => {
 
   useEffect(() => {
     const fetchStockDetails = async () => {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) {
         setError("No authentication token found");
         setLoading(false);
@@ -92,7 +92,7 @@ const RegisterComplaint = () => {
       console.log("🚀 Sending complaintData:", complaintData);
       const response = await axios.post("http://localhost:5000/api/complaints/sendcomplaint",complaintData,
       {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}`  },
+        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}`  },
       });
       alert("Complaint registered successfully: " + response.data.message);
       setSelectedItems([]);

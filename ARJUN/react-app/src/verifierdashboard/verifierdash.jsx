@@ -19,7 +19,7 @@ const notifications = [
 ];
 
 const handleLogout = (navigate) => {
-    localStorage.removeItem("token"); // Remove the token from storage
+    sessionStorage.removeItem("token"); // Remove the token from storage
     navigate("/", {replace: true}); // Redirect to login page
     window.location.reload(); // Ensure the page reloads completely
     window.history.pushState(null,null,"/");
@@ -33,7 +33,7 @@ const verifierDash = () => {
     const navigate= useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem("token"); // Retrieve token from localStorage
+        const token = sessionStorage.getItem("token"); // Retrieve token from localStorage
                       if (token) {
                         try {
                           const decoded = jwtDecode(token); // Decode token to get user info

@@ -19,7 +19,7 @@ const Stockdetails = () => {
   useEffect(() => {
     const fetchStockDetails = async () => {
       try {
-        const token = localStorage.getItem("token"); // Retrieve token from local storage
+        const token = sessionStorage.getItem("token"); // Retrieve token from local storage
         const response = await fetch("http://localhost:5000/api/stockdetails", {
           headers: { Authorization: `Bearer ${token}` },
         });

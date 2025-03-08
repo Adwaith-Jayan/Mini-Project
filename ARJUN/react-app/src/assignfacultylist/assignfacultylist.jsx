@@ -23,7 +23,7 @@ const Assignedfacultydetails = () => {
   const toggleExportMenu = () => setExportOpen(!exportOpen);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (token) {
       try {
         const decoded = jwtDecode(token);
@@ -36,7 +36,7 @@ const Assignedfacultydetails = () => {
 
   useEffect(() => {
     const fetchFacultyDetails = async () => {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) {
         setError("No authentication token found");
         setLoading(false);

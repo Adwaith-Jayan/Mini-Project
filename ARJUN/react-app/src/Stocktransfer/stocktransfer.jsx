@@ -35,7 +35,7 @@ const Stocktransfer = () => {
   };
 
    useEffect(() => {
-      const token = localStorage.getItem("token"); // Retrieve token from localStorage
+      const token = sessionStorage.getItem("token"); // Retrieve token from localStorage
       if (token) {
         try {
           const decoded = jwtDecode(token); // Decode token to get user info

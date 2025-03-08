@@ -24,7 +24,7 @@ const StockRequest = () => {
         };
 
      useEffect(()=>{
-                const token = localStorage.getItem("token");
+                const token = sessionStorage.getItem("token");
                 if (token) {
                     try {
                         const decoded = jwtDecode(token); // Decode token to get user info
@@ -50,7 +50,7 @@ const StockRequest = () => {
         const handleSubmit = async (e) => {
             e.preventDefault();
     
-            const token = localStorage.getItem("token"); 
+            const token = sessionStorage.getItem("token"); 
             if (!token) {
                 alert("Unauthorized! No token found.");
                 return;

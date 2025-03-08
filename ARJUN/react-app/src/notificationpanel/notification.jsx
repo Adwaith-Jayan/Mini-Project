@@ -11,7 +11,7 @@ const Notifications = () => {
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
-                const token = localStorage.getItem("token");
+                const token = sessionStorage.getItem("token");
                 if (!token) {
                     console.error("❌ No token found. User is not authenticated.");
                     return;
@@ -25,9 +25,40 @@ const Notifications = () => {
                     params: { receiver: userEmail },
                     headers: { Authorization: `Bearer ${token}` } // ✅ Include token in request
                 });
+                let fetchedNotifications = response.data.data;
+                console.log("📩 Raw Notifications:", fetchedNotifications);
 
-                console.log("🔍 Fetched Notifications:", response.data.data);
-                setNotifications(response.data.data);
+                // 🔍 Type-Based Filtering
+                const validNotifications = fetchedNotifications.filter((notif) => {
+                    if (notif.type === "tskstockforward") {
+                        return notif.indent_no && notif.sl_no && notif.quantity;
+                    } 
+                    if (notif.type === "hodstockaccept") {
+                        return notif.indent_no && notif.sl_no;
+                    } 
+                    if (notif.type === "hodstockforward") {
+                        return notif.indent_no && notif.quantity && notif.message;
+                    }
+                    if (notif.type === "sicstockaccept") {
+                        return notif.indent_no && notif.quantity && notif.message;
+                    }
+                    if (notif.type === "hodstockreject") {
+                        return notif.indent_no && notif.sl_no && notif.message;
+                    }
+                    if (notif.type === "sicstockreject") {
+                        return notif.indent_no && notif.message;
+                    }
+                    if (notif.type === "principalfacultyassign") {
+                        return notif.facultyemail && notif.last_date;
+                    }
+                    if (notif.type === "verifier_report") {
+                        return notif.verifier_email && notif.verifier_name && notif.verify_date;
+                    }
+                    return false; // Exclude all other notification types
+                });
+
+                console.log("✅ Filtered Notifications:", validNotifications);
+                setNotifications(validNotifications);
             } catch (error) {
                 console.error("❌ Error fetching notifications:", error);
             }
@@ -38,7 +69,7 @@ const Notifications = () => {
 
     const handleAddacc = async (notifId) => {
         try {
-            const token = localStorage.getItem("token");
+            const token = sessionStorage.getItem("token");
             if (!token) {
                 console.error("❌ No token found. User is not authenticated.");
                 return;
@@ -60,7 +91,7 @@ const Notifications = () => {
 
     const handleview = async (notifId) => {
         try {
-            const token = localStorage.getItem("token");
+            const token = sessionStorage.getItem("token");
             if (!token) {
                 console.error("❌ No token found. User is not authenticated.");
                 return;
@@ -84,7 +115,7 @@ const Notifications = () => {
 
     const handleAccept = async (notifId) => {
         try {
-            const token = localStorage.getItem("token");
+            const token = sessionStorage.getItem("token");
             if (!token) {
                 console.error("❌ No token found. User is not authenticated.");
                 return;
@@ -105,7 +136,7 @@ const Notifications = () => {
 
     const handleReject = async (notifId) => {
         try {
-            const token = localStorage.getItem("token");
+            const token = sessionStorage.getItem("token");
             if (!token) {
                 console.error("❌ No token found. User is not authenticated.");
                 return;

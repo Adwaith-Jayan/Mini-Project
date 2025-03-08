@@ -24,7 +24,7 @@ const AssignFaculty = () => {
 
   // Decode token to get user role
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (token) {
       try {
         const decoded = jwtDecode(token);
@@ -58,7 +58,7 @@ const AssignFaculty = () => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
     try {
         const response = await axios.post("http://localhost:5000/api/assign-faculty",formData,
         {
